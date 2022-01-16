@@ -7,6 +7,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Dictionary;
 import java.util.TimeZone;
 
 @Controller
@@ -36,7 +37,15 @@ public class ZmanimController {
 
         timeFormat.setTimeZone(timeZone);
 
-        mv.getModel().put("chatzot", timeFormat.format(zmanimHandler.getZmanim().get(ZmanimHandler.Zmanim.chatzot)));
+        Dictionary zmanim = zmanimHandler.getZmanim();
+
+        mv.getModel().put("alotHashachar", timeFormat.format(zmanim.get(Zmanim.alotHashachar)));
+        mv.getModel().put("sunrise", timeFormat.format(zmanim.get(Zmanim.sunrise)));
+        mv.getModel().put("chatzot", timeFormat.format(zmanim.get(Zmanim.chatzot)));
+        mv.getModel().put("minchaGedola", timeFormat.format(zmanim.get(Zmanim.minchaGedola)));
+        mv.getModel().put("minchaKetana", timeFormat.format(zmanim.get(Zmanim.minchaKetana)));
+        mv.getModel().put("sunset", timeFormat.format(zmanim.get(Zmanim.sunset)));
+        mv.getModel().put("tzait", timeFormat.format(zmanim.get(Zmanim.tzait)));
         return mv;
     }
 }
