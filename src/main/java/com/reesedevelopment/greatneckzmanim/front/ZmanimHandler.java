@@ -1,9 +1,8 @@
-package com.reesedevelopment.greatneckzmanim;
+package com.reesedevelopment.greatneckzmanim.front;
 
 import com.kosherjava.zmanim.ComplexZmanimCalendar;
 import com.kosherjava.zmanim.util.GeoLocation;
 
-import java.util.ArrayList;
 import java.util.Dictionary;
 import java.util.Hashtable;
 

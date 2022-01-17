@@ -1,4 +1,4 @@
-package com.reesedevelopment.greatneckzmanim;
+package com.reesedevelopment.greatneckzmanim.front;
 
 public enum Zmanim {
     alotHashachar,

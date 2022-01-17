@@ -1,8 +1,8 @@
-package com.reesedevelopment.greatneckzmanim.controllers;
+package com.reesedevelopment.greatneckzmanim.front.controllers;
 
 import com.kosherjava.zmanim.util.GeoLocation;
-import com.reesedevelopment.greatneckzmanim.Zmanim;
-import com.reesedevelopment.greatneckzmanim.ZmanimHandler;
+import com.reesedevelopment.greatneckzmanim.front.Zmanim;
+import com.reesedevelopment.greatneckzmanim.front.ZmanimHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
@@ -30,7 +30,7 @@ public class ZmanimController {
     @GetMapping("/")
     public ModelAndView zmanim() {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("zmanim");
+        mv.setViewName("front/zmanim");
 
         dateFormat.setTimeZone(timeZone);
 
