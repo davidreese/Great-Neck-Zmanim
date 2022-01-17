@@ -1,6 +1,8 @@
-package com.reesedevelopment.greatneckzmanim;
+package com.reesedevelopment.greatneckzmanim.controllers;
 
 import com.kosherjava.zmanim.util.GeoLocation;
+import com.reesedevelopment.greatneckzmanim.Zmanim;
+import com.reesedevelopment.greatneckzmanim.ZmanimHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;

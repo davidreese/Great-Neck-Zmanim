@@ -1,4 +1,4 @@
-package com.reesedevelopment.greatneckzmanim;
+package com.reesedevelopment.greatneckzmanim.controllers;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

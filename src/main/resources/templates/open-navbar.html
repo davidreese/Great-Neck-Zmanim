@@ -5,8 +5,8 @@
     <title>Title</title>
 </head>
 <body>
-  <nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="/">Navbar</a>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <a class="navbar-brand" href="/">Great Neck Zmanim</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -32,11 +32,9 @@
           </div>
         </li>
       </ul>
-    </div>
-    <div>
-      <h4 th:text="${date}"></h4>
+      <span class="navbar-text" th:text="${date}">
+      </span>
     </div>
   </nav>
-</div>
 </body>
 </html>
