@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.Dictionary;
 import java.util.TimeZone;
@@ -22,7 +23,8 @@ public class ZmanimController {
     double elevation = 0;
     GeoLocation geoLocation = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
 
-    SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd hh:mm aa");
+    Calendar calendar = Calendar.getInstance();
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy | hh:mm aa");
     SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm:ss aa");
 
     ZmanimHandler zmanimHandler = new ZmanimHandler(geoLocation);
@@ -35,6 +37,7 @@ public class ZmanimController {
         dateFormat.setTimeZone(timeZone);
 
         Date today = new Date();
+//        String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, today);
         mv.getModel().put("date", dateFormat.format(today));
 
         timeFormat.setTimeZone(timeZone);
