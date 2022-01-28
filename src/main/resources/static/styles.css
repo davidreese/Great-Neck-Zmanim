@@ -1,3 +1,30 @@
 .center {
     margin: auto;
 }
+
+.bg-primary {
+    background-color: #035174!important;
+}
+
+.navbar-expand-lg .navbar-collapse {
+    display: block!important;
+}
+
+.time-shower {
+    float: right;
+}
+
+.list-group-item.active {
+    background-color: #035174;
+    border-color: #035174;
+}
+
+.col-4 {
+    flex: 0 0 60%;
+    max-width: 60%;
+}
+
+.col-8 {
+    flex: 0 0 40%;
+    max-width: 40%;
+}
