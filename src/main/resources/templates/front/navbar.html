@@ -11,7 +11,7 @@
       <span class="navbar-toggler-icon"></span>
     </button>
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
-      <ul class="navbar-nav">
+      <ul class="navbar-nav" style="float: left;">
         <li class="nav-item" th:classappend="${#httpServletRequest.requestURI == '/'} ? 'active' : ''">
           <a class="nav-link" href="/">Zmanim<span class="sr-only">(current)</span></a>
         </li>
@@ -32,7 +32,7 @@
           </div>
         </li>
       </ul>
-      <span class="navbar-text" th:text="${date}">
+      <span class="navbar-text time-shower" th:text="${date}">
       </span>
     </div>
   </nav>
