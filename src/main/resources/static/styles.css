@@ -28,3 +28,18 @@
     flex: 0 0 40%;
     max-width: 40%;
 }
+
+.section {
+    width: 50%;
+}
+
+.section-panel {
+    width: 70%;
+    background-color: #d1e0e7;
+    box-shadow: 0 0px 8px 0 rgb(0, 0, 0, 0.2), 0 0px 20px 0 rgba(0, 0, 0, 0.19);
+    border-radius: 10px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    padding-left: 10px;
+    padding-right: 10px;
+}
