@@ -6,6 +6,7 @@
 
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.0.0-2/css/bootstrap.min.css} "/>
     <link rel="stylesheet" th:href="@{/styles.css}">
+    <script type="text/javascript" th:src="@{/front.js}"></script>
 </head>
 <body>
 <div>
@@ -19,27 +20,33 @@
             <span>
                 <h5>Zmanim: Great Neck</h5>
             </span>
-            <div class="row">
-                <div class="col-4">
-                    <div class="list-group" id="list-tab" role="tablist">
-                        <a class="list-group-item list-group-item-action" id="alot-hashachar-time" data-toggle="list" href="#list-alot-hashachar" role="tab" aria-controls="alot-hashachar" th:text="'Alot HaShachar: ' + ${alotHashachar}"></a>
-                        <a class="list-group-item list-group-item-action" id="sunrise-time" data-toggle="list" href="#list-sunrise" role="tab" aria-controls="sunrise" th:text="'Sunrise: ' + ${sunrise}"></a>
-                        <a class="list-group-item list-group-item-action" id="chatzot-time" data-toggle="list" href="#list-chatzot" role="tab" aria-controls="chatzot" th:text="'Chatzot: ' + ${chatzot}"></a>
-                        <a class="list-group-item list-group-item-action" id="mincha-gedola-time" data-toggle="list" href="#list-mincha-gedola" role="tab" aria-controls="mincha-gedola" th:text="'Mincha Gedola: ' + ${minchaGedola}"></a>
-                        <a class="list-group-item list-group-item-action" id="mincha-ketana-time" data-toggle="list" href="#list-mincha-ketana" role="tab" aria-controls="mincha-ketana" th:text="'Mincha Ketana: ' + ${minchaKetana}"></a>
-                        <a class="list-group-item list-group-item-action" id="sunset-time" data-toggle="list" href="#list-sunset" role="tab" aria-controls="sunset" th:text="'Sunrise: ' + ${sunset}"></a>
-                        <a class="list-group-item list-group-item-action" id="tzait-time" data-toggle="list" href="#list-tzait" role="tab" aria-controls="tzait" th:text="'Tzait HaKochavim: ' + ${tzait}"></a>
+                <div class="row">
+                    <div class="col-4">
+                        <div class="list-group" id="list-tab" role="tablist">
+<!--                            <a class="list-group-item list-group-item-action active show" id="initial-hidden" data-toggle="list" href="#list-initial" role="tab" aria-controls="initial-hidden"></a>-->
+                            <a class="list-group-item list-group-item-action" id="alot-hashachar-time" data-toggle="list" href="#list-alot-hashachar" role="tab" aria-controls="alot-hashachar" th:text="'Alot HaShachar: ' + ${alotHashachar}" th:onclick="removeInitialZmanimMessage()"></a>
+                            <a class="list-group-item list-group-item-action" id="sunrise-time" data-toggle="list" href="#list-sunrise" role="tab" aria-controls="sunrise" th:text="'Sunrise: ' + ${sunrise}"></a>
+                            <a class="list-group-item list-group-item-action" id="chatzot-time" data-toggle="list" href="#list-chatzot" role="tab" aria-controls="chatzot" th:text="'Chatzot: ' + ${chatzot}"></a>
+                            <a class="list-group-item list-group-item-action" id="mincha-gedola-time" data-toggle="list" href="#list-mincha-gedola" role="tab" aria-controls="mincha-gedola" th:text="'Mincha Gedola: ' + ${minchaGedola}"></a>
+                            <a class="list-group-item list-group-item-action" id="mincha-ketana-time" data-toggle="list" href="#list-mincha-ketana" role="tab" aria-controls="mincha-ketana" th:text="'Mincha Ketana: ' + ${minchaKetana}"></a>
+                            <a class="list-group-item list-group-item-action" id="sunset-time" data-toggle="list" href="#list-sunset" role="tab" aria-controls="sunset" th:text="'Sunrise: ' + ${sunset}"></a>
+                            <a class="list-group-item list-group-item-action" id="tzait-time" data-toggle="list" href="#list-tzait" role="tab" aria-controls="tzait" th:text="'Tzait HaKochavim: ' + ${tzait}"></a>
+                        </div>
                     </div>
-                </div>
-                <div class="col-8">
-                    <div class="tab-content" id="nav-tabContent">
-                        <div class="tab-pane fade" id="list-alot-hashachar" role="tabpanel" aria-labelledby="list-alot-hashachar-list">Dawn, the time that the first rays of sun rise in the Eastern horizon.</div>
-                        <div class="tab-pane fade" id="list-sunrise" role="tabpanel" aria-labelledby="list-sunrise-list">The earliest time for the Amida.</div>
-                        <div class="tab-pane fade" id="list-chatzot" role="tabpanel" aria-labelledby="list-chatzot-list"></div>
-                        <div class="tab-pane fade" id="list-mincha-gedola" role="tabpanel" aria-labelledby="list-mincha-gedola-list"></div>
-                        <div class="tab-pane fade" id="list-mincha-ketana" role="tabpanel" aria-labelledby="list-mincha-ketana-list"></div>
-                        <div class="tab-pane fade" id="list-sunset" role="tabpanel" aria-labelledby="list-sunset-list"></div>
-                        <div class="tab-pane fade" id="list-tzait" role="tabpanel" aria-labelledby="list-tzait-list"></div>
+                    <div class="col-8">
+                        <div class="tab-content" id="nav-tabContent">
+                            <p id="initial-message">
+                                Click on a zman to see information and halakhic significance for that time.
+                            </p>
+<!--                            <div class="tab-pane fade" id="list-initial" role="tabpanel" aria-labelledby="list-initial-list">Click on a zman to see halakhic significance for that time.</div>-->
+                            <div class="tab-pane fade" id="list-alot-hashachar" role="tabpanel" aria-labelledby="list-alot-hashachar-list">Dawn, the time that the first rays of sun rise in the Eastern horizon.</div>
+                            <div class="tab-pane fade" id="list-sunrise" role="tabpanel" aria-labelledby="list-sunrise-list">The earliest time for the Amida.</div>
+                            <div class="tab-pane fade" id="list-chatzot" role="tabpanel" aria-labelledby="list-chatzot-list"></div>
+                            <div class="tab-pane fade" id="list-mincha-gedola" role="tabpanel" aria-labelledby="list-mincha-gedola-list"></div>
+                            <div class="tab-pane fade" id="list-mincha-ketana" role="tabpanel" aria-labelledby="list-mincha-ketana-list"></div>
+                            <div class="tab-pane fade" id="list-sunset" role="tabpanel" aria-labelledby="list-sunset-list"></div>
+                            <div class="tab-pane fade" id="list-tzait" role="tabpanel" aria-labelledby="list-tzait-list"></div>
+                        </div>
                     </div>
                 </div>
             </div>
