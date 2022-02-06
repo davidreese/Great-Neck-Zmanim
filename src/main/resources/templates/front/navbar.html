@@ -15,21 +15,8 @@
         <li class="nav-item" th:classappend="${#httpServletRequest.requestURI == '/'} ? 'active' : ''">
           <a class="nav-link" href="/">Zmanim<span class="sr-only">(current)</span></a>
         </li>
-        <li class="nav-item" th:classappend="${#httpServletRequest.requestURI == '/greeting'} ? 'active' : ''">
-          <a class="nav-link" href="/greeting">Greeting</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="#">About</a>
-        </li>
-        <li class="nav-item dropdown">
-          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            Dropdown link
-          </a>
-          <div class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-            <a class="dropdown-item" href="#">Action</a>
-            <a class="dropdown-item" href="#">Another action</a>
-            <a class="dropdown-item" href="#">Something else here</a>
-          </div>
+        <li class="nav-item" th:classappend="${#httpServletRequest.requestURI == '/about'} ? 'active' : ''">
+          <a class="nav-link" href="/about">About</a>
         </li>
       </ul>
       <span class="navbar-text time-shower" th:text="${date}">
