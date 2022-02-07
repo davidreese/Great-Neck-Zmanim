@@ -8,15 +8,6 @@ import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class AdminController {
-
-    @GetMapping("/admin/login")
-    public ModelAndView login() {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/login");
-
-        return mv;
-    }
-
     @GetMapping("/admin/dashboard")
     public ModelAndView dashbaord() {
         ModelAndView mv = new ModelAndView();
