@@ -1,0 +1,52 @@
+.btn-primary {
+    background-color: #035174;
+    border-color: #035174;
+}
+
+.btn-primary:hover {
+    background-color: #033A62;
+    border-color: #033A62;
+}
+
+.dropdown-item:active {
+    background-color: #035174;
+}
+
+.login-msg {
+    color: darkred;
+}
+
+html,
+body {
+    margin:0;
+    padding:0;
+    height:100%;
+}
+#container {
+    min-height:100%;
+    position:relative;
+}
+#header {
+    background:#ff0;
+    padding:10px;
+}
+#body {
+    padding:10px;
+    padding-bottom:60px;   /* Height of the footer */
+}
+#footer {
+    position:absolute;
+    bottom:0;
+    width:100%;
+    height:60px;   /* Height of the footer */
+    background:#6cf;
+}
+
+#footer-content {
+    background-color: #b4c9d7;
+    height: 100%;
+}
+
+.py-3 {
+    padding-bottom: 0.5rem!important;
+}
