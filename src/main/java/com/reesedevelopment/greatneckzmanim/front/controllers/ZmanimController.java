@@ -30,6 +30,11 @@ public class ZmanimController {
     ZmanimHandler zmanimHandler = new ZmanimHandler(geoLocation);
 
     @GetMapping("/")
+    public ModelAndView home() {
+        return zmanim();
+    }
+
+    @GetMapping("/zmanim")
     public ModelAndView zmanim() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("front/zmanim");
