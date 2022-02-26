@@ -19,7 +19,7 @@ public class AdminController {
 
     @GetMapping("/admin")
     public ModelAndView admin(@RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) boolean logout) {
-        return new LoginController().login(error, logout);
+        return dashbaord();
     }
 
     @GetMapping("/admin/logout")
