@@ -24,7 +24,6 @@ public class AdminController {
 
     @GetMapping("/admin/logout")
     public ModelAndView logout(@RequestParam(value = "error", required = false) String error) {
-        SecurityContextHolder.getContext().setAuthentication(null);
         return new LoginController().login(error, true);
     }
 }
