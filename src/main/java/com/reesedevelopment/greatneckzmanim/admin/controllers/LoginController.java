@@ -10,13 +10,22 @@ import org.springframework.web.servlet.ModelAndView;
 public class LoginController {
     @GetMapping("/admin/login")
     public ModelAndView login(@RequestParam(value = "error",required = false) String error, @RequestParam(value = "logout",	required = false) boolean logout) {
-        if (logout) {
-            SecurityContextHolder.getContext().setAuthentication(null);
-        }
-
+        System.out.println("LoginController.login() called");
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/login");
 
+        if (logout) {
+            System.out.println("Logging out...");
+            SecurityContextHolder.getContext().setAuthentication(null);
+            System.out.println("Logout Successful");
+            mv.getModel().put("logout", true);
+        }
+
         return mv;
+    }
+
+    @GetMapping("/login")
+    public ModelAndView loginShortcut(@RequestParam(value = "error",required = false) String error, @RequestParam(value = "logout",	required = false) boolean logout) {
+        return login(error, logout);
     }
 }
