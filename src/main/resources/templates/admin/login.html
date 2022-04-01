@@ -13,7 +13,7 @@
 <div id="container">
     <div class="center-container" id="body">
         <div class="dropdown-menu center" style="position: relative; display: block;">
-            <form class="px-4 py-3" th:action="@{/admin/login}" method="post">
+            <form class="px-4 py-3" th:action="@{/j_spring_security_check}" method="post">
                 <div class="form-group">
                     <label for="username-field">Username</label>
                     <input type="text" class="form-control" name="username" id="username-field" placeholder="Username">
@@ -32,7 +32,7 @@
 
                 <div class="login-msg-box" style="padding-top: 4px">
                     <div class="login-msg" th:if="${param.error}">
-                        Invalid username and password.
+                        Invalid credentials.
                     </div>
                     <div class="login-msg" th:if="${param.logout}">
                         You have been logged out.
