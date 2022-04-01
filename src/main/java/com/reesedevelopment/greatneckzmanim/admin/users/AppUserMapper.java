@@ -7,14 +7,14 @@ import org.springframework.jdbc.core.RowMapper;
 
 public class AppUserMapper implements RowMapper<AppUser> {
 
-    public static final String BASE_SQL = "SELECT u.User_Id, u.User_Name, u.Encryted_Password FROM App_User u ";
+    public static final String BASE_SQL = "SELECT u.ID, u.NAME, u.ENCRYPTED_PASSWORD FROM App_User u ";
 
     @Override
     public AppUser mapRow(ResultSet rs, int rowNum) throws SQLException {
 
-        Integer userId = rs.getInt("User_Id");
-        String userName = rs.getString("User_Name");
-        String encrytedPassword = rs.getString("Encryted_Password");
+        Integer userId = rs.getInt("ID");
+        String userName = rs.getString("NAME");
+        String encrytedPassword = rs.getString("ENCRYPTED_PASSWORD");
 
         return new AppUser(userId, userName, encrytedPassword);
     }

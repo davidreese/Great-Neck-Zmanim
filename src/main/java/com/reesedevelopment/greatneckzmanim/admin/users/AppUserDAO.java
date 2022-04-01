@@ -20,10 +20,11 @@ public class AppUserDAO extends JdbcDaoSupport {
     public AppUser findUserAccount(String userName) {
         System.out.println("findUserAccount called");
         // Select .. from App_User u Where u.User_Name = ?
-        String sql = AppUserMapper.BASE_SQL + " WHERE u.User_Name = ? ";
+        String sql = AppUserMapper.BASE_SQL + " WHERE u.NAME = ? ";
 
         Object[] params = new Object[] { userName };
         AppUserMapper mapper = new AppUserMapper();
+
         try {
             AppUser userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
             return userInfo;
