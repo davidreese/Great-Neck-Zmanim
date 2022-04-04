@@ -50,3 +50,8 @@ body {
 .py-3 {
     padding-bottom: 0.5rem!important;
 }
+
+.bottom {
+    position: absolute;
+    bottom: 0;
+}
