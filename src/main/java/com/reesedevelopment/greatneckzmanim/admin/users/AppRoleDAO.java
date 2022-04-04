@@ -34,5 +34,4 @@ public class AppRoleDAO extends JdbcDaoSupport {
 
         return roles;
     }
-
 }
