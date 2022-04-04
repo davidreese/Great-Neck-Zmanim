@@ -26,4 +26,11 @@ public class AdminController {
     public ModelAndView logout(@RequestParam(value = "error", required = false) String error) {
         return new LoginController().login(error, true);
     }
+
+    @GetMapping("/admin/organizations")
+    public ModelAndView organizations() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/organizations");
+        return mv;
+    }
 }
