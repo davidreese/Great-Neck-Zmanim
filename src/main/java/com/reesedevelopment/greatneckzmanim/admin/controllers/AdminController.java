@@ -1,14 +1,21 @@
 package com.reesedevelopment.greatneckzmanim.admin.controllers;
 
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.reesedevelopment.greatneckzmanim.admin.users.GNZUserDAO;
+import com.reesedevelopment.greatneckzmanim.admin.users.GNZOrganizationDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 @Controller
 public class AdminController {
+    @Autowired
+    private GNZUserDAO gnzUserDAO;
+
+    @Autowired
+    private GNZOrganizationDAO gnzOrganizationDAO;
+
     @GetMapping("/admin/dashboard")
     public ModelAndView dashbaord() {
         ModelAndView mv = new ModelAndView();
