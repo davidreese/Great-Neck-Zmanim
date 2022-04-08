@@ -1,12 +1,19 @@
 package com.reesedevelopment.greatneckzmanim.admin.controllers;
 
+import com.reesedevelopment.greatneckzmanim.admin.users.GNZOrganization;
 import com.reesedevelopment.greatneckzmanim.admin.users.GNZUserDAO;
 import com.reesedevelopment.greatneckzmanim.admin.users.GNZOrganizationDAO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @Controller
 public class AdminController {
@@ -53,10 +60,10 @@ public class AdminController {
         return mv;
     }
 
-    @GetMapping("/admin/add-organization")
-    public ModelAndView addOrganization() {
+    @GetMapping("/admin/new-organization")
+    public ModelAndView addOrganization(@RequestParam(value = "success", required = false) boolean success, @RequestParam(value = "error", required = false) String error) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/add-organization");
+        mv.setViewName("admin/new-organization");
         return mv;
     }
 }
