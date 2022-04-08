@@ -16,6 +16,9 @@ public class AdminController {
     @Autowired
     private GNZOrganizationDAO gnzOrganizationDAO;
 
+    @Autowired
+//    private GNZAcc gnzOrganizationDAO;
+
     @GetMapping("/admin/dashboard")
     public ModelAndView dashbaord() {
         ModelAndView mv = new ModelAndView();
@@ -34,11 +37,26 @@ public class AdminController {
         return new LoginController().login(error, true);
     }
 
+//    @GetMapping("/admin/organizations")
+//    public ModelAndView organizations() {
+//        ModelAndView mv = new ModelAndView();
+//        mv.setViewName("admin/organizations");
+//        mv.addObject("organizations", gnzUserDAO.findAll());
+//        return mv;
+//    }
+
     @GetMapping("/admin/organizations")
     public ModelAndView organizations() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/organizations");
         mv.addObject("organizations", gnzOrganizationDAO.findAll());
+        return mv;
+    }
+
+    @GetMapping("/admin/add-organization")
+    public ModelAndView addOrganization() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/add-organization");
         return mv;
     }
 }
