@@ -38,7 +38,7 @@ public class AdminController {
     public ModelAndView organizations() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/organizations");
-        mv.addObject("organizations", gnzUserDAO.findAll());
+        mv.addObject("organizations", gnzOrganizationDAO.findAll());
         return mv;
     }
 }

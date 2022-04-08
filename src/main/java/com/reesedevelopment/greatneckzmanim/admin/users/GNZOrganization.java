@@ -13,14 +13,14 @@ public class GNZOrganization {
     private String id;
 
     @Column(name="NAME", nullable = false)
-    private String username;
+    private String name;
 
     @Column(name="ADDRESS")
     private String address;
 
     public GNZOrganization(String id, String username, String address) {
         this.id = id;
-        this.username = username;
+        this.name = username;
         this.address = address;
     }
 
@@ -32,12 +32,12 @@ public class GNZOrganization {
         this.id = id;
     }
 
-    public String getUsername() {
-        return username;
+    public String getName() {
+        return name;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getAddress() {

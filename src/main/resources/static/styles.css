@@ -71,3 +71,17 @@ horizontal-container {
     justify-content: space-between;
     align-items: center;
 }
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    color: #fff;
+    background-color: #034262;
+    border-color: #034262;
+}
+
+.col-housing {
+-ms-flex-preferred-size: 0;
+flex-basis: 0;
+-ms-flex-positive: 1;
+flex-grow: 1;
+max-width: 100%;
+}
