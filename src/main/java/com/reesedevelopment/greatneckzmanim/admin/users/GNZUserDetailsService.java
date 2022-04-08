@@ -16,14 +16,11 @@ import java.util.List;
 public class GNZUserDetailsService implements UserDetailsService {
 
     @Autowired
-    private AppUserDAO appUserDAO;
-
-    @Autowired
-    private AppRoleDAO appRoleDAO;
+    private GNZUserDAO gnzUserDAO;
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        AppUser user = this.appUserDAO.findUserAccount(userName);
+        GNZUser user = this.gnzUserDAO.findUserAccount(userName);
 
         if (user == null) {
             System.out.println("User not found! " + userName);
@@ -32,16 +29,17 @@ public class GNZUserDetailsService implements UserDetailsService {
 
         System.out.println("Found User: " + user);
 
-        List<String> roleNames = this.appRoleDAO.getRoleNames(user.getId());
-
+//        List<String> roleNames = this.appRoleDAO.getRoleNames(user.getId());
+//
         List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
-        if (roleNames != null) {
-            for (String role : roleNames) {
+//        if (roleNames != null) {
+//            for (String role : roleNames) {
                 // ROLE_USER, ROLE_ADMIN,..
-                GrantedAuthority authority = new SimpleGrantedAuthority(role);
+
+                GrantedAuthority authority = new SimpleGrantedAuthority(user.role().getName());
                 grantList.add(authority);
-            }
-        }
+//            }
+//        }
 
         UserDetails userDetails = (UserDetails) new User(user.getUsername(), user.getEncryptedPassword(), grantList);
 

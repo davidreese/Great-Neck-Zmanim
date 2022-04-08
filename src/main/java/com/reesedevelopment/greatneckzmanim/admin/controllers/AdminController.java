@@ -1,14 +1,31 @@
 package com.reesedevelopment.greatneckzmanim.admin.controllers;
 
-import org.springframework.security.core.context.SecurityContextHolder;
+import com.reesedevelopment.greatneckzmanim.admin.users.GNZOrganization;
+import com.reesedevelopment.greatneckzmanim.admin.users.GNZUserDAO;
+import com.reesedevelopment.greatneckzmanim.admin.users.GNZOrganizationDAO;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 @Controller
 public class AdminController {
+    @Autowired
+    private GNZUserDAO gnzUserDAO;
+
+    @Autowired
+    private GNZOrganizationDAO gnzOrganizationDAO;
+
+    @Autowired
+//    private GNZAcc gnzOrganizationDAO;
+
     @GetMapping("/admin/dashboard")
     public ModelAndView dashbaord() {
         ModelAndView mv = new ModelAndView();
@@ -25,5 +42,92 @@ public class AdminController {
     @GetMapping("/admin/logout")
     public ModelAndView logout(@RequestParam(value = "error", required = false) String error) {
         return new LoginController().login(error, true);
+    }
+
+//    @GetMapping("/admin/organizations")
+//    public ModelAndView organizations() {
+//        ModelAndView mv = new ModelAndView();
+//        mv.setViewName("admin/organizations");
+//        mv.addObject("organizations", gnzUserDAO.findAll());
+//        return mv;
+//    }
+
+    @GetMapping("/admin/organizations")
+    public ModelAndView organizations() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/organizations");
+        mv.addObject("organizations", gnzOrganizationDAO.findAll());
+        return mv;
+    }
+
+    @GetMapping("/admin/new-organization")
+    public ModelAndView addOrganization(@RequestParam(value = "success", required = false) boolean success, @RequestParam(value = "error", required = false) String error) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/new-organization");
+        return mv;
+    }
+
+    @RequestMapping(value = "/admin/create-organization", method = RequestMethod.POST)
+    public ModelAndView createOrganization(@RequestParam(value = "name", required = true) String name,
+                                           @RequestParam(value = "address", required = true) String address,
+                                           @RequestParam(value = "username", required = true) String username,
+                                           @RequestParam(value = "email", required = true) String email,
+                                           @RequestParam(value = "password", required = true) String password,
+                                           @RequestParam(value = "cpassword", required = true) String cpassword) {
+
+        if (name.isEmpty() || address.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty() || cpassword.isEmpty()) {
+            System.out.println("Sorry, fields cannot be left blank.");
+            return addOrganization(false, "Sorry, fields cannot be left blank.");
+        }
+
+        if (!password.equals(cpassword)) {
+            System.out.println("Sorry, passwords do not match.");
+            return addOrganization(false, "Sorry, passwords do not match.");
+        }
+
+//        check if username is valid
+        String usernameRegex = "^[A-Za-z]\\w{5,29}$";
+        Pattern usernamePatter = Pattern.compile(usernameRegex);
+        Matcher m = usernamePatter.matcher(username);
+        if (!m.matches()) {
+            System.out.println("Sorry, username is not valid.");
+            return addOrganization(false,"Sorry, the username must be 6-30 characters, only contain letters and numbers, and start with a letter.");
+        }
+
+//        check if username already exists
+        if (gnzUserDAO.findUserAccount(username) != null) {
+            System.out.println("Sorry, this username already exists.");
+            return addOrganization(false,"Sorry, this username already exists.");
+        }
+
+//        check if email is valid
+        String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+        Pattern emailPattern = Pattern.compile(emailRegex);
+        Matcher m2 = emailPattern.matcher(email);
+        if (!m2.matches()) {
+            System.out.println("Sorry, this email address is not valid.");
+            return addOrganization(false,"Sorry, this email address is invalid.");
+        }
+
+//        check if password is valid
+        String passwordRegex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
+        Pattern passwordPattern = Pattern.compile(passwordRegex);
+        Matcher m3 = passwordPattern.matcher(password);
+        if (!m3.matches()) {
+            System.out.println("Sorry, this password is not valid.");
+            return addOrganization(false,"Sorry, the password must be at least 8 characters, contain at least one letter and one number.");
+        }
+
+        UUID uuid = UUID.randomUUID();
+
+        GNZOrganization organization = new GNZOrganization(uuid.toString(), name, address);
+
+        if  (this.gnzOrganizationDAO.saveOrganization(organization)) {
+            System.out.println("Organization created successfully.");
+            return addOrganization(true, null);
+        } else {
+            System.out.println("Organization creation failed.");
+            return addOrganization(false,"Sorry, there was an error creating the organization.");
+        }
     }
 }

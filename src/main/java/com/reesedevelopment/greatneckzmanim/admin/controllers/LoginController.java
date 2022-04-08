@@ -21,6 +21,10 @@ public class LoginController {
             mv.getModel().put("logout", true);
         }
 
+        if (error != null && !error.isEmpty()) {
+            mv.getModel().put("error", error);
+        }
+
         return mv;
     }
 

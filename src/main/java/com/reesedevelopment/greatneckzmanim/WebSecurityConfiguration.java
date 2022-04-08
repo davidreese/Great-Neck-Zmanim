@@ -64,6 +64,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers("/", "/admin/login", "/admin/logout", "/webjars/**", "/**/*.css", "/**/*.js", "/static/**", "/db/**").permitAll()
+                    .antMatchers("/admin/organizations", "/admin/new-organization", "/admin/create-organization").hasAnyRole("ADMIN")
                     .anyRequest().authenticated()
                     .and()
                 .formLogin()//
@@ -76,7 +77,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .and()
                 .logout()
                     .logoutUrl("/logout")
-                    .logoutSuccessUrl("/logoutSuccessful");
+                    .logoutSuccessUrl("/admin/login?error=true");
 
 
         // For ADMIN only.
