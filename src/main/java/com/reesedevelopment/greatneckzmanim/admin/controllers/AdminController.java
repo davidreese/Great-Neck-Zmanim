@@ -2,6 +2,7 @@ package com.reesedevelopment.greatneckzmanim.admin.controllers;
 
 import com.reesedevelopment.greatneckzmanim.admin.structure.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -174,7 +175,13 @@ public class AdminController {
     @GetMapping("/admin/my-account")
     public ModelAndView myAccount() {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/my-account");
+
+//        TODO: ENSURE SECURITY
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(Role.ADMIN.getName())) {
+            mv.setViewName("admin/my-account");
+        } else {
+            mv.setViewName("admin/my-account");
+        }
 
         Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
