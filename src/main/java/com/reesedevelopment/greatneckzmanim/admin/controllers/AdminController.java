@@ -138,11 +138,21 @@ public class AdminController {
 
         System.out.println("Creating organization...");
 
-        GNZOrganization organization = new GNZOrganization(uuid.toString(), name, address);
+        GNZOrganization organization = new GNZOrganization(name, address);
 
-        if  (this.gnzOrganizationDAO.saveOrganization(organization)) {
+        if  (this.gnzOrganizationDAO.save(organization)) {
             System.out.println("Organization created successfully.");
-            return addOrganization(true, null);
+            System.out.println("Creating account for organization...");
+
+            GNZUser user = new GNZUser(username, email, Encrypter.encrytedPassword(password), organization.getId(), Role.USER.getId());
+            if (this.gnzUserDAO.save(user)) {
+                return addOrganization(true, null);
+            } else {
+                System.out.println("Account creation failed. Deleting organization from database...");
+//                TODO: REMOVE ORGANIZATION FROM DATABASE
+
+                return addOrganization(false, "Sorry, there was an error creating the account.");
+            }
         } else {
             System.out.println("Organization creation failed.");
             return addOrganization(false,"Sorry, there was an error creating the organization.");
