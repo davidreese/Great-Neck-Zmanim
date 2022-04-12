@@ -67,11 +67,15 @@ public class AdminController {
         return mv;
     }
 
-    @GetMapping("/admin/new-organization")
+    @RequestMapping(value = "/admin/new-organization", method = RequestMethod.GET)
     public ModelAndView addOrganization(@RequestParam(value = "success", required = false) boolean success, @RequestParam(value = "error", required = false) String error) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/new-organization");
         Date today = new Date();
+//        mv.addObject("date", dateFormat.format(today));
+//        mv.addObject("success", success);
+//        mv.addObject("error", error);
+
         mv.getModel().put("date", dateFormat.format(today));
         mv.getModel().put("success", success);
         mv.getModel().put("error", error);
