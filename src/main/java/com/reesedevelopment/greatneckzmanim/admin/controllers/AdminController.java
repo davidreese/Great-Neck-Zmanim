@@ -1,8 +1,6 @@
 package com.reesedevelopment.greatneckzmanim.admin.controllers;
 
-import com.reesedevelopment.greatneckzmanim.admin.users.GNZOrganization;
-import com.reesedevelopment.greatneckzmanim.admin.users.GNZUserDAO;
-import com.reesedevelopment.greatneckzmanim.admin.users.GNZOrganizationDAO;
+import com.reesedevelopment.greatneckzmanim.admin.structure.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -11,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -23,13 +23,18 @@ public class AdminController {
     @Autowired
     private GNZOrganizationDAO gnzOrganizationDAO;
 
-    @Autowired
+//    @Autowired
 //    private GNZAcc gnzOrganizationDAO;
+
+    SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy | hh:mm aa");
 
     @GetMapping("/admin/dashboard")
     public ModelAndView dashbaord() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/dashboard");
+
+        Date today = new Date();
+        mv.getModel().put("date", dateFormat.format(today));
 
         return mv;
     }
@@ -57,6 +62,8 @@ public class AdminController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/organizations");
         mv.addObject("organizations", gnzOrganizationDAO.findAll());
+        Date today = new Date();
+        mv.getModel().put("date", dateFormat.format(today));
         return mv;
     }
 
@@ -64,6 +71,11 @@ public class AdminController {
     public ModelAndView addOrganization(@RequestParam(value = "success", required = false) boolean success, @RequestParam(value = "error", required = false) String error) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/new-organization");
+        Date today = new Date();
+        mv.getModel().put("date", dateFormat.format(today));
+        mv.getModel().put("success", success);
+        mv.getModel().put("error", error);
+
         return mv;
     }
 
