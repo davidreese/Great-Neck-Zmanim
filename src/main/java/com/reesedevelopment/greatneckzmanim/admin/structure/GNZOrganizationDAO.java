@@ -79,7 +79,7 @@ public class GNZOrganizationDAO extends JdbcDaoSupport {
         return organizations;
     }
 
-    public boolean saveOrganization(GNZOrganization organization) {
+    public boolean save(GNZOrganization organization) {
         String sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress());
 
         try {
