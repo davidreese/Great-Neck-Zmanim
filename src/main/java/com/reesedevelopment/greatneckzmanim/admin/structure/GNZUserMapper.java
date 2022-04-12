@@ -1,4 +1,4 @@
-package com.reesedevelopment.greatneckzmanim.admin.users;
+package com.reesedevelopment.greatneckzmanim.admin.structure;
 
 import java.io.Serializable;
 import java.sql.ResultSet;

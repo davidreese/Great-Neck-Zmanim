@@ -1,56 +1,56 @@
-package com.reesedevelopment.greatneckzmanim.admin.users;
+package com.reesedevelopment.greatneckzmanim.admin.structure;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.sql.DataSource;
-import java.util.*;
-
 @Repository
 @Transactional
-public class GNZUserDAO extends JdbcDaoSupport {
+public class GNZOrganizationDAO extends JdbcDaoSupport {
 
     @Autowired
-    public GNZUserDAO(DataSource dataSource) {
+    public GNZOrganizationDAO(DataSource dataSource) {
         this.setDataSource(dataSource);
     }
 
-    public GNZUser findUserAccount(String userName) {
+    /*
+    public AppUser findOrganization(String userName) {
         System.out.println("findUserAccount called");
         // Select .. from App_User u Where u.User_Name = ?
-        String sql = GNZUserMapper.BASE_SQL + " WHERE u.USERNAME = ? ";
+        String sql = AppUserMapper.BASE_SQL + " WHERE u.NAME = ? ";
 
         Object[] params = new Object[] { userName };
-        GNZUserMapper mapper = new GNZUserMapper();
+        AppUserMapper mapper = new AppUserMapper();
 
         try {
-            GNZUser userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            AppUser userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
             return userInfo;
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
+    */
 
-    public List<GNZUser> findAll() {
-        String sql = "SELECT ID, USERNAME, ENCRYPTED_PASSWORD FROM ACCOUNT";
+    public List<GNZOrganization> findAll() {
+        String sql = "SELECT * FROM ORGANIZATION";
 
-        GNZUserMapper mapper = new GNZUserMapper();
+        GNZOrganizationMapper mapper = new GNZOrganizationMapper();
 
-        List<Map<String, Object>> userMaps = this.getJdbcTemplate().queryForList(sql);
+        List<Map<String, Object>> orgMaps = this.getJdbcTemplate().queryForList(sql);
 
-        List<GNZUser> users = new ArrayList<GNZUser>();
+        List<GNZOrganization> organizations = new ArrayList<>();
 
 //        iterate through the list and create an GNZUser object for each row
-        for (Map<String, Object> userMap : userMaps) {
-            users.add(mapper.mapRow(userMap));
+        for (Map<String, Object> orgMap : orgMaps) {
+            organizations.add(mapper.mapRow(orgMap));
         }
-
-
-
-
 
 //        System.out.println(users);
         /*
@@ -76,6 +76,18 @@ public class GNZUserDAO extends JdbcDaoSupport {
 
 //        System.out.println("Users: " + users);
 
-        return users;
+        return organizations;
+    }
+
+    public boolean saveOrganization(GNZOrganization organization) {
+        String sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress());
+
+        try {
+            this.getConnection().createStatement().execute(sql);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }
