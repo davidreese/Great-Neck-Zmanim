@@ -7,7 +7,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name="ORGANIZATION")
-public class GNZOrganization {
+public class GNZOrganization implements IDGenerator {
     @Id
     @Column(name="ID", nullable = false, unique = true)
     private String id;
@@ -20,6 +20,12 @@ public class GNZOrganization {
 
     public GNZOrganization(String id, String username, String address) {
         this.id = id;
+        this.name = username;
+        this.address = address;
+    }
+
+    public GNZOrganization(String username, String address) {
+        this.id = generateID('O');
         this.name = username;
         this.address = address;
     }
