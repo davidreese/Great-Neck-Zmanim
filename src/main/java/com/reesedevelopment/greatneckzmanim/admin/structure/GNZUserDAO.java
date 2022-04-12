@@ -78,4 +78,16 @@ public class GNZUserDAO extends JdbcDaoSupport {
 
         return users;
     }
+
+    public boolean save(GNZUser user) {
+        String sql = String.format("INSERT INTO ACCOUNT VALUES ('%s', '%s', '%s', '%s', '%s', '%d')", user.getId(), user.getUsername(), user.getEmail(), user.getEncryptedPassword(), user.getOrganizationId(), user.getRoleId());
+
+        try {
+            this.getConnection().createStatement().execute(sql);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
