@@ -6,7 +6,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="ACCOUNT")
-public class GNZUser {
+public class GNZUser implements IDGenerator {
     @Id
 //    @Id
     @Column(name="ID", nullable = false, unique = true)
@@ -34,6 +34,15 @@ public class GNZUser {
 
     public GNZUser(String id, String username, String email, String encryptedPassword, String organizationId, Integer role) {
         this.id = id;
+        this.username = username;
+        this.email = email;
+        this.encryptedPassword = encryptedPassword;
+        this.organizationId = organizationId;
+        this.roleId = role;
+    }
+
+    public GNZUser(String username, String email, String encryptedPassword, String organizationId, Integer role) {
+        this.id = generateID('A');
         this.username = username;
         this.email = email;
         this.encryptedPassword = encryptedPassword;
