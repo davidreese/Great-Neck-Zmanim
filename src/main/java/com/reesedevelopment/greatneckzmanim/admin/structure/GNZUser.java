@@ -50,51 +50,23 @@ public class GNZUser implements IDGenerator {
         this.roleId = role;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getUsername() {
         return username;
-    }
-
-    public void setUsername(String username) {
-        this.username = username;
     }
 
     public String getEmail() {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     public String getEncryptedPassword() {
         return encryptedPassword;
-    }
-
-    public void setEncryptedPassword(String encryptedPassword) {
-        this.encryptedPassword = encryptedPassword;
     }
 
     public String getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(String organizationId) {
-        this.organizationId = organizationId;
-    }
-
     public Integer getRoleId() {
         return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
     }
 }
