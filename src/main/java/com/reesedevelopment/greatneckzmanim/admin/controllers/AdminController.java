@@ -156,4 +156,29 @@ public class AdminController {
             return addOrganization(false,"Sorry, there was an error creating the organization.");
         }
     }
+
+    @RequestMapping(value = "/admin/new-account", method = RequestMethod.GET)
+    public ModelAndView addAccount(@RequestParam(value = "success", required = false) boolean success, @RequestParam(value = "error", required = false) String error) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/new-account");
+
+        Date today = new Date();
+        mv.getModel().put("date", dateFormat.format(today));
+
+        mv.getModel().put("success", success);
+        mv.getModel().put("error", error);
+
+        return mv;
+    }
+
+    @GetMapping("/admin/my-account")
+    public ModelAndView myAccount() {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/my-account");
+
+        Date today = new Date();
+        mv.getModel().put("date", dateFormat.format(today));
+
+        return mv;
+    }
 }
