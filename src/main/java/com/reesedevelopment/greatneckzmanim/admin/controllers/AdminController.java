@@ -87,6 +87,8 @@ public class AdminController {
                                            @RequestParam(value = "password", required = true) String password,
                                            @RequestParam(value = "cpassword", required = true) String cpassword) {
 
+        System.out.println("Validating input data...");
+
         if (name.isEmpty() || address.isEmpty() || username.isEmpty() || email.isEmpty() || password.isEmpty() || cpassword.isEmpty()) {
             System.out.println("Sorry, fields cannot be left blank.");
             return addOrganization(false, "Sorry, fields cannot be left blank.");
@@ -130,7 +132,7 @@ public class AdminController {
             return addOrganization(false,"Sorry, the password must be at least 8 characters, contain at least one letter and one number.");
         }
 
-        UUID uuid = UUID.randomUUID();
+        System.out.println("Creating organization...");
 
         GNZOrganization organization = new GNZOrganization(uuid.toString(), name, address);
 
