@@ -59,6 +59,9 @@
                                     <label for="cpassword">Confirm Password</label>
                                     <input type="password" class="form-control" name="cpassword" id="cpassword" required>
                                 </div>
+                                <div class="login-msg-box" th:if="${error}" style="padding-bottom: 8px">
+                                    <div class="login-msg-fatal" th:text="${error}"></div>
+                                </div>
                                 <button type="submit" class="btn btn-primary">Create</button>
                             </form>
                         </div>
