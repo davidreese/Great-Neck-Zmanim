@@ -1,6 +1,6 @@
 package com.reesedevelopment.greatneckzmanim;
 
-import com.reesedevelopment.greatneckzmanim.admin.users.GNZUserDetailsService;
+import com.reesedevelopment.greatneckzmanim.admin.structure.GNZUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
