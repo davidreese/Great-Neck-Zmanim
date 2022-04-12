@@ -71,8 +71,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .passwordParameter("password")
                     .and()
                 .logout()
-                    .logoutUrl("/logout")
-                    .logoutSuccessUrl("/admin/login?error=true");
+                    .logoutUrl("/admin/logout")
+                    .logoutSuccessUrl("/admin/login?logout=true");
 
 
         // For ADMIN only.
