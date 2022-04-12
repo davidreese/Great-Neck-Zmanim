@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class GNZOrganizationDAO extends JdbcDaoSupport {
+public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GNZOrganization> {
 
     @Autowired
     public GNZOrganizationDAO(DataSource dataSource) {
@@ -38,7 +38,8 @@ public class GNZOrganizationDAO extends JdbcDaoSupport {
     }
     */
 
-    public List<GNZOrganization> findAll() {
+    @Override
+    public List<GNZOrganization> getAll() {
         String sql = "SELECT * FROM ORGANIZATION";
 
         GNZOrganizationMapper mapper = new GNZOrganizationMapper();
@@ -79,6 +80,7 @@ public class GNZOrganizationDAO extends JdbcDaoSupport {
         return organizations;
     }
 
+    @Override
     public boolean save(GNZOrganization organization) {
         String sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress());
 

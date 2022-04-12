@@ -34,6 +34,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         }
     }
 
+    @Override
     public List<GNZUser> getAll() {
         String sql = "SELECT ID, USERNAME, ENCRYPTED_PASSWORD FROM ACCOUNT";
 
@@ -79,6 +80,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         return users;
     }
 
+    @Override
     public boolean save(GNZUser user) {
         String sql = String.format("INSERT INTO ACCOUNT VALUES ('%s', '%s', '%s', '%s', '%s', '%d')", user.getId(), user.getUsername(), user.getEmail(), user.getEncryptedPassword(), user.getOrganizationId(), user.getRoleId());
 
