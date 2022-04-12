@@ -9,5 +9,5 @@ public interface GNZSaveable<T extends GNZObject> {
 
 //    boolean disable(T objectToDisable);
 
-    boolean delete(T objectToDelete);
+//    boolean delete(T objectToDelete);
 }
