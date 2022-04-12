@@ -71,12 +71,10 @@ public class AdminController {
     public ModelAndView addOrganization(@RequestParam(value = "success", required = false) boolean success, @RequestParam(value = "error", required = false) String error) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/new-organization");
-        Date today = new Date();
-//        mv.addObject("date", dateFormat.format(today));
-//        mv.addObject("success", success);
-//        mv.addObject("error", error);
 
+        Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
+
         mv.getModel().put("success", success);
         mv.getModel().put("error", error);
 
