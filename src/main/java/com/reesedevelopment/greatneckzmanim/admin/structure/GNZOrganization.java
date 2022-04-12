@@ -5,13 +5,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
-@Entity
 @Table(name="ORGANIZATION")
-public class GNZOrganization implements IDGenerator {
-    @Id
-    @Column(name="ID", nullable = false, unique = true)
-    private String id;
-
+public class GNZOrganization extends GNZObject implements IDGenerator {
     @Column(name="NAME", nullable = false)
     private String name;
 
@@ -19,13 +14,13 @@ public class GNZOrganization implements IDGenerator {
     private String address;
 
     public GNZOrganization(String id, String username, String address) {
-        this.id = id;
+        super.id = id;
         this.name = username;
         this.address = address;
     }
 
     public GNZOrganization(String username, String address) {
-        this.id = generateID('O');
+        super.id = generateID('O');
         this.name = username;
         this.address = address;
     }

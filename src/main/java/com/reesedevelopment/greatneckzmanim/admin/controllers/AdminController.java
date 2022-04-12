@@ -61,7 +61,7 @@ public class AdminController {
     public ModelAndView organizations() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/organizations");
-        mv.addObject("organizations", gnzOrganizationDAO.findAll());
+        mv.addObject("organizations", gnzOrganizationDAO.getAll());
         Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
         return mv;

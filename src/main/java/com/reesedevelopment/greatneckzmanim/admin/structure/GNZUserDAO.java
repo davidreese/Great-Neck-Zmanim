@@ -11,7 +11,7 @@ import java.util.*;
 
 @Repository
 @Transactional
-public class GNZUserDAO extends JdbcDaoSupport {
+public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
 
     @Autowired
     public GNZUserDAO(DataSource dataSource) {
@@ -34,7 +34,7 @@ public class GNZUserDAO extends JdbcDaoSupport {
         }
     }
 
-    public List<GNZUser> findAll() {
+    public List<GNZUser> getAll() {
         String sql = "SELECT ID, USERNAME, ENCRYPTED_PASSWORD FROM ACCOUNT";
 
         GNZUserMapper mapper = new GNZUserMapper();

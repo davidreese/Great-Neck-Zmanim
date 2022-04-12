@@ -4,15 +4,8 @@ package com.reesedevelopment.greatneckzmanim.admin.structure;
 
 import javax.persistence.*;
 
-@Entity
 @Table(name="ACCOUNT")
-public class GNZUser implements IDGenerator {
-    @Id
-//    @Id
-    @Column(name="ID", nullable = false, unique = true)
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
-
+public class GNZUser extends GNZObject implements IDGenerator {
     @Column(name="USERNAME", nullable = false, unique = true)
     private String username;
 
@@ -33,7 +26,7 @@ public class GNZUser implements IDGenerator {
     }
 
     public GNZUser(String id, String username, String email, String encryptedPassword, String organizationId, Integer role) {
-        this.id = id;
+        super.id = id;
         this.username = username;
         this.email = email;
         this.encryptedPassword = encryptedPassword;
@@ -42,7 +35,7 @@ public class GNZUser implements IDGenerator {
     }
 
     public GNZUser(String username, String email, String encryptedPassword, String organizationId, Integer role) {
-        this.id = generateID('A');
+        super.id = generateID('A');
         this.username = username;
         this.email = email;
         this.encryptedPassword = encryptedPassword;
