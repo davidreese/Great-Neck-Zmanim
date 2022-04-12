@@ -12,7 +12,7 @@
             <th:block th:include="/admin/sidebar"></th:block>
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
-            <main class="col main pt-5 mt-3 overflow-auto">
+            <main class="col main pt-5 mt-3 overflow-auto" >
                 <h1 class="display-4 d-none d-sm-block">
                     Organizations
                 </h1>
@@ -25,7 +25,7 @@
                     new features such as flexbox, 5 grid sizes (now including xl), cards, `em` sizing, CSS normalization (reboot) and larger font
                     sizes.
                 </p>
-                <div class="row my-4">
+                <div class="row my-4" style="padding-bottom: 60px">
                     <div class="col-lg-9 col-md-8">
                         <div class="table-responsive">
                             <table class="table table-striped">
@@ -79,34 +79,6 @@
 
     </div>
     <!--/.container-->
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Modal</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>This is a dashboard layout for Bootstrap 4. This is an example of the Modal component which you can use to show content.
-                        Any content can be placed inside the modal and it can use the Bootstrap grid classes.</p>
-                    <p>
-                        <a href="https://www.codeply.com/go/KrUO8QpyXP" target="_ext">Grab the code at Codeply</a>
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary-outline" data-dismiss="modal">OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--    Welcome to the dashboard, [[${#httpServletRequest.remoteUser}]].-->
 </div>
 </body>
 </html>
