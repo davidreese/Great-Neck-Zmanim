@@ -99,7 +99,7 @@ public class AdminController {
         }
 
         if (!password.equals(cpassword)) {
-            System.out.println("Sorry, passwords do not match.");
+            System.out.println("Sorry, these passwords do not match.");
             return addOrganization(false, "Sorry, passwords do not match.");
         }
 
@@ -108,7 +108,7 @@ public class AdminController {
         Pattern usernamePatter = Pattern.compile(usernameRegex);
         Matcher m = usernamePatter.matcher(username);
         if (!m.matches()) {
-            System.out.println("Sorry, username is not valid.");
+            System.out.println("Sorry, this username is not valid.");
             return addOrganization(false,"Sorry, the username must be 6-30 characters, only contain letters and numbers, and start with a letter.");
         }
 
