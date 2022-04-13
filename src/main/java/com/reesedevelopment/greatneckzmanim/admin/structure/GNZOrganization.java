@@ -4,6 +4,7 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.net.URL;
 
 @Table(name="ORGANIZATION")
 public class GNZOrganization extends GNZObject implements IDGenerator {
@@ -13,16 +14,21 @@ public class GNZOrganization extends GNZObject implements IDGenerator {
     @Column(name="ADDRESS")
     private String address;
 
-    public GNZOrganization(String id, String username, String address) {
+    @Column(name="URL")
+    private URL websiteURL;
+
+    public GNZOrganization(String id, String username, String address, URL websiteURL) {
         super.id = id;
         this.name = username;
         this.address = address;
+        this.websiteURL = websiteURL;
     }
 
-    public GNZOrganization(String username, String address) {
+    public GNZOrganization(String username, String address, URL websiteURL) {
         super.id = generateID('O');
         this.name = username;
         this.address = address;
+        this.websiteURL = websiteURL;
     }
 
     public String getName() {
@@ -31,5 +37,9 @@ public class GNZOrganization extends GNZObject implements IDGenerator {
 
     public String getAddress() {
         return address;
+    }
+
+    public URL getWebsiteURL() {
+        return websiteURL;
     }
 }

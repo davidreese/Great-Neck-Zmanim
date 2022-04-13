@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
@@ -88,6 +90,7 @@ public class AdminController {
                                            @RequestParam(value = "address", required = true) String address,
                                            @RequestParam(value = "username", required = true) String username,
                                            @RequestParam(value = "email", required = true) String email,
+                                           @RequestParam(value = "site-url", required = false) String siteURLString,
                                            @RequestParam(value = "password", required = true) String password,
                                            @RequestParam(value = "cpassword", required = true) String cpassword) {
 
@@ -127,6 +130,17 @@ public class AdminController {
             return addOrganization(false,"Sorry, this email address is invalid.");
         }
 
+//        check if url string is valid
+        URL siteURL = null;
+        try {
+            siteURL = new URL(siteURLString);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+            if (!siteURLString.isEmpty()) {
+                System.out.println("Sorry, this site URL is not valid.");
+                return addOrganization(false,"Sorry, this site URL is invalid.");
+            }
+        }
 //        check if password is valid
         String passwordRegex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
         Pattern passwordPattern = Pattern.compile(passwordRegex);
@@ -138,7 +152,7 @@ public class AdminController {
 
         System.out.println("Creating organization...");
 
-        GNZOrganization organization = new GNZOrganization(name, address);
+        GNZOrganization organization = new GNZOrganization(name, address, siteURL);
 
         if  (this.gnzOrganizationDAO.save(organization)) {
             System.out.println("Organization created successfully.");
