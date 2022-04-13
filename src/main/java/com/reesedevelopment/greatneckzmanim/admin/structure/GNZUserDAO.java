@@ -92,4 +92,17 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
             return false;
         }
     }
+
+    @Override
+    public boolean delete(GNZUser objectToDelete) {
+        String sql = String.format("DELETE FROM USERS WHERE ID='%s'", objectToDelete.id);
+
+        try {
+            this.getConnection().createStatement().execute(sql);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }

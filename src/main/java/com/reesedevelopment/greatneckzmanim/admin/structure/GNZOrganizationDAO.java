@@ -97,4 +97,26 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
             return false;
         }
     }
+
+    @Override
+    public boolean delete(GNZOrganization objectToDelete) {
+        String sql = String.format("DELETE FROM ORGANIZATIONS WHERE ID='%s'", objectToDelete.id);
+
+        try {
+            this.getConnection().createStatement().execute(sql);
+
+            String matchingUsersSQL = String.format("DELETE FROM USERS WHERE ORGANIZATION_ID='%s'", objectToDelete.id);
+
+            try {
+                this.getConnection().createStatement().execute(matchingUsersSQL);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
