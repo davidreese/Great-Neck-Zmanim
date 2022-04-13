@@ -2,6 +2,7 @@ package com.reesedevelopment.greatneckzmanim.admin.controllers;
 
 import com.reesedevelopment.greatneckzmanim.admin.structure.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -75,12 +76,10 @@ public class AdminController {
     public ModelAndView addOrganization(@RequestParam(value = "success", required = false) boolean success, @RequestParam(value = "error", required = false) String error) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/new-organization");
-        Date today = new Date();
-//        mv.addObject("date", dateFormat.format(today));
-//        mv.addObject("success", success);
-//        mv.addObject("error", error);
 
+        Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
+
         mv.getModel().put("success", success);
         mv.getModel().put("error", error);
 
@@ -174,5 +173,36 @@ public class AdminController {
             System.out.println("Organization creation failed.");
             return addOrganization(false,"Sorry, there was an error creating the organization.");
         }
+    }
+
+    @RequestMapping(value = "/admin/new-account", method = RequestMethod.GET)
+    public ModelAndView addAccount(@RequestParam(value = "success", required = false) boolean success, @RequestParam(value = "error", required = false) String error) {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/new-account");
+
+        Date today = new Date();
+        mv.getModel().put("date", dateFormat.format(today));
+
+        mv.getModel().put("success", success);
+        mv.getModel().put("error", error);
+
+        return mv;
+    }
+
+    @GetMapping("/admin/my-account")
+    public ModelAndView myAccount() {
+        ModelAndView mv = new ModelAndView();
+
+//        TODO: ENSURE SECURITY
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(Role.ADMIN.getName())) {
+            mv.setViewName("admin/my-account");
+        } else {
+            mv.setViewName("admin/my-account");
+        }
+
+        Date today = new Date();
+        mv.getModel().put("date", dateFormat.format(today));
+
+        return mv;
     }
 }
