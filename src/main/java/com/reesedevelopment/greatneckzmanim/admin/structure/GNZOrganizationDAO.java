@@ -82,7 +82,12 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
 
     @Override
     public boolean save(GNZOrganization organization) {
-        String sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress());
+        String sql;
+        if (organization.getWebsiteURI() != null) {
+            sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getWebsiteURI());
+        } else {
+            sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s', NULL)", organization.getId(), organization.getName(), organization.getAddress());
+        }
 
         try {
             this.getConnection().createStatement().execute(sql);

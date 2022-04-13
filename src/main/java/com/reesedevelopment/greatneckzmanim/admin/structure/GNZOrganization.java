@@ -1,9 +1,8 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure;
 
 import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
 import javax.persistence.Table;
+import java.net.URI;
 import java.net.URL;
 
 @Table(name="ORGANIZATION")
@@ -14,21 +13,21 @@ public class GNZOrganization extends GNZObject implements IDGenerator {
     @Column(name="ADDRESS")
     private String address;
 
-    @Column(name="URL")
-    private URL websiteURL;
+    @Column(name="SITE_URI")
+    private URI websiteURI;
 
-    public GNZOrganization(String id, String username, String address, URL websiteURL) {
+    public GNZOrganization(String id, String username, String address, URI websiteURI) {
         super.id = id;
         this.name = username;
         this.address = address;
-        this.websiteURL = websiteURL;
+        this.websiteURI = websiteURI;
     }
 
-    public GNZOrganization(String username, String address, URL websiteURL) {
+    public GNZOrganization(String username, String address, URI websiteURI) {
         super.id = generateID('O');
         this.name = username;
         this.address = address;
-        this.websiteURL = websiteURL;
+        this.websiteURI = websiteURI;
     }
 
     public String getName() {
@@ -39,7 +38,7 @@ public class GNZOrganization extends GNZObject implements IDGenerator {
         return address;
     }
 
-    public URL getWebsiteURL() {
-        return websiteURL;
+    public URI getWebsiteURI() {
+        return websiteURI;
     }
 }

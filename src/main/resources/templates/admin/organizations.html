@@ -33,6 +33,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Name</th>
+                                    <th>Website</th>
                                     <th>Minyan Schedule</th>
                                     <th>Profile & Account</th>
                                 </tr>
@@ -41,6 +42,9 @@
                                 <tr th:each="organization: ${organizations}">
                                     <td th:text="${organization.id}" />
                                     <td th:text="${organization.name}" />
+                                    <td>
+                                        <a th:if="${organization.websiteURI}" th:href="@{'https://' + ${organization.websiteURI}}" th:text="${organization.websiteURI}"></a>
+                                    </td>
                                     <td>
                                         <a role="button" class="btn btn-primary btn-sm">Manage</a>
                                     </td>
