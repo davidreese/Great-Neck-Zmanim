@@ -118,4 +118,17 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
             return false;
         }
     }
+
+    @Override
+    public boolean update(GNZOrganization objectToUpdate) {
+        String sql = String.format("UPDATE ORGANIZATIONS SET NAME='%s', ADDRESS='%s', WEBSITE_URI='%s' WHERE ID='%s'", objectToUpdate.getName(), objectToUpdate.getAddress(), objectToUpdate.getWebsiteURI(), objectToUpdate.getId());
+
+        try {
+            this.getConnection().createStatement().execute(sql);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
 }
