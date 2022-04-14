@@ -2,6 +2,7 @@ package com.reesedevelopment.greatneckzmanim.admin.controllers;
 
 import com.reesedevelopment.greatneckzmanim.admin.structure.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -65,12 +66,14 @@ public class AdminController {
 //    }
 
     @GetMapping("/admin/organizations")
-    public ModelAndView organizations() {
+    public ModelAndView organizations(String success, String error) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/organizations");
         mv.addObject("organizations", gnzOrganizationDAO.getAll());
         Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
+        mv.getModel().put("success", success);
+        mv.getModel().put("error", error);
         return mv;
     }
 
@@ -209,9 +212,17 @@ public class AdminController {
     }
 
     @GetMapping("/admin/organization")
-    public ModelAndView organization(@RequestParam(value = "id", required = false) String id) throws Exception {
+    public ModelAndView organization(@RequestParam(value = "id", required = false) String id, String successMessage, String errorMessage) throws Exception {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/organization");
+
+        if (successMessage != null && !successMessage.isEmpty()) {
+            mv.addObject("success", successMessage);
+        }
+
+        if (errorMessage != null && !errorMessage.isEmpty()) {
+            mv.addObject("error", errorMessage);
+        }
 
 //        check permissions
         if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
@@ -249,5 +260,103 @@ public class AdminController {
 //        mv.addObject("organization", organization);
 
         return mv;
+    }
+
+    @RequestMapping(value = "/admin/update-organization", method = RequestMethod.POST)
+    public ModelAndView updateOrganization(@RequestParam(value = "id", required = true) String id,
+                                           @RequestParam(value = "name", required = true) String name,
+                                           @RequestParam(value = "address", required = false) String address,
+                                           @RequestParam(value = "site-url", required = false) String siteURIString) throws Exception {
+
+//        validate input
+        if (name == null || name.isEmpty()) {
+            return organization(id, null, "Organization name cannot be empty.");
+        }
+
+        URI siteURI = null;
+        if (siteURIString != null && !siteURIString.isEmpty()) {
+            try {
+                siteURI = new URI(siteURIString);
+            } catch (URISyntaxException e) {
+                e.printStackTrace();
+                return organization(id, null, "Invalid website URL.");
+            }
+        }
+
+        GNZOrganization organization = new GNZOrganization(id, name, address, siteURI);
+
+//        check permissions
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
+            if (this.gnzOrganizationDAO.update(organization)) {
+                System.out.println("Organization updated successfully.");
+                return organization(id, "Successfully updated the organization details.", null);
+            } else {
+                System.out.println("Organization update failed.");
+                return organization(id, null, "Sorry, the update failed.");
+            }
+        } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()))) {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            GNZUser user = this.gnzUserDAO.find(username);
+            String associatedOrganizationId = user.getOrganizationId();
+            if (!associatedOrganizationId.equals(id)) {
+                System.out.println("You do not have permission to view this organization.");
+                throw new AccessDeniedException("You do not have permission to view this organization.");
+            } else {
+                if (this.gnzOrganizationDAO.update(organization)) {
+                    System.out.println("Organization updated successfully.");
+                    return organization(id, "Successfully updated the organization details.", null);
+                } else {
+                    System.out.println("Organization update failed.");
+                    return organization(id, null, "Sorry, the update failed.");
+                }
+            }
+        } else {
+            throw new AccessDeniedException("You do not have permission to view this organization.");
+        }
+    }
+
+    @RequestMapping(value = "/admin/delete-organization")
+    public ModelAndView deleteOrganization(@RequestParam(value = "id", required = true) String id) throws Exception {
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
+//            get organization and check if it exists
+            GNZOrganization organization = this.gnzOrganizationDAO.find(id);
+            if (organization != null) {
+                if (this.gnzOrganizationDAO.delete(organization)) {
+                    System.out.println("Organization deleted successfully.");
+                    return organizations("Successfully deleted the organization.", null);
+                } else {
+                    System.out.println("Organization delete failed.");
+                    return organizations(null, "Sorry, the organization could not be deleted.");
+                }
+            } else {
+                System.out.println("Organization does not exist. Failed to delete.");
+                return organizations(null, "Sorry, the organization could not be deleted.");
+            }
+        } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()))) {
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            GNZUser user = this.gnzUserDAO.find(username);
+            String associatedOrganizationId = user.getOrganizationId();
+            if (!associatedOrganizationId.equals(id)) {
+                System.out.println("You do not have permission to view this organization.");
+                throw new AccessDeniedException("You do not have permission to view this organization.");
+            } else {
+//                get organization and check if it exists
+                GNZOrganization organization = this.gnzOrganizationDAO.find(id);
+                if (organization != null) {
+                    if (this.gnzOrganizationDAO.delete(organization)) {
+                        System.out.println("Organization deleted successfully.");
+                        return organizations("Successfully deleted the organization.", null);
+                    } else {
+                        System.out.println("Organization delete failed.");
+                        return organizations(null, "Sorry, the delete failed.");
+                    }
+                } else {
+                    System.out.println("Organization does not exist. Failed to delete.");
+                    return organizations(null, "Sorry, the organization could not be deleted.");
+                }
+            }
+        } else {
+            throw new AccessDeniedException("You do not have permission to view this organization.");
+        }
     }
 }
