@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${organization.name}"></title>
+</head>
+<body>
+<div class="horizontal-container">
+    <th:block th:include="/admin/navbar"></th:block>
+    <div class="container-fluid" id="main">
+        <div class="row row-offcanvas row-offcanvas-left vh-100">
+            <th:block th:include="/admin/sidebar"></th:block>
+            <!--/col-->
+            <div class="col-housing main h-100 overflow-auto">
+                <main class="col main pt-5 mt-3 overflow-auto">
+                    <h1 class="display-4 d-none d-sm-block" th:text="${organization.name}"></h1>
+                    <p class="lead d-none d-sm-block">Edit profile, attributes, and associated accounts.</p>
+                    
+                    <div class="row my-4" style="padding-bottom: 60px">
+                        <div class="col-lg-9 col-md-8">
+                            <div class="table-responsive">
+                                <form th:action="@{/admin/create-organization}" method="post">
+                                    <div class="form-group">
+                                        <label for="name">Organization Name</label>
+                                        <input type="text" class="form-control" name="name" id="name" aria-describedby="display-name" required>
+                                        <small id="name-help" class="form-text text-muted">This is the public display name for the organization.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="address">Organization Address</label>
+                                        <input type="text" class="form-control" name="address" id="address" aria-describedby="address" required>
+                                        <small id="address-help" class="form-text text-muted">This is the publicly displayed address for the organization.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="username">Username</label>
+                                        <input type="text" class="form-control" name="username" id="username" aria-describedby="username" required>
+                                        <small id="username-help" class="form-text text-muted">This is how the organization will log into the admin panel.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="email">Email address</label>
+                                        <input type="email" class="form-control" name="email" id="email" aria-describedby="email" required>
+                                        <small id="email-help" class="form-text text-muted">This email will be used for password recovery.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="site-url">Website</label>
+                                        <input type="text" class="form-control" name="site-url" id="site-url" aria-describedby="site-url">
+                                        <small id="site-url-help" class="form-text text-muted">This website link will be displayed publically.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Password</label>
+                                        <input type="password" class="form-control" name="password" id="password" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="cpassword">Confirm Password</label>
+                                        <input type="password" class="form-control" name="cpassword" id="cpassword" required>
+                                    </div>
+                                    <div class="login-msg-box" th:if="${error}" style="padding-bottom: 8px">
+                                        <div class="login-msg-fatal" th:text="${error}"></div>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary">Create</button>
+                                </form>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Organizations</h4>
+                                    <p class="card-text">See a list of all organizations and manage their data and details.</p>
+                                    <a href="/admin/organizations" class="btn btn-primary">Go</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/row-->
+                </main>
+                <th:block th:include="/admin/footer"></th:block>
+            </div>
+        </div>
+
+    </div>
+</div>
+</body>
+</html>
