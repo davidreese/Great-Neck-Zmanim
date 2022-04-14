@@ -2,6 +2,8 @@ package com.reesedevelopment.greatneckzmanim.admin.controllers;
 
 import com.reesedevelopment.greatneckzmanim.admin.structure.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -117,7 +119,7 @@ public class AdminController {
         }
 
 //        check if username already exists
-        if (gnzUserDAO.findUserAccount(username) != null) {
+        if (gnzUserDAO.find(username) != null) {
             System.out.println("Sorry, this username already exists.");
             return addOrganization(false,"Sorry, this username already exists.");
         }
@@ -194,7 +196,7 @@ public class AdminController {
         ModelAndView mv = new ModelAndView();
 
 //        TODO: ENSURE SECURITY
-        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(Role.ADMIN.getName())) {
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
             mv.setViewName("admin/my-account");
         } else {
             mv.setViewName("admin/my-account");
@@ -202,6 +204,49 @@ public class AdminController {
 
         Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
+
+        return mv;
+    }
+
+    @GetMapping("/admin/organization")
+    public ModelAndView organization(@RequestParam(value = "id", required = false) String id) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/organization");
+
+//        check permissions
+        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
+//                find organization for id
+            GNZOrganization organization = this.gnzOrganizationDAO.find(id);
+            if (organization != null) {
+                mv.getModel().put("organization", organization);
+            } else {
+                System.out.println("Organization not found.");
+//                    TODO: HANDLE ERROR CORRECTLY
+                throw new Exception("Organization not found.");
+            }
+        } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
+//              check if user is associated with organization
+            String username = SecurityContextHolder.getContext().getAuthentication().getName();
+            GNZUser user = this.gnzUserDAO.find(username);
+            String associatedOrganizationId = user.getOrganizationId();
+            if (!associatedOrganizationId.equals(id)) {
+                System.out.println("You do not have permission to view this organization.");
+                throw new AccessDeniedException("You do not have permission to view this organization.");
+            } else {
+//                find organization for id
+                GNZOrganization organization = this.gnzOrganizationDAO.find(id);
+                if (organization != null) {
+                    mv.getModel().put("organization", organization);
+                } else {
+                    System.out.println("Organization not found.");
+//                    TODO: HANDLE ERROR CORRECTLY
+                    throw new Exception("Organization not found.");
+                }
+            }
+        }
+
+
+//        mv.addObject("organization", organization);
 
         return mv;
     }

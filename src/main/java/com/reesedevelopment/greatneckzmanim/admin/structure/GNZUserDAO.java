@@ -18,9 +18,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         this.setDataSource(dataSource);
     }
 
-    public GNZUser findUserAccount(String userName) {
-        System.out.println("findUserAccount called");
-        // Select .. from App_User u Where u.User_Name = ?
+    public GNZUser find(String userName) {
         String sql = GNZUserMapper.BASE_SQL + " WHERE u.USERNAME = ? ";
 
         Object[] params = new Object[] { userName };

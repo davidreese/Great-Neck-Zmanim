@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,23 +21,21 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
         this.setDataSource(dataSource);
     }
 
-    /*
-    public AppUser findOrganization(String userName) {
-        System.out.println("findUserAccount called");
-        // Select .. from App_User u Where u.User_Name = ?
-        String sql = AppUserMapper.BASE_SQL + " WHERE u.NAME = ? ";
 
-        Object[] params = new Object[] { userName };
-        AppUserMapper mapper = new AppUserMapper();
+    public GNZOrganization find(String id) {
+        String sql = GNZOrganizationMapper.BASE_SQL + " WHERE u.ID = ? ";
+
+        Object[] params = new Object[] { id };
+        GNZOrganizationMapper mapper = new GNZOrganizationMapper();
 
         try {
-            AppUser userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            GNZOrganization userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
             return userInfo;
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
-    */
+
 
     @Override
     public List<GNZOrganization> getAll() {
