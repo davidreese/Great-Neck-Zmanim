@@ -35,7 +35,7 @@
                                     <th>Name</th>
                                     <th>Website</th>
                                     <th>Minyan Schedule</th>
-                                    <th>Profile & Account</th>
+                                    <th>Profile & Accounts</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -49,7 +49,7 @@
                                         <a role="button" class="btn btn-primary btn-sm">Manage</a>
                                     </td>
                                     <td>
-                                        <a role="button" class="btn btn-dark btn-sm">Manage</a>
+                                        <a role="button" class="btn btn-dark btn-sm" th:href="@{/admin/organization(id=${organization.id})}">Manage</a>
                                     </td>
                                 </tr>
                                 </tbody>
