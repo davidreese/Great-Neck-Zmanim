@@ -1,18 +1,11 @@
-package com.reesedevelopment.greatneckzmanim.admin.users;
+package com.reesedevelopment.greatneckzmanim.admin.structure;
 
 //import org.springframework.data.annotation.Id;
 
 import javax.persistence.*;
 
-@Entity
 @Table(name="ACCOUNT")
-public class GNZUser {
-    @Id
-//    @Id
-    @Column(name="ID", nullable = false, unique = true)
-//    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private String id;
-
+public class GNZUser extends GNZObject implements IDGenerator {
     @Column(name="USERNAME", nullable = false, unique = true)
     private String username;
 
@@ -33,7 +26,7 @@ public class GNZUser {
     }
 
     public GNZUser(String id, String username, String email, String encryptedPassword, String organizationId, Integer role) {
-        this.id = id;
+        super.id = id;
         this.username = username;
         this.email = email;
         this.encryptedPassword = encryptedPassword;
@@ -41,51 +34,32 @@ public class GNZUser {
         this.roleId = role;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
+    public GNZUser(String username, String email, String encryptedPassword, String organizationId, Integer role) {
+        super.id = generateID('A');
+        this.username = username;
+        this.email = email;
+        this.encryptedPassword = encryptedPassword;
+        this.organizationId = organizationId;
+        this.roleId = role;
     }
 
     public String getUsername() {
         return username;
     }
 
-    public void setUsername(String username) {
-        this.username = username;
-    }
-
     public String getEmail() {
         return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
     }
 
     public String getEncryptedPassword() {
         return encryptedPassword;
     }
 
-    public void setEncryptedPassword(String encryptedPassword) {
-        this.encryptedPassword = encryptedPassword;
-    }
-
     public String getOrganizationId() {
         return organizationId;
     }
 
-    public void setOrganizationId(String organizationId) {
-        this.organizationId = organizationId;
-    }
-
     public Integer getRoleId() {
         return roleId;
-    }
-
-    public void setRoleId(Integer roleId) {
-        this.roleId = roleId;
     }
 }

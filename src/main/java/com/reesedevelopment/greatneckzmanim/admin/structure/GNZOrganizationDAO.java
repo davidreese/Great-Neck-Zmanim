@@ -1,4 +1,4 @@
-package com.reesedevelopment.greatneckzmanim.admin.users;
+package com.reesedevelopment.greatneckzmanim.admin.structure;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,7 +13,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class GNZOrganizationDAO extends JdbcDaoSupport {
+public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GNZOrganization> {
 
     @Autowired
     public GNZOrganizationDAO(DataSource dataSource) {
@@ -38,7 +38,8 @@ public class GNZOrganizationDAO extends JdbcDaoSupport {
     }
     */
 
-    public List<GNZOrganization> findAll() {
+    @Override
+    public List<GNZOrganization> getAll() {
         String sql = "SELECT * FROM ORGANIZATION";
 
         GNZOrganizationMapper mapper = new GNZOrganizationMapper();
@@ -79,12 +80,40 @@ public class GNZOrganizationDAO extends JdbcDaoSupport {
         return organizations;
     }
 
-    public boolean saveOrganization(GNZOrganization organization) {
-        String sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress());
+    @Override
+    public boolean save(GNZOrganization organization) {
+        String sql;
+        if (organization.getWebsiteURI() != null) {
+            sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getWebsiteURI());
+        } else {
+            sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s', NULL)", organization.getId(), organization.getName(), organization.getAddress());
+        }
 
         try {
             this.getConnection().createStatement().execute(sql);
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean delete(GNZOrganization objectToDelete) {
+        String sql = String.format("DELETE FROM ORGANIZATIONS WHERE ID='%s'", objectToDelete.id);
+
+        try {
+            this.getConnection().createStatement().execute(sql);
+
+            String matchingUsersSQL = String.format("DELETE FROM USERS WHERE ORGANIZATION_ID='%s'", objectToDelete.id);
+
+            try {
+                this.getConnection().createStatement().execute(matchingUsersSQL);
+                return true;
+            } catch (Exception e) {
+                e.printStackTrace();
+                return false;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return false;

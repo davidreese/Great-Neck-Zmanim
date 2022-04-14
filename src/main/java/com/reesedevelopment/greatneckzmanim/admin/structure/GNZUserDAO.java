@@ -1,4 +1,4 @@
-package com.reesedevelopment.greatneckzmanim.admin.users;
+package com.reesedevelopment.greatneckzmanim.admin.structure;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -11,7 +11,7 @@ import java.util.*;
 
 @Repository
 @Transactional
-public class GNZUserDAO extends JdbcDaoSupport {
+public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
 
     @Autowired
     public GNZUserDAO(DataSource dataSource) {
@@ -34,7 +34,8 @@ public class GNZUserDAO extends JdbcDaoSupport {
         }
     }
 
-    public List<GNZUser> findAll() {
+    @Override
+    public List<GNZUser> getAll() {
         String sql = "SELECT ID, USERNAME, ENCRYPTED_PASSWORD FROM ACCOUNT";
 
         GNZUserMapper mapper = new GNZUserMapper();
@@ -77,5 +78,31 @@ public class GNZUserDAO extends JdbcDaoSupport {
 //        System.out.println("Users: " + users);
 
         return users;
+    }
+
+    @Override
+    public boolean save(GNZUser user) {
+        String sql = String.format("INSERT INTO ACCOUNT VALUES ('%s', '%s', '%s', '%s', '%s', '%d')", user.getId(), user.getUsername(), user.getEmail(), user.getEncryptedPassword(), user.getOrganizationId(), user.getRoleId());
+
+        try {
+            this.getConnection().createStatement().execute(sql);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean delete(GNZUser objectToDelete) {
+        String sql = String.format("DELETE FROM USERS WHERE ID='%s'", objectToDelete.id);
+
+        try {
+            this.getConnection().createStatement().execute(sql);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
     }
 }

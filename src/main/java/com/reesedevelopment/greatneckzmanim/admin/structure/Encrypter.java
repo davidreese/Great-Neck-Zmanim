@@ -1,4 +1,4 @@
-package com.reesedevelopment.greatneckzmanim.admin.users;
+package com.reesedevelopment.greatneckzmanim.admin.structure;
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 

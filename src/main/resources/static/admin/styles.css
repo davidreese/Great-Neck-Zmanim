@@ -12,8 +12,12 @@
     background-color: #035174;
 }
 
-.login-msg {
+.login-msg-fatal {
     color: darkred;
+}
+
+.login-msg-success {
+    color: green;
 }
 
 html,
