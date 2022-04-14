@@ -13,6 +13,12 @@
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
             <main class="col main pt-5 mt-3 overflow-auto" >
+                <div th:if="${success}">
+                    <div class="alert alert-success" role="alert" th:text="${success}"> </div>
+                </div>
+                <div th:if="${error}">
+                    <div class="alert alert-danger" role="alert" th:text="${error}"></div>
+                </div>
                 <h1 class="display-4 d-none d-sm-block">
                     Organizations
                 </h1>
@@ -35,7 +41,7 @@
                                     <th>Name</th>
                                     <th>Website</th>
                                     <th>Minyan Schedule</th>
-                                    <th>Profile & Account</th>
+                                    <th>Profile & Accounts</th>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -49,7 +55,7 @@
                                         <a role="button" class="btn btn-primary btn-sm">Manage</a>
                                     </td>
                                     <td>
-                                        <a role="button" class="btn btn-dark btn-sm">Manage</a>
+                                        <a role="button" class="btn btn-dark btn-sm" th:href="@{/admin/organization(id=${organization.id})}">Manage</a>
                                     </td>
                                 </tr>
                                 </tbody>

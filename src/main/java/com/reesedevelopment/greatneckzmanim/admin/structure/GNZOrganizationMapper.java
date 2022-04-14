@@ -13,7 +13,7 @@ import java.util.Map;
 
 public class GNZOrganizationMapper implements RowMapper<GNZOrganization>, Serializable {
 
-    public static final String BASE_SQL = "SELECT u.ID, u.NAME, u.ENCRYPTED_PASSWORD, u.SITE_URI FROM APP_USER u ";
+    public static final String BASE_SQL = "SELECT u.ID, u.NAME, u.ADDRESS, u.SITE_URI FROM ORGANIZATION u ";
 
     @Override
     public GNZOrganization mapRow(ResultSet rs, int rowNum) throws SQLException {

@@ -7,6 +7,7 @@ import java.util.Map;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -20,23 +21,21 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
         this.setDataSource(dataSource);
     }
 
-    /*
-    public AppUser findOrganization(String userName) {
-        System.out.println("findUserAccount called");
-        // Select .. from App_User u Where u.User_Name = ?
-        String sql = AppUserMapper.BASE_SQL + " WHERE u.NAME = ? ";
 
-        Object[] params = new Object[] { userName };
-        AppUserMapper mapper = new AppUserMapper();
+    public GNZOrganization find(String id) {
+        String sql = GNZOrganizationMapper.BASE_SQL + " WHERE u.ID = ? ";
+
+        Object[] params = new Object[] { id };
+        GNZOrganizationMapper mapper = new GNZOrganizationMapper();
 
         try {
-            AppUser userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            GNZOrganization userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
             return userInfo;
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
-    */
+
 
     @Override
     public List<GNZOrganization> getAll() {
@@ -100,12 +99,12 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
 
     @Override
     public boolean delete(GNZOrganization objectToDelete) {
-        String sql = String.format("DELETE FROM ORGANIZATIONS WHERE ID='%s'", objectToDelete.id);
+        String sql = String.format("DELETE FROM ORGANIZATION WHERE ID='%s'", objectToDelete.id);
 
         try {
             this.getConnection().createStatement().execute(sql);
 
-            String matchingUsersSQL = String.format("DELETE FROM USERS WHERE ORGANIZATION_ID='%s'", objectToDelete.id);
+            String matchingUsersSQL = String.format("DELETE FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", objectToDelete.id);
 
             try {
                 this.getConnection().createStatement().execute(matchingUsersSQL);
@@ -114,6 +113,24 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
                 e.printStackTrace();
                 return false;
             }
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean update(GNZOrganization organizationToUpdate) {
+        String sql;
+        if (organizationToUpdate.getWebsiteURI() != null) {
+            sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI='%s' WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getWebsiteURI(), organizationToUpdate.getId());
+        } else {
+            sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI=NULL WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getId());
+        }
+
+        try {
+            this.getConnection().createStatement().execute(sql);
+            return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;

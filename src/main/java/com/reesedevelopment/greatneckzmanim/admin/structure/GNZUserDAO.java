@@ -18,9 +18,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         this.setDataSource(dataSource);
     }
 
-    public GNZUser findUserAccount(String userName) {
-        System.out.println("findUserAccount called");
-        // Select .. from App_User u Where u.User_Name = ?
+    public GNZUser find(String userName) {
         String sql = GNZUserMapper.BASE_SQL + " WHERE u.USERNAME = ? ";
 
         Object[] params = new Object[] { userName };
@@ -95,7 +93,20 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
 
     @Override
     public boolean delete(GNZUser objectToDelete) {
-        String sql = String.format("DELETE FROM USERS WHERE ID='%s'", objectToDelete.id);
+        String sql = String.format("DELETE FROM ACCOUNT WHERE ID='%s'", objectToDelete.id);
+
+        try {
+            this.getConnection().createStatement().execute(sql);
+            return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    @Override
+    public boolean update(GNZUser objectToUpdate) {
+        String sql = String.format("UPDATE ACCOUNT SET NAME='%s', EMAIL='%s', ORGANIZATION_ID='%s', ROLE_ID='%s' WHERE ID='%s'", objectToUpdate.getUsername(), objectToUpdate.getEmail(), objectToUpdate.getOrganizationId(), objectToUpdate.getRoleId(), objectToUpdate.getId());
 
         try {
             this.getConnection().createStatement().execute(sql);
