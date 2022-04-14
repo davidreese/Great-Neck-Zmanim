@@ -10,10 +10,10 @@ public class GNZOrganization extends GNZObject implements IDGenerator {
     @Column(name="NAME", nullable = false)
     private String name;
 
-    @Column(name="ADDRESS")
+    @Column(name="ADDRESS", nullable = true)
     private String address;
 
-    @Column(name="SITE_URI")
+    @Column(name="SITE_URI", nullable = true)
     private URI websiteURI;
 
     public GNZOrganization(String id, String username, String address, URI websiteURI) {

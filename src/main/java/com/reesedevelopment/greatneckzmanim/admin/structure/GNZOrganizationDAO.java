@@ -99,12 +99,12 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
 
     @Override
     public boolean delete(GNZOrganization objectToDelete) {
-        String sql = String.format("DELETE FROM ORGANIZATIONS WHERE ID='%s'", objectToDelete.id);
+        String sql = String.format("DELETE FROM ORGANIZATION WHERE ID='%s'", objectToDelete.id);
 
         try {
             this.getConnection().createStatement().execute(sql);
 
-            String matchingUsersSQL = String.format("DELETE FROM USERS WHERE ORGANIZATION_ID='%s'", objectToDelete.id);
+            String matchingUsersSQL = String.format("DELETE FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", objectToDelete.id);
 
             try {
                 this.getConnection().createStatement().execute(matchingUsersSQL);
@@ -120,8 +120,13 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
     }
 
     @Override
-    public boolean update(GNZOrganization objectToUpdate) {
-        String sql = String.format("UPDATE ORGANIZATIONS SET NAME='%s', ADDRESS='%s', WEBSITE_URI='%s' WHERE ID='%s'", objectToUpdate.getName(), objectToUpdate.getAddress(), objectToUpdate.getWebsiteURI(), objectToUpdate.getId());
+    public boolean update(GNZOrganization organizationToUpdate) {
+        String sql;
+        if (organizationToUpdate.getWebsiteURI() != null) {
+            sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI='%s' WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getWebsiteURI(), organizationToUpdate.getId());
+        } else {
+            sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI=NULL WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getId());
+        }
 
         try {
             this.getConnection().createStatement().execute(sql);
