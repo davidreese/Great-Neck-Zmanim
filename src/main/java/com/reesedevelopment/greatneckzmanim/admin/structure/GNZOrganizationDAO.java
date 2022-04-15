@@ -137,8 +137,8 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
         }
     }
 
-    public List<GNZUser> getUsersForOrganization(String organizationId) {
-        String sql = String.format("SELECT * FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", organizationId);
+    public List<GNZUser> getUsersForOrganization(GNZOrganization organization) {
+        String sql = String.format("SELECT * FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", organization.id);
 
         GNZUserMapper mapper = new GNZUserMapper();
 

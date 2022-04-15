@@ -19,6 +19,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -235,6 +236,9 @@ public class AdminController {
 //                    TODO: HANDLE ERROR CORRECTLY
                 throw new Exception("Organization not found.");
             }
+
+            List<GNZUser> associatedUsers = this.gnzOrganizationDAO.getUsersForOrganization(organization);
+            mv.addObject("associated-users", associatedUsers);
         } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
 //              check if user is associated with organization
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -253,6 +257,10 @@ public class AdminController {
 //                    TODO: HANDLE ERROR CORRECTLY
                     throw new Exception("Organization not found.");
                 }
+
+
+                List<GNZUser> associatedUsers = this.gnzOrganizationDAO.getUsersForOrganization(organization);
+                mv.addObject("associated-users", associatedUsers);
             }
         }
 
