@@ -9,10 +9,10 @@ public interface IDGenerator {
 
     default String generateID(Character prefix) {
         Long timeSinceEpoch = (new Date()).getTime();
-        return String.format("%s%s%s", prefix, timeSinceEpoch, random());
+        return String.format("%s%s%s", prefix, timeSinceEpoch.toString().substring(5), random());
     }
 
     private String random() {
-        return String.valueOf(NumberTools.getRandomNumber(100, 999));
+        return String.valueOf(NumberTools.getRandomNumber(1000, 9999));
     }
 }
