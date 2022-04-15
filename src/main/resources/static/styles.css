@@ -65,7 +65,7 @@ a.link {
     color: #035174;
 }
 
-horizontal-container {
+.horizontal-container {
     display: flex!important;
     flex-direction: row;
     justify-content: space-between;
