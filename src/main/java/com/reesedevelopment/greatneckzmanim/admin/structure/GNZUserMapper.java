@@ -31,7 +31,7 @@ public class GNZUserMapper implements RowMapper<GNZUser>, Serializable {
         String email = (String) m.get("EMAIL");
         String encrytedPassword = (String) m.get("ENCRYPTED_PASSWORD");
         String orgId = (String) m.get("ORGANIZATION_ID");
-        Integer role = (Integer) m.get("ROLE_ID");
+        Integer role = Integer.valueOf(m.get("ROLE_ID").toString());
 
         return new GNZUser(id, username, email, encrytedPassword, orgId, role);
     }
