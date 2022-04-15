@@ -13,8 +13,11 @@
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
                 <main class="col main pt-5 mt-3 overflow-auto">
+                    <div class="alert alert-success" role="alert" th:if="${success}" th:text="${success}"></div>
                     <h1 class="display-4 d-none d-sm-block" th:text="${organization.name}"></h1>
                     <p class="lead d-none d-sm-block">Edit profile, attributes, and associated accounts.</p>
+
+                    <hr>
                     
                     <div class="row my-4" style="padding-bottom: 60px">
                         <div class="col-lg-9 col-md-8">
@@ -39,12 +42,37 @@
                                     <div class="login-msg-box" th:if="${error}" style="padding-bottom: 8px">
                                         <div class="form-msg-fatal" th:text="${error}"></div>
                                     </div>
-                                    <div class="login-msg-box" th:if="${success}" style="padding-bottom: 8px">
-                                        <div class="form-msg-success" th:text="${success}"></div>
-                                    </div>
+<!--                                    <div class="login-msg-box" th:if="${success}" style="padding-bottom: 8px">-->
+<!--                                        <div class="form-msg-success" th:text="${success}"></div>-->
+<!--                                    </div>-->
                                     <button type="submit" class="btn btn-primary">Update</button>
                                 </form>
                             </div>
+
+                            <hr>
+
+                            <h5>Associated Accounts</h5>
+                            <table class="table table-striped">
+                                <thead>
+                                <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">Username</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Options</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr th:each="user: ${associatedusers}">
+                                    <th scope="row" th:text="${user.id}"></th>
+                                    <td th:text="${user.username}"></td>
+                                    <td th:text="${user.email}"></td>
+                                    <td>
+                                        <button type="button" class="btn btn-warning" th:disabled="${associatedusers.size() <= 1}">Disable</button>
+                                        <button type="button" class="btn btn-danger" th:disabled="${associatedusers.size() <= 1}">Delete</button>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
 
                             <hr>
 
@@ -63,7 +91,7 @@
                                         <div class="card-body">
                                             <h5 class="card-title">Delete this organization</h5>
                                             <p class="card-text">Permanently delete all data for this organization, as well as all user accounts associated with it.</p>
-                                            <button class="btn btn-outline-danger" data-toggle="modal" data-target="#delete-modal">Delete</button>
+                                            <button class="btn btn-outline-danger" data-toggle="modal" data-target="#delete-organization-modal">Delete</button>
                                         </div>
                                     </div>
                                 </div>
@@ -95,21 +123,41 @@
     </div>
 </div>
 
-<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="delete-modal-label" aria-hidden="true">
+<div class="modal fade" id="delete-organization-modal" tabindex="-1" aria-labelledby="delete-organization-modal-label" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="delete-modal-label" th:text="${'Permanently delete ' + organization.name + '?'}"></h5>
+                <h5 class="modal-title" id="delete-organization-modal-label" th:text="${'Permanently delete ' + organization.name + '?'}"></h5>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
             <div class="modal-body">
-                Permanently delete all data related to this organization. This action cannot be undone.
+                Do you want to permanently delete all data related to this organization. This action cannot be undone.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
                 <a th:href="@{/admin/delete-organization} + '?id=' + ${organization.id}" class="btn btn-danger">Delete</a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="disable-organization-modal" tabindex="-1" aria-labelledby="disable-organization-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="disable-organization-modal-label" th:text="${'Disable ' + organization.name + '?'}"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                Do you want to disable this organization's data from being shown on the site and its login access?. This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
+                <a th:href="@{/admin/disable-organization} + '?id=' + ${organization.id}" class="btn btn-danger">Disable</a>
             </div>
         </div>
     </div>
