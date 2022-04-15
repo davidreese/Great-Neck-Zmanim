@@ -238,7 +238,7 @@ public class AdminController {
             }
 
             List<GNZUser> associatedUsers = this.gnzOrganizationDAO.getUsersForOrganization(organization);
-            mv.addObject("associated-users", associatedUsers);
+            mv.addObject("associatedusers", associatedUsers);
         } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
 //              check if user is associated with organization
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
