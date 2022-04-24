@@ -9,7 +9,7 @@
     <link th:rel="stylesheet" th:href="@{/admin/dashboard.css}">
 </head>
 <body>
-<div class="horizontal-container">
+<div class="horizontal-container d-flex" id="wrapper">
     <th:block th:include="/admin/navbar"></th:block>
     <div class="container-fluid" id="main">
         <div class="row row-offcanvas row-offcanvas-left vh-100">
@@ -486,9 +486,6 @@
 
     </div>
     <!--/.container-->
-    <footer class="container-fluid">
-        <p class="text-right small">©2016-2018 Company</p>
-    </footer>
 
 
     <!-- Modal -->
@@ -516,7 +513,7 @@
             </div>
         </div>
     </div>
-<!--    Welcome to the dashboard, [[${#httpServletRequest.remoteUser}]].-->
+    <!--    Welcome to the dashboard, [[${#httpServletRequest.remoteUser}]].-->
 </div>
 </body>
 
