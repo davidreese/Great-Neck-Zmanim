@@ -37,6 +37,22 @@ public class AdminController {
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy | hh:mm aa");
 
+    private boolean isAdmin() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()));
+    }
+
+    private boolean isUser() {
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()));
+    }
+
+//    private List<String> getOrganizationsWithAccess() {
+//        if (isAdmin()) {
+//            return null;
+//        } else {
+//            return gnzUserDAO.getOrganizationsWithAccess(SecurityContextHolder.getContext().getAuthentication().getName());
+//        }
+//    }
+
     @GetMapping("/admin/dashboard")
     public ModelAndView dashbaord() {
         ModelAndView mv = new ModelAndView();
@@ -49,7 +65,8 @@ public class AdminController {
     }
 
     @GetMapping("/admin")
-    public ModelAndView admin(@RequestParam(value = "error", required = false) String error, @RequestParam(value = "logout", required = false) boolean logout) {
+    public ModelAndView admin(@RequestParam(value = "error", required = false) String error,
+                              @RequestParam(value = "logout", required = false) boolean logout) {
         return dashbaord();
     }
 
@@ -79,7 +96,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/new-organization", method = RequestMethod.GET)
-    public ModelAndView addOrganization(@RequestParam(value = "success", required = false) boolean success, @RequestParam(value = "error", required = false) String error) {
+    public ModelAndView addOrganization(@RequestParam(value = "success", required = false) boolean success,
+                                        @RequestParam(value = "error", required = false) String error) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/new-organization");
 
@@ -182,7 +200,8 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/new-account", method = RequestMethod.GET)
-    public ModelAndView addAccount(@RequestParam(value = "success", required = false) boolean success, @RequestParam(value = "error", required = false) String error) {
+    public ModelAndView addAccount(@RequestParam(value = "success", required = false) boolean success,
+                                   @RequestParam(value = "error", required = false) String error) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/new-account");
 
@@ -213,17 +232,31 @@ public class AdminController {
     }
 
     @GetMapping("/admin/organization")
-    public ModelAndView organization(@RequestParam(value = "id", required = false) String id, String successMessage, String errorMessage) throws Exception {
+    public ModelAndView organization(@RequestParam(value = "id", required = false) String id,
+                                     String mainSuccessMessage,
+                                     String mainErrorMessage,
+                                     String updateErrorMessage,
+                                     String addAccountErrorMessage) throws Exception {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/organization");
 
-        if (successMessage != null && !successMessage.isEmpty()) {
-            mv.addObject("success", successMessage);
+        if (mainSuccessMessage != null && !mainSuccessMessage.isEmpty()) {
+            mv.addObject("main-success", mainSuccessMessage);
         }
 
-        if (errorMessage != null && !errorMessage.isEmpty()) {
-            mv.addObject("error", errorMessage);
+        if (mainErrorMessage != null && !mainErrorMessage.isEmpty()) {
+            mv.addObject("main-error", mainErrorMessage);
         }
+
+        if (updateErrorMessage != null && !updateErrorMessage.isEmpty()) {
+            mv.addObject("updateError", updateErrorMessage);
+        }
+
+        if (addAccountErrorMessage != null && !addAccountErrorMessage.isEmpty()) {
+            mv.addObject("add-account-error", addAccountErrorMessage);
+        }
+
+
 
 //        check permissions
         if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
@@ -278,7 +311,7 @@ public class AdminController {
 
 //        validate input
         if (name == null || name.isEmpty()) {
-            return organization(id, null, "Organization name cannot be empty.");
+            return organization(id, null, null, "Organization name cannot be empty.", null);
         }
 
         URI siteURI = null;
@@ -287,7 +320,7 @@ public class AdminController {
                 siteURI = new URI(siteURIString);
             } catch (URISyntaxException e) {
                 e.printStackTrace();
-                return organization(id, null, "Invalid website URL.");
+                return organization(id, null, null, "Invalid website URL.", null);
             }
         }
 
@@ -297,10 +330,10 @@ public class AdminController {
         if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
             if (this.gnzOrganizationDAO.update(organization)) {
                 System.out.println("Organization updated successfully.");
-                return organization(id, "Successfully updated the organization details.", null);
+                return organization(id, "Successfully updated the organization details.", null, null, null);
             } else {
                 System.out.println("Organization update failed.");
-                return organization(id, null, "Sorry, the update failed.");
+                return organization(id, null, null, "Sorry, the update failed.", null);
             }
         } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()))) {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -312,10 +345,10 @@ public class AdminController {
             } else {
                 if (this.gnzOrganizationDAO.update(organization)) {
                     System.out.println("Organization updated successfully.");
-                    return organization(id, "Successfully updated the organization details.", null);
+                    return organization(id, "Successfully updated the organization details.", null, null, null);
                 } else {
                     System.out.println("Organization update failed.");
-                    return organization(id, null, "Sorry, the update failed.");
+                    return organization(id, null, "Sorry, the update failed.", null, null);
                 }
             }
         } else {
