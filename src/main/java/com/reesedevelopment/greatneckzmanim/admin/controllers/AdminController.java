@@ -241,11 +241,11 @@ public class AdminController {
         mv.setViewName("admin/organization");
 
         if (mainSuccessMessage != null && !mainSuccessMessage.isEmpty()) {
-            mv.addObject("main-success", mainSuccessMessage);
+            mv.addObject("mainSuccess", mainSuccessMessage);
         }
 
         if (mainErrorMessage != null && !mainErrorMessage.isEmpty()) {
-            mv.addObject("main-error", mainErrorMessage);
+            mv.addObject("mainError", mainErrorMessage);
         }
 
         if (updateErrorMessage != null && !updateErrorMessage.isEmpty()) {
@@ -253,7 +253,7 @@ public class AdminController {
         }
 
         if (addAccountErrorMessage != null && !addAccountErrorMessage.isEmpty()) {
-            mv.addObject("add-account-error", addAccountErrorMessage);
+            mv.addObject("addAccountError", addAccountErrorMessage);
         }
 
 
@@ -399,5 +399,65 @@ public class AdminController {
         } else {
             throw new AccessDeniedException("You do not have permission to view this organization.");
         }
+    }
+
+    @RequestMapping(value = "/admin/create-account")
+    public ModelAndView createAccount(@RequestParam(value = "username", required = true) String username,
+                                      @RequestParam(value = "email", required = true) String email,
+                                      @RequestParam(value = "password", required = true) String password,
+                                      @RequestParam(value = "cpassword") String cpassword,
+                                      @RequestParam(value = "oid", required = false) String organizationId) throws Exception {
+
+//        check permissions
+        if (isAdmin()) {
+//            validate input
+            System.out.println("Validating input data...");
+
+            if (username.isEmpty() || email.isEmpty() || password.isEmpty() || cpassword.isEmpty()) {
+                System.out.println("Sorry, fields cannot be left blank.");
+                return organization(organizationId, null, null, null, "Sorry, fields cannot be left blank.");
+            }
+
+            if (!password.equals(cpassword)) {
+                System.out.println("Sorry, passwords do not match.");
+                return organization(organizationId, null, null, null, "Sorry, passwords do not match.");
+            }
+
+            String usernameRegex = "^[A-Za-z]\\w{5,29}$";
+            Pattern usernamePatter = Pattern.compile(usernameRegex);
+            Matcher m = usernamePatter.matcher(username);
+            if (!m.matches()) {
+                System.out.println("Sorry, this username is not valid.");
+                return organization(organizationId, null, null, null,"Sorry, the username must be 6-30 characters, only contain letters and numbers, and start with a letter.");
+            }
+
+//        check if username already exists
+            if (gnzUserDAO.find(username) != null) {
+                System.out.println("Sorry, this username already exists.");
+                return organization(organizationId, null, null, null,"Sorry, this username already exists.");
+            }
+
+
+//        check if email is valid
+            String emailRegex = "^[A-Za-z0-9+_.-]+@(.+)$";
+            Pattern emailPattern = Pattern.compile(emailRegex);
+            Matcher m2 = emailPattern.matcher(email);
+            if (!m2.matches()) {
+                System.out.println("Sorry, this email address is not valid.");
+                return organization(organizationId, null, null, null,"Sorry, this email address is invalid.");
+            }
+
+
+//        check if password is valid
+            String passwordRegex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
+            Pattern passwordPattern = Pattern.compile(passwordRegex);
+            Matcher m3 = passwordPattern.matcher(password);
+            if (!m3.matches()) {
+                System.out.println("Sorry, this password is not valid.");
+                return organization(organizationId, null, null, null,"Sorry, the password must be at least 8 characters, contain at least one letter and one number.");
+            }
+        }
+
+        return organization(organizationId, null, null, null, null);
     }
 }

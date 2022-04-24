@@ -13,12 +13,12 @@
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
                 <main class="col main pt-5 mt-3 overflow-auto">
-                    <div class="alert alert-success" role="alert" th:if="${success}" th:text="${success}"></div>
+                    <div class="alert alert-success" role="alert" th:if="${mainSuccess}" th:text="${mainSuccess}"></div>
                     <h1 class="display-4 d-none d-sm-block" th:text="${organization.name}"></h1>
                     <p class="lead d-none d-sm-block">Edit profile, attributes, and associated accounts.</p>
 
                     <hr>
-                    
+
                     <div class="row my-4" style="padding-bottom: 60px">
                         <div class="col-lg-9 col-md-8">
                             <div class="table-responsive">
@@ -42,8 +42,8 @@
                                     <div class="login-msg-box" th:if="${updateError}" style="padding-bottom: 8px">
                                         <div class="form-msg-fatal" th:text="${updateError}"></div>
                                     </div>
-<!--                                    <div class="login-msg-box" th:if="${success}" style="padding-bottom: 8px">-->
-<!--                                        <div class="form-msg-success" th:text="${success}"></div>-->
+<!--                                    <div class="login-msg-box" th:if="${mainSuccess}" style="padding-bottom: 8px">-->
+<!--                                        <div class="form-msg-success" th:text="${mainSuccess}"></div>-->
 <!--                                    </div>-->
                                     <button type="submit" class="btn btn-primary">Update</button>
                                 </form>
@@ -54,7 +54,7 @@
                             <div class="horizontal-container">
                                 <h5>Associated Accounts</h5>
                                 <div style="padding-bottom: 10px;">
-                                    <button type="button" class="btn btn-outline-primary" style="font-size: 0.6rem;" data-toggle="modal" data-target="#add-account-modal">
+                                    <button type="button" class="btn btn-outline-primary" style="font-size: 0.6rem;" id="add-account-btn" data-toggle="modal" data-target="#add-account-modal">
                                         Add Account
                                     </button>
                                 </div>
@@ -183,16 +183,16 @@
             <div class="modal-body">
 <!--                TODO: ADD HYPERLINK IN THE MESSAGE-->
 <!--                <p th:utext="${'This account will have user privileges associated with ' + organization.name + '. To create an admin account, visit the <a th:href=\\"@{/admin/new-account}">New Account</a> page.'}"></p>-->
-                <p>This account will have user privileges associated with [(${organization.name})]. To create an admin account, visit the <a href="/admin/new-account">Create an Account</a> page.</p></p>
+                <p>This account will have user privileges associated with [(${organization.name})]. To create an admin account, visit the <a href="/admin/new-account">create an account</a> page.</p></p>
                 <form method="post" th:action="@{/admin/create-account?r=u&oid=} + ${organization.id}">
                     <div class="form-group">
                         <label for="new-account-username">Username</label>
-                        <input type="text" class="form-control" id="new-account-username" aria-describedby="username-help" required>
+                        <input type="text" class="form-control" id="new-account-username" name="username" aria-describedby="username-help" required>
                         <small id="username-help" class="form-text text-muted">This is how the user will log into the admin panel.</small>
                     </div>
                     <div class="form-group">
                         <label for="new-account-email">Email address</label>
-                        <input type="email" class="form-control" id="new-account-email" aria-describedby="email-help" required>
+                        <input type="email" class="form-control" id="new-account-email" name="email" aria-describedby="email-help" required>
                         <small id="email-help" class="form-text text-muted">This email will be used for password recovery.</small>
                     </div>
                     <div class="form-group">
@@ -203,6 +203,9 @@
                         <label for="cpassword">Confirm Password</label>
                         <input type="password" class="form-control" name="cpassword" id="cpassword" required>
                     </div>
+                    <div class="login-msg-box" th:if="${addAccountError}" style="padding-bottom: 8px">
+                        <div class="form-msg-fatal" th:text="${addAccountError}"></div>
+                    </div>
                     <hr>
                     <button type="submit" class="btn btn-primary">Create</button>
                 </form>
@@ -210,6 +213,9 @@
         </div>
     </div>
 </div>
-
 </body>
+<script th:src="@{/admin/organization.js}"></script>
+<script th:if="${addAccountError}" th:inline="javascript">
+    showAddAccountModal();
+</script>
 </html>
