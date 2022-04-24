@@ -272,7 +272,7 @@ public class AdminController {
 
             List<GNZUser> associatedUsers = this.gnzOrganizationDAO.getUsersForOrganization(organization);
             mv.addObject("associatedusers", associatedUsers);
-        } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()))) {
+        } else if (isUser()) {
 //              check if user is associated with organization
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             GNZUser user = this.gnzUserDAO.find(username);
@@ -406,10 +406,9 @@ public class AdminController {
                                       @RequestParam(value = "email", required = true) String email,
                                       @RequestParam(value = "password", required = true) String password,
                                       @RequestParam(value = "cpassword") String cpassword,
-                                      @RequestParam(value = "oid", required = false) String organizationId) throws Exception {
+                                      @RequestParam(value = "oid", required = false) String organizationId,
+                                      @RequestParam(value = "r", required = false) String roleInital) throws Exception {
 
-//        check permissions
-        if (isAdmin()) {
 //            validate input
             System.out.println("Validating input data...");
 
@@ -456,8 +455,73 @@ public class AdminController {
                 System.out.println("Sorry, this password is not valid.");
                 return organization(organizationId, null, null, null,"Sorry, the password must be at least 8 characters, contain at least one letter and one number.");
             }
-        }
 
-        return organization(organizationId, null, null, null, null);
+            Role role;
+            if (roleInital.toLowerCase().equals("a")) {
+                role = Role.ADMIN;
+            } else if (roleInital.toLowerCase().equals("u") && organizationId != null) {
+                role = Role.USER;
+            } else if (organizationId != null) {
+                role = Role.USER;
+            } else {
+                System.out.println("No organization selected.");
+                return organization(organizationId, null, null, null,"Sorry, an error occurred.");
+            }
+
+            if (role == Role.ADMIN) {
+                if (isAdmin()) {
+                    System.out.println("Creating account...");
+
+                    GNZUser user = new GNZUser(username, email, Encrypter.encrytedPassword(password), organizationId, role);
+
+                    if (this.gnzUserDAO.save(user)) {
+                        return organization(organizationId, "Successfully created a new account with username '" + user.getUsername() + ".'", null, null, null);
+                    } else {
+                        System.out.println("Account creation failed.");
+                        return organization(organizationId, null, null, null,"Sorry, an error occurred.");
+                    }
+                } else {
+                    throw new AccessDeniedException("You do not have permission to create an administrator account.");
+                }
+            } else if (role == Role.USER) {
+                if (isAdmin()) {
+                    System.out.println("Creating account...");
+
+                    GNZUser user = new GNZUser(username, email, Encrypter.encrytedPassword(password), organizationId, role);
+
+                    if (this.gnzUserDAO.save(user)) {
+                        return organization(organizationId, "Successfully created a new account with username '" + user.getUsername() + ".'", null, null, null);
+                    } else {
+                        System.out.println("Account creation failed.");
+                        return organization(organizationId, null, null, null,"Sorry, an error occurred.");
+                    }
+                } else if (isUser()) {
+//                    check if user is in the same organization
+                    if (organizationId != null) {
+                        if (gnzUserDAO.find(username).getId().equals(organizationId)) {
+                            System.out.println("Creating account...");
+
+                            GNZUser user = new GNZUser(username, email, Encrypter.encrytedPassword(password), organizationId, role);
+
+                            if (this.gnzUserDAO.save(user)) {
+                                return organization(organizationId, "Successfully created a new account with username '" + user.getUsername() + ".'", null, null, null);
+                            } else {
+                                System.out.println("Account creation failed.");
+                                return organization(organizationId, null, null, null,"Sorry, an error occurred.");
+                            }
+                        } else {
+                            throw new AccessDeniedException("You do not have permission to create an account for this organization.");
+                        }
+                    } else {
+                        System.out.println("No organization selected.");
+                        return organization(organizationId, null, null, null,"Sorry, an error occurred.");
+                    }
+                } else {
+                    throw new AccessDeniedException("You do not have permission to create an account.");
+                }
+            } else {
+                System.out.println("Error: The role is null.");
+                return organization(organizationId, null, null, null,"Sorry, an error occurred.");
+            }
     }
 }
