@@ -259,7 +259,7 @@ public class AdminController {
 
 
 //        check permissions
-        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
+        if (isAdmin()) {
 //                find organization for id
             GNZOrganization organization = this.gnzOrganizationDAO.find(id);
             if (organization != null) {
@@ -272,7 +272,7 @@ public class AdminController {
 
             List<GNZUser> associatedUsers = this.gnzOrganizationDAO.getUsersForOrganization(organization);
             mv.addObject("associatedusers", associatedUsers);
-        } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
+        } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()))) {
 //              check if user is associated with organization
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             GNZUser user = this.gnzUserDAO.find(username);
