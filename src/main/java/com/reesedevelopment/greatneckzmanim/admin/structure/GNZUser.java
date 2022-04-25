@@ -43,6 +43,24 @@ public class GNZUser extends GNZObject implements IDGenerator {
         this.roleId = role;
     }
 
+    public GNZUser(String id, String username, String email, String encryptedPassword, String organizationId, Role role) {
+        super.id = id;
+        this.username = username;
+        this.email = email;
+        this.encryptedPassword = encryptedPassword;
+        this.organizationId = organizationId;
+        this.roleId = role.getId();
+    }
+
+    public GNZUser(String username, String email, String encryptedPassword, String organizationId, Role role) {
+        super.id = generateID('A');
+        this.username = username;
+        this.email = email;
+        this.encryptedPassword = encryptedPassword;
+        this.organizationId = organizationId;
+        this.roleId = role.getId();
+    }
+
     public String getUsername() {
         return username;
     }

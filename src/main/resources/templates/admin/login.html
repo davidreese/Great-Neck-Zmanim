@@ -31,10 +31,10 @@
                 <button type="submit" class="btn btn-primary">Sign in</button>
 
                 <div class="login-msg-box" style="padding-top: 4px">
-                    <div class="login-msg-fatal" th:if="${param.error}">
+                    <div class="form-msg-fatal" th:if="${param.error}">
                         Invalid credentials.
                     </div>
-                    <div class="login-msg-success" th:if="${param.logout}">
+                    <div class="form-msg-success" th:if="${param.logout}">
                         You have been logged out.
                     </div>
                 </div>
