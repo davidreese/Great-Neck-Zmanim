@@ -10,29 +10,20 @@
     <link th:rel="stylesheet" th:href="@{/admin/styles.css}">
 </head>
 <body>
-<div class="col-md-3 col-lg-2 sidebar-offcanvas h-100 overflow-auto bg-light pl-0" id="sidebar" role="navigation">
-    <ul class="nav flex-column sticky-top pl-0 pt-5 mt-3">
-        <li class="nav-item"><a class="nav-link" href="/admin/dashboard">Dashboard</a></li>
-<!--        <li class="nav-item">-->
-<!--            <a class="nav-link" href="#submenu1" data-toggle="collapse" data-target="#submenu1">Reports▾</a>-->
-<!--            <ul class="list-unstyled flex-column pl-3 collapse" id="submenu1" aria-expanded="false">-->
-<!--                <li class="nav-item"><a class="nav-link" href="">Report 1</a></li>-->
-<!--                <li class="nav-item"><a class="nav-link" href="">Report 2</a></li>-->
-<!--            </ul>-->
-<!--        </li>-->
-        <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item"><a class="nav-link" href="/admin/organizations">Organizations</a></li>
-<!--        [[${#request.userPrincipal.isAuthenticated}]]-->
-<!--        [[${#request.userPrincipal.authorities}]]-->
-<!--        [[${#request.userPrincipal.principal}]]-->
-        <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item"><a class="nav-link" href="/admin/new-organization">Create an Organization</a></li>
-        <li sec:authorize="hasRole('ROLE_ADMIN')" class="nav-item"><a class="nav-link" href="/admin/new-account">Create an Account</a></li>
-        <li class="nav-item"><a class="nav-link" href="/admin/my-account">My Account</a></li>
-    </ul>
-    <li class="nav-item bottom"><a class="nav-link" href="/admin/logout">Logout ([[${#httpServletRequest.remoteUser}]])</a></li>
+<div class="border-end bg-white" id="sidebar-wrapper">
+    <div class="sidebar-heading border-bottom bg-light">Start Bootstrap </div>
+    <div class="list-group list-group-flush">
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/dashboard">Dashboard</a>
+        <a  class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/organizations" sec:authorize="hasRole('ROLE_ADMIN')">Organizations</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/new-organization" sec:authorize="hasRole('ROLE_ADMIN')">Create an Organization</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/new-account" sec:authorize="hasRole('ROLE_ADMIN')">Create an Account</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/my-account">My Account</a>
+    </div>
 </div>
 </body>
 <script th:src="@{/admin/sidebar.js}"></script>
 <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.6.1/js/bootstrap.min.js}"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </html>

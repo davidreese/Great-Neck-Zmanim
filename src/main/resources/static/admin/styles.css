@@ -63,3 +63,27 @@ body {
 a {
     color: #035174;
 }
+
+.footer-pusher {
+    padding-bottom: 60px;
+}
+
+@media screen and (max-width: 600px) {
+  #footer {
+  /*
+    visibility: hidden;
+    display: none;
+    */
+    /*
+    position: relative;
+    */
+    height: 30px;
+    font-size: 0.6rem;
+  }
+  #footer-content {
+    padding: 0.5rem!important;
+  }
+  .footer-pusher {
+    padding-bottom: 30px;
+  }
+}
