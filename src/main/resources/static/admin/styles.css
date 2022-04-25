@@ -47,7 +47,7 @@ body {
 }
 
 #footer-content {
-    background-color: #b4c9d7;
+    background-color: #dee6ec;
     height: 100%;
 }
 
@@ -86,4 +86,16 @@ a {
   .footer-pusher {
     padding-bottom: 30px;
   }
+}
+
+.sidebar-slip:not(:hover) {
+    background-color: #F6F5F5!important;
+}
+
+.sidebar-slip:hover {
+    background-color: #ececec!important;
+}
+
+.sidebar {
+    background-color: #F6F5F5!important;
 }

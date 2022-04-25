@@ -10,14 +10,14 @@
     <link th:rel="stylesheet" th:href="@{/admin/styles.css}">
 </head>
 <body>
-<div class="border-end bg-white" id="sidebar-wrapper">
+<div class="border-end bg-white sidebar" id="sidebar-wrapper">
     <div class="sidebar-heading border-bottom bg-light">Start Bootstrap </div>
     <div class="list-group list-group-flush">
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/dashboard">Dashboard</a>
-        <a  class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/organizations" sec:authorize="hasRole('ROLE_ADMIN')">Organizations</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/new-organization" sec:authorize="hasRole('ROLE_ADMIN')">Create an Organization</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/new-account" sec:authorize="hasRole('ROLE_ADMIN')">Create an Account</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3" href="/admin/my-account">My Account</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" href="/admin/dashboard">Dashboard</a>
+        <a  class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" href="/admin/organizations" sec:authorize="hasRole('ROLE_ADMIN')">Organizations</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" href="/admin/new-organization" sec:authorize="hasRole('ROLE_ADMIN')">Create an Organization</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" href="/admin/new-account" sec:authorize="hasRole('ROLE_ADMIN')">Create an Account</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" href="/admin/my-account">My Account</a>
     </div>
 </div>
 </body>
