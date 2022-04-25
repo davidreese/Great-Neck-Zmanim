@@ -89,7 +89,8 @@
                                         <div class="card-body">
                                             <h5 class="card-title">Disable this organization</h5>
                                             <p class="card-text">Disable access, privately and publicly, to this organization's data. This will not erase any data from the account.</p>
-                                            <a href="#" class="btn btn-warning">Disable</a>
+                                            <button class="btn btn-warning" data-toggle="modal" data-target="#disable-organization-modal">Disable</button>
+
                                         </div>
                                     </div>
                                 </div>
@@ -160,7 +161,7 @@
                 </button>
             </div>
             <div class="modal-body">
-                Do you want to disable this organization's data from being shown on the site and its login access?
+                Do you want to disable this organization's data from being shown on the site? It's login access will be disabled.
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-outline-secondary" data-dismiss="modal">Close</button>
