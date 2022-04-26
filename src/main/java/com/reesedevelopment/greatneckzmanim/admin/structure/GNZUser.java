@@ -107,9 +107,9 @@ public class GNZUser extends GNZObject implements IDGenerator {
         switch (this.role()) {
             case ADMIN:
                 if (this.getOrganizationId() == null) {
-                    return "Site Admin";
+                    return "Admin";
                 } else {
-                    return "Organization Admin";
+                    return "Manager";
                 }
             case USER:
                 return "User";

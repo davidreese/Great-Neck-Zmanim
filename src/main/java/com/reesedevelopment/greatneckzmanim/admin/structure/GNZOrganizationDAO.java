@@ -37,7 +37,7 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
     }
 
     @Override
-    public GNZOrganization findByID(String id) {
+    public GNZOrganization findById(String id) {
         String sql = GNZOrganizationMapper.BASE_SQL + " WHERE u.ID = ? ";
 
         Object[] params = new Object[] { id };
