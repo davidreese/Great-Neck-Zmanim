@@ -80,4 +80,41 @@ public class GNZUser extends GNZObject implements IDGenerator {
     public Integer getRoleId() {
         return roleId;
     }
+
+//    private GNZOrganization getOrganization() {
+//
+//        return gnzOrganizationDAO.find(organizationId);
+//    }
+//
+//    public String getOrganizationDisplayName() {
+//        GNZOrganization org = getOrganization();
+//        return (org == null) ? "" : org.getName();
+//    }
+
+    public boolean isSuperAdmin() {
+        return (this.role() == Role.ADMIN && this.getOrganizationId() == null);
+    }
+
+    public boolean isAdmin() {
+        return (this.role() == Role.ADMIN);
+    }
+
+    public boolean isUser() {
+        return (this.role() == Role.USER);
+    }
+
+    public String getRoleDisplayName() {
+        switch (this.role()) {
+            case ADMIN:
+                if (this.getOrganizationId() == null) {
+                    return "Site Admin";
+                } else {
+                    return "Organization Admin";
+                }
+            case USER:
+                return "User";
+            default:
+                return null;
+        }
+    }
 }

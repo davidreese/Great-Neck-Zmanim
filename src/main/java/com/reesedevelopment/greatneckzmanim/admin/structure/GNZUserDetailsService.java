@@ -20,7 +20,7 @@ public class GNZUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
-        GNZUser user = this.gnzUserDAO.find(userName);
+        GNZUser user = this.gnzUserDAO.findByName(userName);
 
         if (user == null) {
             System.out.println("User not found! " + userName);

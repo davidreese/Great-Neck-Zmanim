@@ -21,8 +21,23 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
         this.setDataSource(dataSource);
     }
 
+    @Override
+    public GNZOrganization findByName(String name) {
+        String sql = GNZOrganizationMapper.BASE_SQL + " WHERE u.NAME = ? ";
 
-    public GNZOrganization find(String id) {
+        Object[] params = new Object[] { name };
+        GNZOrganizationMapper mapper = new GNZOrganizationMapper();
+
+        try {
+            GNZOrganization userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            return userInfo;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public GNZOrganization findByID(String id) {
         String sql = GNZOrganizationMapper.BASE_SQL + " WHERE u.ID = ? ";
 
         Object[] params = new Object[] { id };
@@ -35,7 +50,6 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
             return null;
         }
     }
-
 
     @Override
     public List<GNZOrganization> getAll() {

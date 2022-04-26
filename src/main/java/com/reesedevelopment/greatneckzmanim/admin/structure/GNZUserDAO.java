@@ -18,10 +18,26 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         this.setDataSource(dataSource);
     }
 
-    public GNZUser find(String userName) {
+    @Override
+    public GNZUser findByName(String username) {
         String sql = GNZUserMapper.BASE_SQL + " WHERE u.USERNAME = ? ";
 
-        Object[] params = new Object[] { userName };
+        Object[] params = new Object[] { username };
+        GNZUserMapper mapper = new GNZUserMapper();
+
+        try {
+            GNZUser userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            return userInfo;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    @Override
+    public GNZUser findByID(String id) {
+        String sql = GNZUserMapper.BASE_SQL + " WHERE u.ID = ? ";
+
+        Object[] params = new Object[] { id };
         GNZUserMapper mapper = new GNZUserMapper();
 
         try {
@@ -34,7 +50,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
 
     @Override
     public List<GNZUser> getAll() {
-        String sql = "SELECT ID, USERNAME, ENCRYPTED_PASSWORD FROM ACCOUNT";
+        String sql = "SELECT ID, USERNAME, EMAIL, ENCRYPTED_PASSWORD, ROLE_ID, ORGANIZATION_ID FROM ACCOUNT";
 
         GNZUserMapper mapper = new GNZUserMapper();
 

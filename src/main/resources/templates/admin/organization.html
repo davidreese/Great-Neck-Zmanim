@@ -26,17 +26,17 @@
                                     <input type="hidden" name="id" th:value="${organization.id}">
                                     <div class="form-group">
                                         <label for="name">Organization Name</label>
-                                        <input type="text" class="form-control" name="name" id="name" aria-describedby="display-name" required th:value="${organization.name}">
+                                        <input type="text" class="form-control" name="name" id="name" aria-describedby="name-help" required th:value="${organization.name}">
                                         <small id="name-help" class="form-text text-muted">This is the public display name for the organization.</small>
                                     </div>
                                     <div class="form-group">
                                         <label for="address">Organization Address</label>
-                                        <input type="text" class="form-control" name="address" id="address" aria-describedby="address" th:value="${organization.address}">
+                                        <input type="text" class="form-control" name="address" id="address" aria-describedby="address-help" th:value="${organization.address}">
                                         <small id="address-help" class="form-text text-muted">This is the publicly displayed address for the organization.</small>
                                     </div>
                                     <div class="form-group">
                                         <label for="site-url">Website</label>
-                                        <input type="text" class="form-control" name="site-url" id="site-url" aria-describedby="site-url" th:value="${organization.websiteURI}">
+                                        <input type="text" class="form-control" name="site-url" id="site-url" aria-describedby="site-url-help" th:value="${organization.websiteURI}">
                                         <small id="site-url-help" class="form-text text-muted">This website link will be displayed publically.</small>
                                     </div>
                                     <div class="login-msg-box" th:if="${updateError}" style="padding-bottom: 8px">
@@ -65,6 +65,7 @@
                                     <th scope="col">ID</th>
                                     <th scope="col">Username</th>
                                     <th scope="col">Email</th>
+                                    <th scope="col">Role</th>
                                     <th scope="col">Options</th>
                                 </tr>
                                 </thead>
@@ -73,6 +74,7 @@
                                     <th scope="row" th:text="${user.id}"></th>
                                     <td th:text="${user.username}"></td>
                                     <td th:text="${user.email}"></td>
+                                    <td th:text="${user.getRoleDisplayName()}"></td>
                                     <td>
                                         <button type="button" class="btn btn-outline-warning" th:disabled="${associatedusers.size() <= 1}" data-toggle="modal" th:data-target="${'#disable-account-modal-' + user.id}">Disable</button>
                                         <button type="button" class="btn btn-outline-danger" th:disabled="${associatedusers.size() <= 1}" data-toggle="modal" th:data-target="${'#delete-account-modal-' + user.id}">Delete</button>
@@ -114,7 +116,7 @@
                                     <a href="/admin/organizations" class="btn btn-primary">Go</a>
                                 </div>
                             </div>
-                            <div class="card card-inverse bg-inverse mt-3" sec:authorize="hasRole('ROLE_ADMIN')">
+                            <div class="card card-inverse bg-inverse mt-3" th:if="${associatedorganization == null}" sec:authorize="hasRole('ROLE_ADMIN')">
                                 <div class="card-body">
                                     <h4 class="card-title">Organizations</h4>
                                     <p class="card-text">See a list of all organizations and manage their data and details.</p>
@@ -229,21 +231,21 @@
                 <form method="post" th:action="@{/admin/create-account?r=u&oid=} + ${organization.id}">
                     <div class="form-group">
                         <label for="new-account-username">Username</label>
-                        <input type="text" class="form-control" id="new-account-username" name="username" aria-describedby="username-help" required>
-                        <small id="username-help" class="form-text text-muted">This is how the user will log into the admin panel.</small>
+                        <input type="text" class="form-control" id="new-account-username" name="username" aria-describedby="new-username-help" required>
+                        <small id="new-username-help" class="form-text text-muted">This is how the user will log into the admin panel.</small>
                     </div>
                     <div class="form-group">
                         <label for="new-account-email">Email address</label>
-                        <input type="email" class="form-control" id="new-account-email" name="email" aria-describedby="email-help" required>
-                        <small id="email-help" class="form-text text-muted">This email will be used for password recovery.</small>
+                        <input type="email" class="form-control" id="new-account-email" name="email" aria-describedby="new-email-help" required>
+                        <small id="new-email-help" class="form-text text-muted">This email will be used for password recovery.</small>
                     </div>
                     <div class="form-group">
-                        <label for="password">Password</label>
-                        <input type="password" class="form-control" name="password" id="password" required>
+                        <label for="new-password">Password</label>
+                        <input type="password" class="form-control" name="password" id="new-password" required>
                     </div>
                     <div class="form-group">
-                        <label for="cpassword">Confirm Password</label>
-                        <input type="password" class="form-control" name="cpassword" id="cpassword" required>
+                        <label for="new-cpassword">Confirm Password</label>
+                        <input type="password" class="form-control" name="cpassword" id="new-cpassword" required>
                     </div>
                     <div class="login-msg-box" th:if="${addAccountError}" style="padding-bottom: 8px">
                         <div class="form-msg-fatal" th:text="${addAccountError}"></div>
