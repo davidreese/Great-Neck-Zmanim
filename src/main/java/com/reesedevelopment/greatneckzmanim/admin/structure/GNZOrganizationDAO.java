@@ -29,8 +29,8 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
         GNZOrganizationMapper mapper = new GNZOrganizationMapper();
 
         try {
-            GNZOrganization userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
-            return userInfo;
+            GNZOrganization orgInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            return orgInfo;
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -44,8 +44,8 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
         GNZOrganizationMapper mapper = new GNZOrganizationMapper();
 
         try {
-            GNZOrganization userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
-            return userInfo;
+            GNZOrganization orgInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            return orgInfo;
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
@@ -61,7 +61,6 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
 
         List<GNZOrganization> organizations = new ArrayList<>();
 
-//        iterate through the list and create an GNZUser object for each row
         for (Map<String, Object> orgMap : orgMaps) {
             organizations.add(mapper.mapRow(orgMap));
         }
@@ -118,10 +117,10 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
         try {
             this.getConnection().createStatement().execute(sql);
 
-            String matchingUsersSQL = String.format("DELETE FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", objectToDelete.id);
+            String matchingOrgsSQL = String.format("DELETE FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", objectToDelete.id);
 
             try {
-                this.getConnection().createStatement().execute(matchingUsersSQL);
+                this.getConnection().createStatement().execute(matchingOrgsSQL);
                 return true;
             } catch (Exception e) {
                 e.printStackTrace();
