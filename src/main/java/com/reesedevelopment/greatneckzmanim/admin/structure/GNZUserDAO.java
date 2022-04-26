@@ -34,7 +34,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
     }
 
     @Override
-    public GNZUser findByID(String id) {
+    public GNZUser findById(String id) {
         String sql = GNZUserMapper.BASE_SQL + " WHERE u.ID = ? ";
 
         Object[] params = new Object[] { id };
@@ -122,7 +122,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
 
     @Override
     public boolean update(GNZUser objectToUpdate) {
-        String sql = String.format("UPDATE ACCOUNT SET NAME='%s', EMAIL='%s', ORGANIZATION_ID='%s', ROLE_ID='%s' WHERE ID='%s'", objectToUpdate.getUsername(), objectToUpdate.getEmail(), objectToUpdate.getOrganizationId(), objectToUpdate.getRoleId(), objectToUpdate.getId());
+        String sql = String.format("UPDATE ACCOUNT SET USERNAME='%s', EMAIL='%s', ORGANIZATION_ID='%s', ROLE_ID='%s' WHERE ID='%s'", objectToUpdate.getUsername(), objectToUpdate.getEmail(), objectToUpdate.getOrganizationId(), objectToUpdate.getRoleId(), objectToUpdate.getId());
 
         try {
             this.getConnection().createStatement().execute(sql);

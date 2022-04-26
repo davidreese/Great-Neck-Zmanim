@@ -5,7 +5,7 @@ import java.util.List;
 public interface GNZSaveable<T extends GNZObject> {
     T findByName(String name);
 
-    T findByID(String id);
+    T findById(String id);
 
     List<T> getAll();
 
