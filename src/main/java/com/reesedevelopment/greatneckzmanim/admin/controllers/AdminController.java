@@ -286,7 +286,7 @@ public class AdminController {
                 mv.addObject("associatedorganization", associatedOrganization);
 
                 mv.addObject("user", user);
-            } else if (isUser()) {} else {
+            } else {
                 throw new AccessDeniedException("You are not authorized to view this account.");
             }
         } else if (isUser()) {
