@@ -2,7 +2,6 @@ package com.reesedevelopment.greatneckzmanim.admin.controllers;
 
 import com.reesedevelopment.greatneckzmanim.admin.structure.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.expression.spel.ast.NullLiteral;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -13,14 +12,10 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -45,6 +40,15 @@ public class AdminController {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()));
     }
 
+    private GNZUser getCurrentUser() {
+        return this.gnzUserDAO.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
+    }
+
+    private boolean isSuperAdmin() {
+        GNZUser user = getCurrentUser();
+        return user.getOrganizationId() == null && user.role().equals(Role.ADMIN);
+    }
+
 //    private List<String> getOrganizationsWithAccess() {
 //        if (isAdmin()) {
 //            return null;
@@ -57,6 +61,8 @@ public class AdminController {
     public ModelAndView dashbaord() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/dashboard");
+
+        mv.addObject("user", getCurrentUser());
 
         Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
@@ -85,19 +91,28 @@ public class AdminController {
 
     @GetMapping("/admin/organizations")
     public ModelAndView organizations(String success, String error) {
-        ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/organizations");
-        mv.addObject("organizations", gnzOrganizationDAO.getAll());
-        Date today = new Date();
-        mv.getModel().put("date", dateFormat.format(today));
-        mv.getModel().put("success", success);
-        mv.getModel().put("error", error);
-        return mv;
+    if (!isSuperAdmin()) {
+        throw new AccessDeniedException("You are not authorized to access this page");
+    }
+            ModelAndView mv = new ModelAndView();
+            mv.setViewName("admin/organizations");
+            mv.addObject("organizations", gnzOrganizationDAO.getAll());
+
+            mv.addObject("user", getCurrentUser());
+
+            Date today = new Date();
+            mv.getModel().put("date", dateFormat.format(today));
+            mv.getModel().put("success", success);
+            mv.getModel().put("error", error);
+            return mv;
     }
 
     @RequestMapping(value = "/admin/new-organization", method = RequestMethod.GET)
     public ModelAndView addOrganization(@RequestParam(value = "success", required = false) boolean success,
                                         @RequestParam(value = "error", required = false) String error) {
+        if (!isSuperAdmin()) {
+            throw new AccessDeniedException("You are not authorized to access this page.");
+        }
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/new-organization");
 
@@ -106,6 +121,8 @@ public class AdminController {
 
         mv.getModel().put("success", success);
         mv.getModel().put("error", error);
+
+        mv.addObject("user", getCurrentUser());
 
         return mv;
     }
@@ -118,6 +135,9 @@ public class AdminController {
                                            @RequestParam(value = "site-url", required = false) String siteURIString,
                                            @RequestParam(value = "password", required = true) String password,
                                            @RequestParam(value = "cpassword", required = true) String cpassword) {
+        if (!isSuperAdmin()) {
+            throw new AccessDeniedException("You are not authorized to access this page.");
+        }
 
         System.out.println("Validating input data...");
 
@@ -141,7 +161,7 @@ public class AdminController {
         }
 
 //        check if username already exists
-        if (gnzUserDAO.find(username) != null) {
+        if (gnzUserDAO.findByName(username) != null) {
             System.out.println("Sorry, this username already exists.");
             return addOrganization(false,"Sorry, this username already exists.");
         }
@@ -184,7 +204,7 @@ public class AdminController {
             System.out.println("Organization created successfully.");
             System.out.println("Creating account for organization...");
 
-            GNZUser user = new GNZUser(username, email, Encrypter.encrytedPassword(password), organization.getId(), Role.USER.getId());
+            GNZUser user = new GNZUser(username, email, Encrypter.encrytedPassword(password), organization.getId(), Role.ADMIN.getId());
             if (this.gnzUserDAO.save(user)) {
                 return addOrganization(true, null);
             } else {
@@ -202,8 +222,25 @@ public class AdminController {
     @RequestMapping(value = "/admin/accounts", method = RequestMethod.GET)
     public ModelAndView accounts(@RequestParam(value = "success", required = false) boolean success,
                                    @RequestParam(value = "error", required = false) String error) {
+        if (!isSuperAdmin()) {
+            throw new AccessDeniedException("You are not authorized to access this page.");
+        }
+
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/accounts");
+
+        List<GNZUser> users = this.gnzUserDAO.getAll();
+        mv.addObject("accounts", users);
+
+        Map<String, String> organizationNames = new HashMap<>();
+        for (GNZUser user : users) {
+            GNZOrganization organization = this.gnzOrganizationDAO.findByID(user.getOrganizationId());
+            String organizationDisplayName = organization == null ? "" : organization.getName();
+            organizationNames.put(user.getId(), organizationDisplayName);
+        }
+        mv.addObject("organizationNames", organizationNames);
+
+        mv.addObject("user", getCurrentUser());
 
         Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
@@ -214,15 +251,66 @@ public class AdminController {
         return mv;
     }
 
-    @GetMapping("/admin/my-account")
-    public ModelAndView myAccount() {
+    @GetMapping("/admin/account")
+    public ModelAndView account(@RequestParam(value = "id", required = true) String id) {
         ModelAndView mv = new ModelAndView();
 
 //        TODO: ENSURE SECURITY
-        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
-            mv.setViewName("admin/my-account");
+        if (isSuperAdmin()) {
+            mv.setViewName("admin/account");
+
+            GNZUser queriedUser = this.gnzUserDAO.findByID(id);
+            System.out.println("Queried user: " + queriedUser);
+            mv.addObject("queriedaccount", queriedUser);
+
+            GNZOrganization associatedOrganization = this.gnzOrganizationDAO.findByID(queriedUser.getOrganizationId());
+            System.out.println("Associated organization: " + associatedOrganization);
+            mv.addObject("associatedorganization", associatedOrganization);
+
+            mv.addObject("user", getCurrentUser());
+        } else if (isAdmin()) {
+            GNZUser user = getCurrentUser();
+            GNZUser queriedUser = this.gnzUserDAO.findByID(id);
+            System.out.println("Queried user: " + queriedUser);
+
+            if (user != null && user.getOrganizationId().equals(queriedUser.getOrganizationId())) {
+                mv.setViewName("admin/account");
+
+                mv.addObject("queriedaccount", queriedUser);
+
+                GNZOrganization associatedOrganization = this.gnzOrganizationDAO.findByID(queriedUser.getOrganizationId());
+                System.out.println("Associated organization: " + associatedOrganization);
+                mv.addObject("associatedorganization", associatedOrganization);
+
+                mv.addObject("user", user);
+            } else if (isUser()) {} else {
+                throw new AccessDeniedException("You are not authorized to view this account.");
+            }
+        } else if (isUser()) {
+            GNZUser user = getCurrentUser();
+
+            if (!user.getId().equals(id)) {
+                throw new AccessDeniedException("You are not authorized to view this account.");
+            }
+
+            GNZUser queriedUser = this.gnzUserDAO.findByID(id);
+            System.out.println("Queried user: " + queriedUser);
+
+            if (user.getOrganizationId().equals(queriedUser.getOrganizationId())) {
+                mv.setViewName("admin/account");
+
+                mv.addObject("queriedaccount", queriedUser);
+
+                GNZOrganization associatedOrganization = this.gnzOrganizationDAO.findByID(queriedUser.getOrganizationId());
+                System.out.println("Associated organization: " + associatedOrganization);
+                mv.addObject("associatedorganization", associatedOrganization);
+
+                mv.addObject("user", user);
+            } else if (isUser()) {} else {
+                throw new AccessDeniedException("You are not authorized to view this account.");
+            }
         } else {
-            mv.setViewName("admin/my-account");
+            throw new AccessDeniedException("You are not authorized to view this account.");
         }
 
         Date today = new Date();
@@ -256,12 +344,10 @@ public class AdminController {
             mv.addObject("addAccountError", addAccountErrorMessage);
         }
 
-
-
 //        check permissions
         if (isAdmin()) {
 //                find organization for id
-            GNZOrganization organization = this.gnzOrganizationDAO.find(id);
+            GNZOrganization organization = this.gnzOrganizationDAO.findByID(id);
             if (organization != null) {
                 mv.getModel().put("organization", organization);
             } else {
@@ -272,17 +358,19 @@ public class AdminController {
 
             List<GNZUser> associatedUsers = this.gnzOrganizationDAO.getUsersForOrganization(organization);
             mv.addObject("associatedusers", associatedUsers);
+
+            mv.addObject("user", getCurrentUser());
         } else if (isUser()) {
 //              check if user is associated with organization
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            GNZUser user = this.gnzUserDAO.find(username);
+            GNZUser user = this.gnzUserDAO.findByName(username);
             String associatedOrganizationId = user.getOrganizationId();
             if (!associatedOrganizationId.equals(id)) {
                 System.out.println("You do not have permission to view this organization.");
                 throw new AccessDeniedException("You do not have permission to view this organization.");
             } else {
 //                find organization for id
-                GNZOrganization organization = this.gnzOrganizationDAO.find(id);
+                GNZOrganization organization = this.gnzOrganizationDAO.findByID(id);
                 if (organization != null) {
                     mv.getModel().put("organization", organization);
                 } else {
@@ -293,7 +381,9 @@ public class AdminController {
 
 
                 List<GNZUser> associatedUsers = this.gnzOrganizationDAO.getUsersForOrganization(organization);
-                mv.addObject("associated-users", associatedUsers);
+                mv.addObject("associatedusers", associatedUsers);
+
+                mv.addObject("user", getCurrentUser());
             }
         }
 
@@ -327,7 +417,7 @@ public class AdminController {
         GNZOrganization organization = new GNZOrganization(id, name, address, siteURI);
 
 //        check permissions
-        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
+        if (isAdmin()) {
             if (this.gnzOrganizationDAO.update(organization)) {
                 System.out.println("Organization updated successfully.");
                 return organization(id, "Successfully updated the organization details.", null, null, null);
@@ -335,9 +425,9 @@ public class AdminController {
                 System.out.println("Organization update failed.");
                 return organization(id, null, null, "Sorry, the update failed.", null);
             }
-        } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()))) {
+        } else if (isUser()) {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            GNZUser user = this.gnzUserDAO.find(username);
+            GNZUser user = this.gnzUserDAO.findByName(username);
             String associatedOrganizationId = user.getOrganizationId();
             if (!associatedOrganizationId.equals(id)) {
                 System.out.println("You do not have permission to view this organization.");
@@ -360,7 +450,7 @@ public class AdminController {
     public ModelAndView deleteOrganization(@RequestParam(value = "id", required = true) String id) throws Exception {
         if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.ADMIN.getName()))) {
 //            get organization and check if it exists
-            GNZOrganization organization = this.gnzOrganizationDAO.find(id);
+            GNZOrganization organization = this.gnzOrganizationDAO.findByID(id);
             if (organization != null) {
                 if (this.gnzOrganizationDAO.delete(organization)) {
                     System.out.println("Organization deleted successfully.");
@@ -375,14 +465,14 @@ public class AdminController {
             }
         } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()))) {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            GNZUser user = this.gnzUserDAO.find(username);
+            GNZUser user = this.gnzUserDAO.findByName(username);
             String associatedOrganizationId = user.getOrganizationId();
             if (!associatedOrganizationId.equals(id)) {
                 System.out.println("You do not have permission to view this organization.");
                 throw new AccessDeniedException("You do not have permission to view this organization.");
             } else {
 //                get organization and check if it exists
-                GNZOrganization organization = this.gnzOrganizationDAO.find(id);
+                GNZOrganization organization = this.gnzOrganizationDAO.findByID(id);
                 if (organization != null) {
                     if (this.gnzOrganizationDAO.delete(organization)) {
                         System.out.println("Organization deleted successfully.");
@@ -408,6 +498,9 @@ public class AdminController {
                                       @RequestParam(value = "cpassword") String cpassword,
                                       @RequestParam(value = "oid", required = false) String organizationId,
                                       @RequestParam(value = "r", required = false) String roleInital) throws Exception {
+            if (!isSuperAdmin()) {
+                throw new AccessDeniedException("You do not have permission to create an account.");
+            }
 
 //            validate input
             System.out.println("Validating input data...");
@@ -431,7 +524,7 @@ public class AdminController {
             }
 
 //        check if username already exists
-            if (gnzUserDAO.find(username) != null) {
+            if (gnzUserDAO.findByName(username) != null) {
                 System.out.println("Sorry, this username already exists.");
                 return organization(organizationId, null, null, null,"Sorry, this username already exists.");
             }
@@ -498,7 +591,7 @@ public class AdminController {
                 } else if (isUser()) {
 //                    check if user is in the same organization
                     if (organizationId != null) {
-                        if (gnzUserDAO.find(username).getId().equals(organizationId)) {
+                        if (gnzUserDAO.findByName(username).getId().equals(organizationId)) {
                             System.out.println("Creating account...");
 
                             GNZUser user = new GNZUser(username, email, Encrypter.encrytedPassword(password), organizationId, role);
