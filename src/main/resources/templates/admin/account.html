@@ -39,10 +39,10 @@
                                         <div>
                                         <div class="btn-group btn-group-toggle" id="privileges" data-toggle="buttons" aria-describedby="privileges-help">
                                             <label th:class="${'btn btn-secondary' + ((queriedaccount.isAdmin()) ? ' active' : '')}">
-                                                <input type="radio" name="privileges" id="admin" th:checked="${(queriedaccount.isAdmin())}"> Manager
+                                                <input type="radio" name="privileges" id="admin" value="1" th:checked="${(queriedaccount.isAdmin())}"> Manager
                                             </label>
                                             <label th:class="${'btn btn-secondary' + ((queriedaccount.isUser()) ? ' active' : '')}">
-                                                <input type="radio" name="privileges" id="user" th:checked="${(queriedaccount.isUser())}"> User
+                                                <input type="radio" name="privileges" id="user" value="2" th:checked="${(queriedaccount.isUser())}"> User
                                             </label>
                                         </div>
                                         </div>
@@ -172,5 +172,6 @@
 <script th:if="${addAccountError}" th:inline="javascript">
     showAddAccountModal();
 </script>
+<script th:src
 
 </html>
