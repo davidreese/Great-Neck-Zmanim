@@ -26,13 +26,30 @@
                                     <input type="hidden" name="id" th:value="${queriedaccount.id}">
                                     <div class="form-group">
                                         <label for="username">Username</label>
-                                        <input type="text" class="form-control" name="username" id="username" aria-describedby="username-help" required th:value="${queriedaccount.username}">
+                                        <input type="text" class="form-control" name="username" id="username" aria-describedby="username-help" th:value="${queriedaccount.username}" required>
                                         <small id="username-help" class="form-text text-muted">This is used for account sign-in.</small>
                                     </div>
                                     <div class="form-group">
                                         <label for="email">Email</label>
-                                        <input type="text" class="form-control" name="email" id="email" aria-describedby="email-help" th:value="${queriedaccount.email}">
+                                        <input type="text" class="form-control" name="email" id="email" aria-describedby="email-help" th:value="${queriedaccount.email}" required>
                                         <small id="email-help" class="form-text text-muted">This email will be used for password recovery.</small>
+                                    </div>
+                                    <div class="form-group" th:if="${user.isAdmin() && !queriedaccount.isSuperAdmin()}">
+                                        <label for="privileges">Privileges</label>
+                                        <div>
+                                        <div class="btn-group btn-group-toggle" id="privileges" data-toggle="buttons" aria-describedby="privileges-help">
+                                            <label th:class="${'btn btn-secondary' + ((queriedaccount.isAdmin()) ? ' active' : '')}">
+                                                <input type="radio" name="privileges" id="admin" value="1" th:checked="${(queriedaccount.isAdmin())}"> Manager
+                                            </label>
+                                            <label th:class="${'btn btn-secondary' + ((queriedaccount.isUser()) ? ' active' : '')}">
+                                                <input type="radio" name="privileges" id="user" value="2" th:checked="${(queriedaccount.isUser())}"> User
+                                            </label>
+                                        </div>
+                                        </div>
+                                        <small id="privileges-help" class="form-text text-muted">Manager permissions allow the user to add and edit other accounts. To change this user's privileges, toggle the switch and click the update button.</small>
+<!--                                        <label for="privileges">Privileges</label>-->
+<!--                                        <input type="text" class="form-control" name="email" id="email" aria-describedby="email-help" th:value="${queriedaccount.email}">-->
+<!--                                        <small id="email-help" class="form-text text-muted">This email will be used for password recovery.</small>-->
                                     </div>
                                     <!--                                    <div class="form-group">-->
                                     <!--                                        <label for="site-url">Website</label>-->
@@ -155,5 +172,6 @@
 <script th:if="${addAccountError}" th:inline="javascript">
     showAddAccountModal();
 </script>
+<script th:src
 
 </html>
