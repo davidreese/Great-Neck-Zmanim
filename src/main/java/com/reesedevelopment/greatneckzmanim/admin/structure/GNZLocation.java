@@ -4,14 +4,21 @@ import javax.persistence.Column;
 import javax.persistence.Table;
 
 @Table(name = "LOCATION")
-public class GNZLocation extends GNZObject {
+public class GNZLocation extends GNZObject implements IDGenerator {
     @Column(name="NAME")
     private String name;
 
     @Column(name="ORGANIZATION_ID")
     private String organizationId;
 
+    public GNZLocation(String id, String name, String organizationId) {
+        super.id = id;
+        this.name = name;
+        this.organizationId = organizationId;
+    }
+
     public GNZLocation(String name, String organizationId) {
+        super.id = generateID('L');
         this.name = name;
         this.organizationId = organizationId;
     }
