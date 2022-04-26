@@ -199,11 +199,11 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/admin/new-account", method = RequestMethod.GET)
-    public ModelAndView addAccount(@RequestParam(value = "success", required = false) boolean success,
+    @RequestMapping(value = "/admin/accounts", method = RequestMethod.GET)
+    public ModelAndView accounts(@RequestParam(value = "success", required = false) boolean success,
                                    @RequestParam(value = "error", required = false) String error) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/new-account");
+        mv.setViewName("admin/accounts");
 
         Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
