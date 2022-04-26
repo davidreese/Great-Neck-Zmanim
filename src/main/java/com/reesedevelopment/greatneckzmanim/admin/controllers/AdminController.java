@@ -29,6 +29,9 @@ public class AdminController {
     @Autowired
     private GNZOrganizationDAO gnzOrganizationDAO;
 
+    @Autowired
+    private GNZLocationDAO gnzLocationDAO;
+
 //    @Autowired
 //    private GNZAcc gnzOrganizationDAO;
 
@@ -92,10 +95,11 @@ public class AdminController {
 //    }
 
     @GetMapping("/admin/organizations")
-    public ModelAndView organizations(String success, String error) {
+    public ModelAndView organizations(String successMessage, String errorMessage) {
         if (!isSuperAdmin()) {
             throw new AccessDeniedException("You are not authorized to access this page");
         }
+
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/organizations");
         mv.addObject("organizations", gnzOrganizationDAO.getAll());
@@ -104,8 +108,9 @@ public class AdminController {
 
         Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
-        mv.getModel().put("success", success);
-        mv.getModel().put("error", error);
+
+        mv.getModel().put("success", successMessage);
+        mv.getModel().put("error", errorMessage);
         return mv;
     }
 
@@ -495,12 +500,14 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/create-account")
-    public ModelAndView createAccount(@RequestParam(value = "username", required = true) String username,
-                                      @RequestParam(value = "email", required = true) String email,
-                                      @RequestParam(value = "password", required = true) String password,
-                                      @RequestParam(value = "cpassword") String cpassword,
-                                      @RequestParam(value = "oid", required = false) String organizationId,
-                                      @RequestParam(value = "r", required = false) String roleInital) throws Exception {
+    public ModelAndView createAccount(
+            @RequestParam(value = "username", required = true) String username,
+            @RequestParam(value = "email", required = true) String email,
+            @RequestParam(value = "password", required = true) String password,
+            @RequestParam(value = "cpassword") String cpassword,
+            @RequestParam(value = "oid", required = false) String organizationId,
+            @RequestParam(value = "r", required = false) String roleInital
+    ) throws Exception {
         if (!isSuperAdmin()) {
             throw new AccessDeniedException("You do not have permission to create an account.");
         }
@@ -664,5 +671,22 @@ public class AdminController {
                 return account(id,null, "Sorry, an error occurred. The account could not be updated.");
             }
         }
+    }
+
+    @RequestMapping(value = "/admin/locations", method = RequestMethod.GET)
+    public ModelAndView locations(String successMessage, String errorMessage) {
+        ModelAndView mv = new ModelAndView("admin/locations");
+        mv.addObject("locations", gnzLocationDAO.getAll());
+
+        mv.addObject("user", getCurrentUser());
+
+        Date today = new Date();
+        mv.getModel().put("date", dateFormat.format(today));
+
+
+        mv.addObject("successmessage", successMessage);
+        mv.addObject("errormessage", errorMessage);
+
+        return mv;
     }
 }
