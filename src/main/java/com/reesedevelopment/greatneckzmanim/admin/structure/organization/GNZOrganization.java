@@ -1,4 +1,7 @@
-package com.reesedevelopment.greatneckzmanim.admin.structure;
+package com.reesedevelopment.greatneckzmanim.admin.structure.organization;
+
+import com.reesedevelopment.greatneckzmanim.admin.structure.GNZObject;
+import com.reesedevelopment.greatneckzmanim.admin.structure.IDGenerator;
 
 import javax.persistence.Column;
 import javax.persistence.Table;

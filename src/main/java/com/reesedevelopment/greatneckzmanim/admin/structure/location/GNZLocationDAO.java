@@ -1,5 +1,6 @@
-package com.reesedevelopment.greatneckzmanim.admin.structure;
+package com.reesedevelopment.greatneckzmanim.admin.structure.location;
 
+import com.reesedevelopment.greatneckzmanim.admin.structure.GNZSaveable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -98,7 +99,7 @@ public class GNZLocationDAO extends JdbcDaoSupport implements GNZSaveable<GNZLoc
 
     @Override
     public boolean delete(GNZLocation objectToDelete) {
-        String sql = String.format("DELETE FROM LOCATION WHERE ID='%s'", objectToDelete.id);
+        String sql = String.format("DELETE FROM LOCATION WHERE ID='%s'", objectToDelete.getId());
 
         try {
             this.getConnection().createStatement().execute(sql);

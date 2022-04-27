@@ -1,4 +1,4 @@
-package com.reesedevelopment.greatneckzmanim.admin.structure;
+package com.reesedevelopment.greatneckzmanim.admin.structure.organization;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,6 +6,9 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
+import com.reesedevelopment.greatneckzmanim.admin.structure.GNZSaveable;
+import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUser;
+import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -112,12 +115,12 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
 
     @Override
     public boolean delete(GNZOrganization objectToDelete) {
-        String sql = String.format("DELETE FROM ORGANIZATION WHERE ID='%s'", objectToDelete.id);
+        String sql = String.format("DELETE FROM ORGANIZATION WHERE ID='%s'", objectToDelete.getId());
 
         try {
             this.getConnection().createStatement().execute(sql);
 
-            String matchingOrgsSQL = String.format("DELETE FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", objectToDelete.id);
+            String matchingOrgsSQL = String.format("DELETE FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", objectToDelete.getId());
 
             try {
                 this.getConnection().createStatement().execute(matchingOrgsSQL);
@@ -151,7 +154,7 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
     }
 
     public List<GNZUser> getUsersForOrganization(GNZOrganization organization) {
-        String sql = String.format("SELECT * FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", organization.id);
+        String sql = String.format("SELECT * FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", organization.getId());
 
         GNZUserMapper mapper = new GNZUserMapper();
 

@@ -1,6 +1,10 @@
-package com.reesedevelopment.greatneckzmanim.admin.structure;
+package com.reesedevelopment.greatneckzmanim.admin.structure.user;
 
 //import org.springframework.data.annotation.Id;
+
+import com.reesedevelopment.greatneckzmanim.admin.structure.GNZObject;
+import com.reesedevelopment.greatneckzmanim.admin.structure.IDGenerator;
+import com.reesedevelopment.greatneckzmanim.admin.structure.Role;
 
 import javax.persistence.*;
 
