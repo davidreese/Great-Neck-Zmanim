@@ -674,14 +674,26 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/locations", method = RequestMethod.GET)
-    public ModelAndView locations(String successMessage, String errorMessage) {
+    public ModelAndView locations(@RequestParam(value = "oid", required = false) String oid, String successMessage, String errorMessage) {
+        String oidToUse;
+        if (isSuperAdmin()) {
+            oidToUse = oid;
+        } else {
+            if (oid != null) {
+                throw new AccessDeniedException("You do not have permission to view locations for this organization.");
+            } else {
+                oidToUse = getCurrentUser().getOrganizationId();
+            }
+        }
+
         ModelAndView mv = new ModelAndView("admin/locations");
-        mv.addObject("locations", gnzLocationDAO.getAll());
+        mv.addObject("locations", gnzLocationDAO.findMatching(oidToUse));
 
         GNZUser currentUser = getCurrentUser();
-        GNZOrganization currentOrganization = gnzOrganizationDAO.findById(currentUser.getOrganizationId());
         mv.addObject("user", currentUser);
-        mv.addObject("organization", currentOrganization);
+
+        GNZOrganization organization = gnzOrganizationDAO.findById(oidToUse);
+        mv.addObject("organization", organization);
 
         Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
@@ -700,14 +712,14 @@ public class AdminController {
         }
 
         if (name.isEmpty()) {
-            return locations(null, "Sorry, an error occurred. The location could not be created.");
+            return locations(null, null, "Sorry, an error occurred. The location could not be created.");
         }
 
         GNZLocation location = new GNZLocation(name, organizationId);
         if (gnzLocationDAO.save(location)) {
-            return locations("Successfully created location '" + location.getName() + ".'", null);
+            return locations(organizationId,"Successfully created location '" + location.getName() + ".'", null);
         } else {
-            return locations(null, "Sorry, an error occurred. The location could not be created.");
+            return locations(organizationId,null, "Sorry, an error occurred. The location could not be created.");
         }
     }
 
@@ -718,29 +730,32 @@ public class AdminController {
             throw new AccessDeniedException("You do not have permission to update a location for this organization.");
         }
 
+        String organizationId = locationToUpdate.getOrganizationId();
+
         if (newName.isEmpty()) {
-            return locations(null, "Sorry, an error occurred. The location could not be updated.");
+            return locations(organizationId, null, "Sorry, an error occurred. The location could not be updated.");
         }
 
         GNZLocation location = new GNZLocation(id, newName, locationToUpdate.getOrganizationId());
         if (gnzLocationDAO.update(location)) {
-            return locations("Successfully updated location '" + location.getName() + ".'", null);
+            return locations(organizationId, "Successfully updated location '" + location.getName() + ".'", null);
         } else {
-            return locations(null, "Sorry, an error occurred. The location could not be updated.");
+            return locations(organizationId, null, "Sorry, an error occurred. The location could not be updated.");
         }
     }
 
     @RequestMapping(value = "/admin/delete-location")
     public ModelAndView deleteLocation(@RequestParam(value = "id", required = true) String id) {
         GNZLocation locationToDelete = gnzLocationDAO.findById(id);
+        String organizationId = locationToDelete.getOrganizationId();
         if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(locationToDelete.getOrganizationId())) {
             throw new AccessDeniedException("You do not have permission to delete a location for this organization.");
         }
 
         if (gnzLocationDAO.delete(locationToDelete)) {
-            return locations("Successfully deleted location '" + locationToDelete.getName() + ".'", null);
+            return locations(organizationId, "Successfully deleted location '" + locationToDelete.getName() + ".'", null);
         } else {
-            return locations(null, "Sorry, an error occurred. The location could not be deleted.");
+            return locations(organizationId, null, "Sorry, an error occurred. The location could not be deleted.");
         }
     }
 }

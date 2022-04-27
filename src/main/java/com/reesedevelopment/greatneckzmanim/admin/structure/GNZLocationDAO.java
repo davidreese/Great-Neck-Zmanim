@@ -51,6 +51,20 @@ public class GNZLocationDAO extends JdbcDaoSupport implements GNZSaveable<GNZLoc
         }
     }
 
+    public List<GNZLocation> findMatching(String organizationId) {
+        String sql = GNZLocationMapper.BASE_SQL + " WHERE l.ORGANIZATION_ID = ? ";
+
+        Object[] params = new Object[] { organizationId };
+        GNZLocationMapper mapper = new GNZLocationMapper();
+
+        try {
+            List<GNZLocation> locationInfo = this.getJdbcTemplate().query(sql, params, mapper);
+            return locationInfo;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
     @Override
     public List<GNZLocation> getAll() {
         String sql = "SELECT * FROM LOCATION";
