@@ -678,7 +678,10 @@ public class AdminController {
         ModelAndView mv = new ModelAndView("admin/locations");
         mv.addObject("locations", gnzLocationDAO.getAll());
 
-        mv.addObject("user", getCurrentUser());
+        GNZUser currentUser = getCurrentUser();
+        GNZOrganization currentOrganization = gnzOrganizationDAO.findById(currentUser.getOrganizationId());
+        mv.addObject("user", currentUser);
+        mv.addObject("organization", currentOrganization);
 
         Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
@@ -688,5 +691,23 @@ public class AdminController {
         mv.addObject("errormessage", errorMessage);
 
         return mv;
+    }
+
+    @RequestMapping(value = "/admin/create-location")
+    public ModelAndView createLocation(@RequestParam(value = "name", required = true) String name, @RequestParam(value = "oid", required = true) String organizationId) {
+        if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(organizationId)) {
+            throw new AccessDeniedException("You do not have permission to create a location for this organization.");
+        }
+
+        if (name.isEmpty()) {
+            return locations(null, "Sorry, an error occurred. The location could not be created.");
+        }
+
+        GNZLocation location = new GNZLocation(name, organizationId);
+        if (gnzLocationDAO.save(location)) {
+            return locations("Successfully created location '" + location.getName() + ".'", null);
+        } else {
+            return locations(null, "Sorry, an error occurred. The location could not be created.");
+        }
     }
 }
