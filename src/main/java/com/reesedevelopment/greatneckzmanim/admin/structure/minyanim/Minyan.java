@@ -10,7 +10,7 @@ import javax.persistence.Table;
 
 @Table(name = "MINYAN")
 public class Minyan extends GNZObject implements IDGenerator {
-    @Column(name = "TYPE")
+    @Column(name = "TYPE", nullable = false)
     private String minyanTypeString;
 
     private MinyanType minyanType;
@@ -20,12 +20,12 @@ public class Minyan extends GNZObject implements IDGenerator {
 
     private GNZLocation location;
 
-    @Column(name = "ORGANIZATION_ID")
+    @Column(name = "ORGANIZATION_ID", nullable = false)
     private String organizationId;
 
     private GNZOrganization organization;
 
-    @Column(name = "ENABLED")
+    @Column(name = "ENABLED", nullable = false)
     private boolean enabled;
 
     @Column(name = "START_TIME_1")
@@ -66,7 +66,7 @@ public class Minyan extends GNZObject implements IDGenerator {
     @Column(name = "NOTES")
     private String notes;
 
-    @Column(name = "NUSACH")
+    @Column(name = "NUSACH", nullable = false)
     private String nusach;
 
     public Minyan(String id,
