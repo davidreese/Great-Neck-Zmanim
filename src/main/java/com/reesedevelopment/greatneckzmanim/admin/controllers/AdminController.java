@@ -684,11 +684,7 @@ public class AdminController {
         if (isSuperAdmin()) {
             oidToUse = oid;
         } else {
-            if (oid != null) {
-                throw new AccessDeniedException("You do not have permission to view locations for this organization.");
-            } else {
-                oidToUse = getCurrentUser().getOrganizationId();
-            }
+            oidToUse = getCurrentUser().getOrganizationId();
         }
 
         ModelAndView mv = new ModelAndView("admin/locations");
@@ -728,7 +724,7 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/admin/update-location")
+    @RequestMapping(value = "/admin/update-location", method = RequestMethod.POST)
     public ModelAndView updateLocation(@RequestParam(value = "id", required = true) String id, @RequestParam(value = "name", required = true) String newName) {
         GNZLocation locationToUpdate = gnzLocationDAO.findById(id);
         if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(locationToUpdate.getOrganizationId())) {
