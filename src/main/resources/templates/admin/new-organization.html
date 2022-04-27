@@ -17,6 +17,12 @@
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
                 <main class="col main pt-5 mt-3 overflow-auto">
+                    <div th:if="${successmessage}">
+                        <div class="alert alert-success" role="alert" th:text="${successmessage}"> </div>
+                    </div>
+                    <div th:if="${errormessage}">
+                        <div class="alert alert-danger" role="alert" th:text="${errormessage}"></div>
+                    </div>
                 <h1 class="display-4 d-none d-sm-block">
                     Add an Organization
                 </h1>
@@ -54,7 +60,7 @@
                                 <div class="form-group">
                                     <label for="site-url">Website</label>
                                     <input type="text" class="form-control" name="site-url" id="site-url" aria-describedby="site-url-help">
-                                    <small id="site-url-help" class="form-text text-muted">This website link will be displayed publically.</small>
+                                    <small id="site-url-help" class="form-text text-muted">Optional: This website link will be displayed publically.</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password</label>
@@ -64,8 +70,8 @@
                                     <label for="cpassword">Confirm Password</label>
                                     <input type="password" class="form-control" name="cpassword" id="cpassword" required>
                                 </div>
-                                <div class="login-msg-box" th:if="${error}" style="padding-bottom: 8px">
-                                    <div class="form-msg-fatal" th:text="${error}"></div>
+                                <div class="login-msg-box" th:if="${inputerrormessage}">
+                                    <div class="form-msg-fatal" th:text="${inputerrormessage}"></div>
                                 </div>
                                 <hr>
                                 <button type="submit" class="btn btn-primary">Create</button>

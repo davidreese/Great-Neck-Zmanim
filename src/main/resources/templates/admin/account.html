@@ -95,7 +95,7 @@
                                 <div class="card-body">
                                     <h4 class="card-title">Associated Organization</h4>
                                     <p class="card-text" th:text="${'View and manage the organization details for ' + associatedorganization.name + '.'}"></p>
-                                    <a href="/admin/organizations" class="btn btn-primary">Go</a>
+                                    <a th:href="@{/admin/organization(id=${associatedorganization.id})}" class="btn btn-primary">Go</a>
                                 </div>
                             </div>
                             <div class="card card-inverse bg-inverse mt-3" th:if="${user.isSuperAdmin()}" sec:authorize="hasRole('ROLE_ADMIN')">
@@ -127,7 +127,7 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="delete-account-modal-label" th:text="${'Permanently delete ' + queriedaccount.username + '?'}"></h5>
+                    <h5 class="modal-title" id="delete-account-modal-label" th:text="${'Permanently delete ''' + queriedaccount.username + '''?'}"></h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -149,7 +149,7 @@
             <div class="modal-dialog">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="disable-account-modal-label" th:text="${'Disable ' + queriedaccount.username + '?'}"></h5>
+                        <h5 class="modal-title" id="disable-account-modal-label" th:text="${'Disable ''' + queriedaccount.username + '''?'}"></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
