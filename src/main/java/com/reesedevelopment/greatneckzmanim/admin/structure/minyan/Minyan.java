@@ -1,4 +1,4 @@
-package com.reesedevelopment.greatneckzmanim.admin.structure.minyanim;
+package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 
 import com.reesedevelopment.greatneckzmanim.admin.structure.GNZObject;
 import com.reesedevelopment.greatneckzmanim.admin.structure.IDGenerator;

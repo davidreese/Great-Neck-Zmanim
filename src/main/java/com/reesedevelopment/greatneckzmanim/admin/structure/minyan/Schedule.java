@@ -1,4 +1,4 @@
-package com.reesedevelopment.greatneckzmanim.admin.structure.minyanim;
+package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 
 public class Schedule {
     private Time sunday;
