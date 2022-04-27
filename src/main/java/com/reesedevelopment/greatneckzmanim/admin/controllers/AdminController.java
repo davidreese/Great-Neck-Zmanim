@@ -763,4 +763,11 @@ public class AdminController {
             return locations(organizationId, null, "Sorry, an error occurred. The location could not be deleted.");
         }
     }
+
+    @RequestMapping(value = "/admin/minyanim")
+    public ModelAndView minyanim() {
+        ModelAndView mv = new ModelAndView("/admin/minyan-schedule");
+
+        return mv;
+    }
 }
