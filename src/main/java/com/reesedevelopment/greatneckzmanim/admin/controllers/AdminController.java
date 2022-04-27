@@ -710,4 +710,23 @@ public class AdminController {
             return locations(null, "Sorry, an error occurred. The location could not be created.");
         }
     }
+
+    @RequestMapping(value = "/admin/update-location")
+    public ModelAndView updateLocation(@RequestParam(value = "id", required = true) String id, @RequestParam(value = "name", required = true) String newName) {
+        GNZLocation locationToUpdate = gnzLocationDAO.findById(id);
+        if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(locationToUpdate.getOrganizationId())) {
+            throw new AccessDeniedException("You do not have permission to update a location for this organization.");
+        }
+
+        if (newName.isEmpty()) {
+            return locations(null, "Sorry, an error occurred. The location could not be updated.");
+        }
+
+        GNZLocation location = new GNZLocation(id, newName, locationToUpdate.getOrganizationId());
+        if (gnzLocationDAO.update(location)) {
+            return locations("Successfully updated location '" + location.getName() + ".'", null);
+        } else {
+            return locations(null, "Sorry, an error occurred. The location could not be updated.");
+        }
+    }
 }
