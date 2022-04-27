@@ -13,11 +13,11 @@
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
             <main class="col main pt-5 mt-3 overflow-auto" >
-                <div th:if="${success}">
-                    <div class="alert alert-success" role="alert" th:text="${success}"> </div>
+                <div th:if="${successmessage}">
+                    <div class="alert alert-success" role="alert" th:text="${successmessage}"> </div>
                 </div>
-                <div th:if="${error}">
-                    <div class="alert alert-danger" role="alert" th:text="${error}"></div>
+                <div th:if="${errormessage}">
+                    <div class="alert alert-danger" role="alert" th:text="${errormessage}"></div>
                 </div>
                 <h1 class="display-4 d-none d-sm-block">
                     Organizations
