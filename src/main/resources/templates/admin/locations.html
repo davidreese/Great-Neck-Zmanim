@@ -91,7 +91,7 @@
                 <!--                <p th:utext="${'This account will have user privileges associated with ' + organization.name + '. To create an admin account, visit the <a th:href=\\"@{/admin/new-account}">New Account</a> page.'}"></p>-->
                 <p>This location will be associated with [(${organization.name})].</p></p>
                 <form method="post" th:action="@{/admin/create-location}">
-                    <input type="hidden" name="oid" th:value="${organization.id}">
+                    <input hidden name="oid" th:value="${organization.id}">
                     <div class="form-group">
                         <label for="new-name">Name</label>
                         <input type="text" class="form-control" id="new-name" name="name" aria-describedby="new-name-help" required>
@@ -103,6 +103,35 @@
                     <hr>
                     <button type="submit" class="btn btn-primary">Add</button>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:each="location: ${locations}">
+    <div class="modal fade" th:id="${'add-location-modal-' + location.id}" tabindex="-1" th:aria-labelledby="${'add-location-modal-label-' + location.id}" style="display: none;" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title h4" th:id="${'add-location-modal-label-' + location.id}">Add a Location</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <!--                <p th:utext="${'This account will have user privileges associated with ' + organization.name + '. To create an admin account, visit the <a th:href=\\"@{/admin/new-account}">New Account</a> page.'}"></p>-->
+<!--                    <p>This location will be associated with [(${organization.name})].</p></p>-->
+                    <form method="post" th:action="@{/admin/update-location}">
+                        <input hidden name="id" th:value="${location.id}">
+                        <div class="form-group">
+                            <label for="new-name">Name</label>
+                            <input type="text" class="form-control" th:id="${'new-name-' + location.id}" name="name" th:aria-describedby="${'new-name-help-' + location.id}" required>
+                            <small th:id="${'new-name-help-' + location.id}" class="form-text text-muted">This is the public display name.</small>
+                        </div>
+                        <hr>
+                        <button type="submit" class="btn btn-primary">Add</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
