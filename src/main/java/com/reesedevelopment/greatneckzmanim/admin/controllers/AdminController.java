@@ -729,4 +729,18 @@ public class AdminController {
             return locations(null, "Sorry, an error occurred. The location could not be updated.");
         }
     }
+
+    @RequestMapping(value = "/admin/delete-location")
+    public ModelAndView deleteLocation(@RequestParam(value = "id", required = true) String id) {
+        GNZLocation locationToDelete = gnzLocationDAO.findById(id);
+        if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(locationToDelete.getOrganizationId())) {
+            throw new AccessDeniedException("You do not have permission to delete a location for this organization.");
+        }
+
+        if (gnzLocationDAO.delete(locationToDelete)) {
+            return locations("Successfully deleted location '" + locationToDelete.getName() + ".'", null);
+        } else {
+            return locations(null, "Sorry, an error occurred. The location could not be deleted.");
+        }
+    }
 }
