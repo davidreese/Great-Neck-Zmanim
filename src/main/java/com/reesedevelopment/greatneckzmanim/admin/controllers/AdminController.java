@@ -29,6 +29,9 @@ public class AdminController {
     @Autowired
     private GNZOrganizationDAO gnzOrganizationDAO;
 
+    @Autowired
+    private GNZLocationDAO gnzLocationDAO;
+
 //    @Autowired
 //    private GNZAcc gnzOrganizationDAO;
 
@@ -92,10 +95,11 @@ public class AdminController {
 //    }
 
     @GetMapping("/admin/organizations")
-    public ModelAndView organizations(String success, String error) {
+    public ModelAndView organizations(String successMessage, String errorMessage) {
         if (!isSuperAdmin()) {
             throw new AccessDeniedException("You are not authorized to access this page");
         }
+
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/organizations");
         mv.addObject("organizations", gnzOrganizationDAO.getAll());
@@ -104,8 +108,9 @@ public class AdminController {
 
         Date today = new Date();
         mv.getModel().put("date", dateFormat.format(today));
-        mv.getModel().put("success", success);
-        mv.getModel().put("error", error);
+
+        mv.getModel().put("success", successMessage);
+        mv.getModel().put("error", errorMessage);
         return mv;
     }
 
@@ -495,12 +500,14 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/create-account")
-    public ModelAndView createAccount(@RequestParam(value = "username", required = true) String username,
-                                      @RequestParam(value = "email", required = true) String email,
-                                      @RequestParam(value = "password", required = true) String password,
-                                      @RequestParam(value = "cpassword") String cpassword,
-                                      @RequestParam(value = "oid", required = false) String organizationId,
-                                      @RequestParam(value = "r", required = false) String roleInital) throws Exception {
+    public ModelAndView createAccount(
+            @RequestParam(value = "username", required = true) String username,
+            @RequestParam(value = "email", required = true) String email,
+            @RequestParam(value = "password", required = true) String password,
+            @RequestParam(value = "cpassword") String cpassword,
+            @RequestParam(value = "oid", required = false) String organizationId,
+            @RequestParam(value = "r", required = false) String roleInital
+    ) throws Exception {
         if (!isSuperAdmin()) {
             throw new AccessDeniedException("You do not have permission to create an account.");
         }
@@ -663,6 +670,77 @@ public class AdminController {
             } else {
                 return account(id,null, "Sorry, an error occurred. The account could not be updated.");
             }
+        }
+    }
+
+    @RequestMapping(value = "/admin/locations", method = RequestMethod.GET)
+    public ModelAndView locations(String successMessage, String errorMessage) {
+        ModelAndView mv = new ModelAndView("admin/locations");
+        mv.addObject("locations", gnzLocationDAO.getAll());
+
+        GNZUser currentUser = getCurrentUser();
+        GNZOrganization currentOrganization = gnzOrganizationDAO.findById(currentUser.getOrganizationId());
+        mv.addObject("user", currentUser);
+        mv.addObject("organization", currentOrganization);
+
+        Date today = new Date();
+        mv.getModel().put("date", dateFormat.format(today));
+
+
+        mv.addObject("successmessage", successMessage);
+        mv.addObject("errormessage", errorMessage);
+
+        return mv;
+    }
+
+    @RequestMapping(value = "/admin/create-location")
+    public ModelAndView createLocation(@RequestParam(value = "name", required = true) String name, @RequestParam(value = "oid", required = true) String organizationId) {
+        if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(organizationId)) {
+            throw new AccessDeniedException("You do not have permission to create a location for this organization.");
+        }
+
+        if (name.isEmpty()) {
+            return locations(null, "Sorry, an error occurred. The location could not be created.");
+        }
+
+        GNZLocation location = new GNZLocation(name, organizationId);
+        if (gnzLocationDAO.save(location)) {
+            return locations("Successfully created location '" + location.getName() + ".'", null);
+        } else {
+            return locations(null, "Sorry, an error occurred. The location could not be created.");
+        }
+    }
+
+    @RequestMapping(value = "/admin/update-location")
+    public ModelAndView updateLocation(@RequestParam(value = "id", required = true) String id, @RequestParam(value = "name", required = true) String newName) {
+        GNZLocation locationToUpdate = gnzLocationDAO.findById(id);
+        if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(locationToUpdate.getOrganizationId())) {
+            throw new AccessDeniedException("You do not have permission to update a location for this organization.");
+        }
+
+        if (newName.isEmpty()) {
+            return locations(null, "Sorry, an error occurred. The location could not be updated.");
+        }
+
+        GNZLocation location = new GNZLocation(id, newName, locationToUpdate.getOrganizationId());
+        if (gnzLocationDAO.update(location)) {
+            return locations("Successfully updated location '" + location.getName() + ".'", null);
+        } else {
+            return locations(null, "Sorry, an error occurred. The location could not be updated.");
+        }
+    }
+
+    @RequestMapping(value = "/admin/delete-location")
+    public ModelAndView deleteLocation(@RequestParam(value = "id", required = true) String id) {
+        GNZLocation locationToDelete = gnzLocationDAO.findById(id);
+        if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(locationToDelete.getOrganizationId())) {
+            throw new AccessDeniedException("You do not have permission to delete a location for this organization.");
+        }
+
+        if (gnzLocationDAO.delete(locationToDelete)) {
+            return locations("Successfully deleted location '" + locationToDelete.getName() + ".'", null);
+        } else {
+            return locations(null, "Sorry, an error occurred. The location could not be deleted.");
         }
     }
 }

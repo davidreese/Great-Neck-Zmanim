@@ -207,7 +207,6 @@
                 </button>
             </div>
             <div class="modal-body">
-                <!--                TODO: ADD HYPERLINK IN THE MESSAGE-->
                 <!--                <p th:utext="${'This account will have user privileges associated with ' + organization.name + '. To create an admin account, visit the <a th:href=\\"@{/admin/new-account}">New Account</a> page.'}"></p>-->
                 <p>This account will have user privileges associated with [(${organization.name})]. To create an admin account, visit the <a href="/admin/new-account">create an account</a> page.</p></p>
                 <form method="post" th:action="@{/admin/create-account?r=u&oid=} + ${organization.id}">
