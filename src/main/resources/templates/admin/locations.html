@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Locations</title>
+</head>
+<body>
+<div class="horizontal-container d-flex" id="wrapper">
+    <th:block th:include="/admin/navbar"></th:block>
+    <div class="container-fluid" id="main">
+        <div class="row row-offcanvas row-offcanvas-left vh-100">
+            <th:block th:include="/admin/sidebar"></th:block>
+            <!--/col-->
+            <div class="col-housing main h-100 overflow-auto">
+                <main class="col main pt-5 mt-3 overflow-auto" >
+                    <div th:if="${successmessage}">
+                        <div class="alert alert-success" role="alert" th:text="${successmessage}"> </div>
+                    </div>
+                    <div th:if="${errormessage}">
+                        <div class="alert alert-danger" role="alert" th:text="${errormessage}"></div>
+                    </div>
+                    <h1 class="display-4 d-none d-sm-block">
+                        Locations
+                    </h1>
+                    <p class="lead d-none d-sm-block" th:text="${'Manage and add more locations for minyanim at ' + organization.name + '.'}"></p>
+
+                    <hr>
+
+                    <div class="row my-4 footer-pusher">
+                        <div class="col-lg-9 col-md-8">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead class="thead-inverse">
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Name</th>
+                                        <th>Edit</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr th:each="location: ${locations}">
+                                        <td th:text="${location.id}" />
+                                        <td th:text="${location.name}" />
+                                        <td>
+                                            <button class="btn btn-outline-dark btn-sm">Manage</button>
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <h4 class="card-title">Add a Location</h4>
+                                    <p class="card-text">Add another location that minyanim will take place, such as a side room or social hall, so you can assign places for minyanim.</p>
+                                    <button class="btn btn-primary" data-toggle="modal" data-target="#add-location-modal">New Location</button>
+                                </div>
+                            </div>
+                            <div class="card card-inverse bg-inverse mt-3">
+                                <div class="card-body">
+                                    <h4 class="card-title">Minyan Schedule</h4>
+                                    <p class="card-text" th:text="${'Change the schedule of routine and occasional minyanim for ' + organization.name + '.'}"></p>
+                                    <a href="/admin/organizations" class="btn btn-primary">Go</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+                <th:block th:include="/admin/footer"></th:block>
+            </div>
+
+            <!--/main col-->
+        </div>
+
+    </div>
+    <!--/.container-->
+</div>
+
+<div class="modal fade" id="add-location-modal" tabindex="-1" aria-labelledby="add-location-modal-label" style="display: none;" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title h4" id="add-location-modal-label">Add a Location</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <!--                <p th:utext="${'This account will have user privileges associated with ' + organization.name + '. To create an admin account, visit the <a th:href=\\"@{/admin/new-account}">New Account</a> page.'}"></p>-->
+                <p>This location will be associated with [(${organization.name})].</p></p>
+                <form method="post" th:action="@{/admin/create-location}">
+                    <input type="hidden" name="oid" th:value="${organization.id}">
+                    <div class="form-group">
+                        <label for="new-name">Name</label>
+                        <input type="text" class="form-control" id="new-name" name="name" aria-describedby="new-name-help" required>
+                        <small id="new-name-help" class="form-text text-muted">This is the public display name.</small>
+                    </div>
+                    <div class="login-msg-box" th:if="${addlocationerror}" style="padding-bottom: 8px">
+                        <div class="form-msg-fatal" th:text="${addlocationerror}"></div>
+                    </div>
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Add</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>
