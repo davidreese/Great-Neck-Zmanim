@@ -115,14 +115,14 @@
                                 <div class="card-body">
                                     <h4 class="card-title">Minyan Schedule</h4>
                                     <p class="card-text" th:text="${'Change the schedule of routine and occasional minyanim for ' + organization.name + '.'}"></p>
-                                    <a href="/admin/organizations" class="btn btn-primary">Go</a>
+                                    <a href="/admin/minyanim" class="btn btn-primary">Go</a>
                                 </div>
                             </div>
-                            <div class="card card-inverse bg-inverse mt-3" th:if="${user.isSuperAdmin()}" sec:authorize="hasRole('ROLE_ADMIN')">
+                            <div class="card card-inverse bg-inverse mt-3">
                                 <div class="card-body">
-                                    <h4 class="card-title">Organizations</h4>
-                                    <p class="card-text">See a list of all organizations and manage their data and details.</p>
-                                    <a href="/admin/organizations" class="btn btn-primary">Go</a>
+                                    <h4 class="card-title">Locations</h4>
+                                    <p class="card-text" th:text="${'Manage the locations of minyanim for ' + organization.name + '.'}"></p>
+                                    <a th:href="@{/admin/locations(oid=${organization.id})}" class="btn btn-primary">Go</a>
                                 </div>
                             </div>
                         </div>
