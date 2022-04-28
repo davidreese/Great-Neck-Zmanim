@@ -7,6 +7,7 @@ import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organiz
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import java.util.Locale;
 
 @Table(name = "MINYAN")
 public class Minyan extends GNZObject implements IDGenerator {
@@ -90,7 +91,7 @@ public class Minyan extends GNZObject implements IDGenerator {
     ) {
         super.id = id;
         this.minyanTypeString = minyanTypeString;
-        this.minyanType = MinyanType.valueOf(minyanTypeString);
+        this.minyanType = MinyanType.fromString(minyanTypeString);
         this.locationId = locationId;
         this.organizationId = organizationId;
         this.enabled = enabled;
@@ -105,6 +106,7 @@ public class Minyan extends GNZObject implements IDGenerator {
         this.startTimeCH = startTimeCH;
         this.startTimeCHRC = startTimeCHRC;
         this.startTimeYT = startTimeYT;
+        this.schedule = new Schedule(startTime1, startTime2, startTime3, startTime4, startTime5, startTime6, startTime7, startTimeRC, startTimeCH, startTimeCHRC, startTimeYT);
         this.notes = notes;
         this.nusach = nusach;
     }
@@ -129,7 +131,7 @@ public class Minyan extends GNZObject implements IDGenerator {
     ) {
         super.id = generateID('M');
         this.minyanTypeString = minyanTypeString;
-        this.minyanType = MinyanType.valueOf(minyanTypeString);
+        this.minyanType = MinyanType.fromString(minyanTypeString);
         this.locationId = locationId;
         this.organizationId = organizationId;
         this.enabled = enabled;

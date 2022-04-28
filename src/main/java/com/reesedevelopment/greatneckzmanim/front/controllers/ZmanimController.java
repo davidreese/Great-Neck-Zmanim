@@ -49,13 +49,13 @@ public class ZmanimController {
 
         Dictionary zmanim = zmanimHandler.getZmanim();
 
-        mv.getModel().put("alotHashachar", timeFormat.format(zmanim.get(Zmanim.alotHashachar)));
-        mv.getModel().put("sunrise", timeFormat.format(zmanim.get(Zmanim.sunrise)));
-        mv.getModel().put("chatzot", timeFormat.format(zmanim.get(Zmanim.chatzot)));
-        mv.getModel().put("minchaGedola", timeFormat.format(zmanim.get(Zmanim.minchaGedola)));
-        mv.getModel().put("minchaKetana", timeFormat.format(zmanim.get(Zmanim.minchaKetana)));
-        mv.getModel().put("sunset", timeFormat.format(zmanim.get(Zmanim.sunset)));
-        mv.getModel().put("tzait", timeFormat.format(zmanim.get(Zmanim.tzait)));
+        mv.getModel().put("alotHashachar", timeFormat.format(zmanim.get(Zmanim.ALOT_HASHACHAR)));
+        mv.getModel().put("sunrise", timeFormat.format(zmanim.get(Zmanim.SUNRISE)));
+        mv.getModel().put("chatzot", timeFormat.format(zmanim.get(Zmanim.CHATZOT)));
+        mv.getModel().put("minchaGedola", timeFormat.format(zmanim.get(Zmanim.MINCHA_GEDOLA)));
+        mv.getModel().put("minchaKetana", timeFormat.format(zmanim.get(Zmanim.MINCHA_KETANA)));
+        mv.getModel().put("sunset", timeFormat.format(zmanim.get(Zmanim.SUNSET)));
+        mv.getModel().put("tzait", timeFormat.format(zmanim.get(Zmanim.TZAIT)));
         return mv;
     }
 }

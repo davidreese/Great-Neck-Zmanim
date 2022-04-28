@@ -16,13 +16,17 @@ public class MinyanTime {
             }
             time = new Time(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
         } else if (rawTime.startsWith("R")) {
-            String[] parts = rawTime.substring(1).split(":");
+            String[] parts = rawTime.substring(2).split(":");
             if (parts.length != 2) {
                 throw new IllegalArgumentException("Invalid time");
             }
 //          TODO: VERIFY THIS WORKS WITH NEGATIVE OFFSETS
 //          TODO: FIX valueOf
-            rule = new TimeRule(Zmanim.valueOf(parts[0]), Integer.parseInt(parts[1]));
+            if (parts.length == 2) {
+            rule = new TimeRule(Zmanim.fromString(parts[0]), Integer.parseInt(parts[1]));
+            } else {
+                throw new IllegalArgumentException("Invalid time");
+            }
         } else {
             throw new IllegalArgumentException("Invalid time");
         }
