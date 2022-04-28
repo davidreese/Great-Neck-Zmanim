@@ -2,8 +2,8 @@ package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 
 import com.reesedevelopment.greatneckzmanim.admin.structure.GNZObject;
 import com.reesedevelopment.greatneckzmanim.admin.structure.IDGenerator;
-import com.reesedevelopment.greatneckzmanim.admin.structure.location.GNZLocation;
-import com.reesedevelopment.greatneckzmanim.admin.structure.organization.GNZOrganization;
+import com.reesedevelopment.greatneckzmanim.admin.structure.location.Location;
+import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organization;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -18,12 +18,12 @@ public class Minyan extends GNZObject implements IDGenerator {
     @Column(name = "LOCATION_ID")
     private String locationId;
 
-    private GNZLocation location;
+    private Location location;
 
     @Column(name = "ORGANIZATION_ID", nullable = false)
     private String organizationId;
 
-    private GNZOrganization organization;
+    private Organization organization;
 
     @Column(name = "ENABLED", nullable = false)
     private boolean enabled;
@@ -71,7 +71,6 @@ public class Minyan extends GNZObject implements IDGenerator {
 
     public Minyan(String id,
                   String minyanTypeString,
-                  MinyanType minyanType,
                   String locationId,
                   String organizationId,
                   boolean enabled,
@@ -91,7 +90,7 @@ public class Minyan extends GNZObject implements IDGenerator {
     ) {
         super.id = id;
         this.minyanTypeString = minyanTypeString;
-        this.minyanType = minyanType;
+        this.minyanType = MinyanType.valueOf(minyanTypeString);
         this.locationId = locationId;
         this.organizationId = organizationId;
         this.enabled = enabled;
@@ -111,7 +110,6 @@ public class Minyan extends GNZObject implements IDGenerator {
     }
 
     public Minyan(String minyanTypeString,
-                  MinyanType minyanType,
                   String locationId,
                   String organizationId,
                   boolean enabled,
@@ -131,7 +129,7 @@ public class Minyan extends GNZObject implements IDGenerator {
     ) {
         super.id = generateID('M');
         this.minyanTypeString = minyanTypeString;
-        this.minyanType = minyanType;
+        this.minyanType = MinyanType.valueOf(minyanTypeString);
         this.locationId = locationId;
         this.organizationId = organizationId;
         this.enabled = enabled;
@@ -146,6 +144,7 @@ public class Minyan extends GNZObject implements IDGenerator {
         this.startTimeCH = startTimeCH;
         this.startTimeCHRC = startTimeCHRC;
         this.startTimeYT = startTimeYT;
+        this.schedule = new Schedule(startTime1, startTime2, startTime3, startTime4, startTime5, startTime6, startTime7, startTimeRC, startTimeCH, startTimeCHRC, startTimeYT);
         this.notes = notes;
         this.nusach = nusach;
     }
@@ -162,7 +161,7 @@ public class Minyan extends GNZObject implements IDGenerator {
         return locationId;
     }
 
-    public GNZLocation getLocation() {
+    public Location getLocation() {
         return location;
     }
 
@@ -170,7 +169,7 @@ public class Minyan extends GNZObject implements IDGenerator {
         return organizationId;
     }
 
-    public GNZOrganization getOrganization() {
+    public Organization getOrganization() {
         return organization;
     }
 

@@ -2,6 +2,7 @@ package com.reesedevelopment.greatneckzmanim.front;
 
 import com.kosherjava.zmanim.ComplexZmanimCalendar;
 import com.kosherjava.zmanim.util.GeoLocation;
+import com.reesedevelopment.greatneckzmanim.global.Zmanim;
 
 import java.util.Dictionary;
 import java.util.Hashtable;

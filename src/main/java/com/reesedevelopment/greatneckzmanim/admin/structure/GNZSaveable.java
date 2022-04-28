@@ -3,7 +3,7 @@ package com.reesedevelopment.greatneckzmanim.admin.structure;
 import java.util.List;
 
 public interface GNZSaveable<T extends GNZObject> {
-    T findByName(String name);
+//    T findByName(String name);
 
     T findById(String id);
 

@@ -19,7 +19,6 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         this.setDataSource(dataSource);
     }
 
-    @Override
     public GNZUser findByName(String username) {
         String sql = GNZUserMapper.BASE_SQL + " WHERE u.USERNAME = ? ";
 

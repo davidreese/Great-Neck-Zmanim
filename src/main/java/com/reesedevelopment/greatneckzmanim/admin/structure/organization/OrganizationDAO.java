@@ -17,22 +17,21 @@ import org.springframework.transaction.annotation.Transactional;
 
 @Repository
 @Transactional
-public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GNZOrganization> {
+public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organization> {
 
     @Autowired
-    public GNZOrganizationDAO(DataSource dataSource) {
+    public OrganizationDAO(DataSource dataSource) {
         this.setDataSource(dataSource);
     }
 
-    @Override
-    public GNZOrganization findByName(String name) {
-        String sql = GNZOrganizationMapper.BASE_SQL + " WHERE u.NAME = ? ";
+    public Organization findByName(String name) {
+        String sql = OrganizationMapper.BASE_SQL + " WHERE u.NAME = ? ";
 
         Object[] params = new Object[] { name };
-        GNZOrganizationMapper mapper = new GNZOrganizationMapper();
+        OrganizationMapper mapper = new OrganizationMapper();
 
         try {
-            GNZOrganization orgInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            Organization orgInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
             return orgInfo;
         } catch (EmptyResultDataAccessException e) {
             return null;
@@ -40,14 +39,14 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
     }
 
     @Override
-    public GNZOrganization findById(String id) {
-        String sql = GNZOrganizationMapper.BASE_SQL + " WHERE u.ID = ? ";
+    public Organization findById(String id) {
+        String sql = OrganizationMapper.BASE_SQL + " WHERE u.ID = ? ";
 
         Object[] params = new Object[] { id };
-        GNZOrganizationMapper mapper = new GNZOrganizationMapper();
+        OrganizationMapper mapper = new OrganizationMapper();
 
         try {
-            GNZOrganization orgInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            Organization orgInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
             return orgInfo;
         } catch (EmptyResultDataAccessException e) {
             return null;
@@ -55,48 +54,24 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
     }
 
     @Override
-    public List<GNZOrganization> getAll() {
+    public List<Organization> getAll() {
         String sql = "SELECT * FROM ORGANIZATION";
 
-        GNZOrganizationMapper mapper = new GNZOrganizationMapper();
+        OrganizationMapper mapper = new OrganizationMapper();
 
         List<Map<String, Object>> orgMaps = this.getJdbcTemplate().queryForList(sql);
 
-        List<GNZOrganization> organizations = new ArrayList<>();
+        List<Organization> organizations = new ArrayList<>();
 
         for (Map<String, Object> orgMap : orgMaps) {
             organizations.add(mapper.mapRow(orgMap));
         }
 
-//        System.out.println(users);
-        /*
-        try {
-//            Class.forName("org.h2.Driver");
-//            String url = "jdbc:h2:file:./data/demo";
-//            Connection con = DriverManager.getConnection(url);
-            Statement stmt = this.getConnection().createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                System.out.println("rs = " + rs.getString("NAME"));
-            }
-            stmt.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
-
-
-//        List<Map<String, Object>> users = this.getJdbcTemplate().queryForList(sql, mapper);
-
-//        mapper.mapRow()
-
-//        System.out.println("Users: " + users);
-
         return organizations;
     }
 
     @Override
-    public boolean save(GNZOrganization organization) {
+    public boolean save(Organization organization) {
         String sql;
         if (organization.getWebsiteURI() != null) {
             sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getWebsiteURI());
@@ -114,7 +89,7 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
     }
 
     @Override
-    public boolean delete(GNZOrganization objectToDelete) {
+    public boolean delete(Organization objectToDelete) {
         String sql = String.format("DELETE FROM ORGANIZATION WHERE ID='%s'", objectToDelete.getId());
 
         try {
@@ -136,7 +111,7 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
     }
 
     @Override
-    public boolean update(GNZOrganization organizationToUpdate) {
+    public boolean update(Organization organizationToUpdate) {
         String sql;
         if (organizationToUpdate.getWebsiteURI() != null) {
             sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI='%s' WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getWebsiteURI(), organizationToUpdate.getId());
@@ -153,7 +128,7 @@ public class GNZOrganizationDAO extends JdbcDaoSupport implements GNZSaveable<GN
         }
     }
 
-    public List<GNZUser> getUsersForOrganization(GNZOrganization organization) {
+    public List<GNZUser> getUsersForOrganization(Organization organization) {
         String sql = String.format("SELECT * FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", organization.getId());
 
         GNZUserMapper mapper = new GNZUserMapper();

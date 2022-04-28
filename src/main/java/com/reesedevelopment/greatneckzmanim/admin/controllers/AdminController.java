@@ -1,10 +1,10 @@
 package com.reesedevelopment.greatneckzmanim.admin.controllers;
 
 import com.reesedevelopment.greatneckzmanim.admin.structure.*;
-import com.reesedevelopment.greatneckzmanim.admin.structure.location.GNZLocation;
-import com.reesedevelopment.greatneckzmanim.admin.structure.location.GNZLocationDAO;
-import com.reesedevelopment.greatneckzmanim.admin.structure.organization.GNZOrganization;
-import com.reesedevelopment.greatneckzmanim.admin.structure.organization.GNZOrganizationDAO;
+import com.reesedevelopment.greatneckzmanim.admin.structure.location.Location;
+import com.reesedevelopment.greatneckzmanim.admin.structure.location.LocationDAO;
+import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organization;
+import com.reesedevelopment.greatneckzmanim.admin.structure.organization.OrganizationDAO;
 import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUser;
 import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUserDAO;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,10 +33,10 @@ public class AdminController {
     private GNZUserDAO gnzUserDAO;
 
     @Autowired
-    private GNZOrganizationDAO gnzOrganizationDAO;
+    private OrganizationDAO organizationDAO;
 
     @Autowired
-    private GNZLocationDAO gnzLocationDAO;
+    private LocationDAO locationDAO;
 
 //    @Autowired
 //    private GNZAcc gnzOrganizationDAO;
@@ -108,7 +108,7 @@ public class AdminController {
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/organizations");
-        mv.addObject("organizations", gnzOrganizationDAO.getAll());
+        mv.addObject("organizations", organizationDAO.getAll());
 
         mv.addObject("user", getCurrentUser());
 
@@ -211,9 +211,9 @@ public class AdminController {
 
         System.out.println("Creating organization...");
 
-        GNZOrganization organization = new GNZOrganization(name, address, siteURI);
+        Organization organization = new Organization(name, address, siteURI);
 
-        if  (this.gnzOrganizationDAO.save(organization)) {
+        if  (this.organizationDAO.save(organization)) {
             System.out.println("Organization created successfully.");
             System.out.println("Creating account for organization...");
 
@@ -223,7 +223,7 @@ public class AdminController {
             } else {
                 System.out.println("Account creation failed. Deleting organization from database...");
 //                TODO: REMOVE ORGANIZATION FROM DATABASE
-                if (this.gnzOrganizationDAO.delete(organization)) {
+                if (this.organizationDAO.delete(organization)) {
                     System.out.println("Organization deleted successfully.");
                 } else {
                     System.out.println("Organization deletion failed.");
@@ -251,7 +251,7 @@ public class AdminController {
 
         Map<String, String> organizationNames = new HashMap<>();
         for (GNZUser user : users) {
-            GNZOrganization organization = this.gnzOrganizationDAO.findById(user.getOrganizationId());
+            Organization organization = this.organizationDAO.findById(user.getOrganizationId());
             String organizationDisplayName = organization == null ? "" : organization.getName();
             organizationNames.put(user.getId(), organizationDisplayName);
         }
@@ -282,7 +282,7 @@ public class AdminController {
             System.out.println("Queried user: " + queriedUser);
             mv.addObject("queriedaccount", queriedUser);
 
-            GNZOrganization associatedOrganization = this.gnzOrganizationDAO.findById(queriedUser.getOrganizationId());
+            Organization associatedOrganization = this.organizationDAO.findById(queriedUser.getOrganizationId());
             System.out.println("Associated organization: " + associatedOrganization);
             mv.addObject("associatedorganization", associatedOrganization);
 
@@ -297,7 +297,7 @@ public class AdminController {
 
                 mv.addObject("queriedaccount", queriedUser);
 
-                GNZOrganization associatedOrganization = this.gnzOrganizationDAO.findById(queriedUser.getOrganizationId());
+                Organization associatedOrganization = this.organizationDAO.findById(queriedUser.getOrganizationId());
                 System.out.println("Associated organization: " + associatedOrganization);
                 mv.addObject("associatedorganization", associatedOrganization);
 
@@ -320,7 +320,7 @@ public class AdminController {
 
                 mv.addObject("queriedaccount", queriedUser);
 
-                GNZOrganization associatedOrganization = this.gnzOrganizationDAO.findById(queriedUser.getOrganizationId());
+                Organization associatedOrganization = this.organizationDAO.findById(queriedUser.getOrganizationId());
                 System.out.println("Associated organization: " + associatedOrganization);
                 mv.addObject("associatedorganization", associatedOrganization);
 
@@ -366,7 +366,7 @@ public class AdminController {
 //        check permissions
         if (isAdmin()) {
 //                find organization for id
-            GNZOrganization organization = this.gnzOrganizationDAO.findById(id);
+            Organization organization = this.organizationDAO.findById(id);
             if (organization != null) {
                 mv.getModel().put("organization", organization);
             } else {
@@ -375,7 +375,7 @@ public class AdminController {
                 throw new Exception("Organization not found.");
             }
 
-            List<GNZUser> associatedUsers = this.gnzOrganizationDAO.getUsersForOrganization(organization);
+            List<GNZUser> associatedUsers = this.organizationDAO.getUsersForOrganization(organization);
             mv.addObject("associatedusers", associatedUsers);
 
             mv.addObject("user", getCurrentUser());
@@ -389,7 +389,7 @@ public class AdminController {
                 throw new AccessDeniedException("You do not have permission to view this organization.");
             } else {
 //                find organization for id
-                GNZOrganization organization = this.gnzOrganizationDAO.findById(id);
+                Organization organization = this.organizationDAO.findById(id);
                 if (organization != null) {
                     mv.getModel().put("organization", organization);
                 } else {
@@ -399,7 +399,7 @@ public class AdminController {
                 }
 
 
-                List<GNZUser> associatedUsers = this.gnzOrganizationDAO.getUsersForOrganization(organization);
+                List<GNZUser> associatedUsers = this.organizationDAO.getUsersForOrganization(organization);
                 mv.addObject("associatedusers", associatedUsers);
 
                 mv.addObject("user", getCurrentUser());
@@ -433,11 +433,11 @@ public class AdminController {
             }
         }
 
-        GNZOrganization organization = new GNZOrganization(id, name, address, siteURI);
+        Organization organization = new Organization(id, name, address, siteURI);
 
 //        check permissions
         if (isAdmin()) {
-            if (this.gnzOrganizationDAO.update(organization)) {
+            if (this.organizationDAO.update(organization)) {
                 System.out.println("Organization updated successfully.");
                 return organization(id, "Successfully updated the organization details.", null, null, null);
             } else {
@@ -452,7 +452,7 @@ public class AdminController {
                 System.out.println("You do not have permission to view this organization.");
                 throw new AccessDeniedException("You do not have permission to view this organization.");
             } else {
-                if (this.gnzOrganizationDAO.update(organization)) {
+                if (this.organizationDAO.update(organization)) {
                     System.out.println("Organization updated successfully.");
                     return organization(id, "Successfully updated the organization details.", null, null, null);
                 } else {
@@ -469,9 +469,9 @@ public class AdminController {
     public ModelAndView deleteOrganization(@RequestParam(value = "id", required = true) String id) throws Exception {
         if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(ADMIN.getName()))) {
 //            get organization and check if it exists
-            GNZOrganization organization = this.gnzOrganizationDAO.findById(id);
+            Organization organization = this.organizationDAO.findById(id);
             if (organization != null) {
-                if (this.gnzOrganizationDAO.delete(organization)) {
+                if (this.organizationDAO.delete(organization)) {
                     System.out.println("Organization deleted successfully.");
                     return organizations("Successfully deleted the organization.", null);
                 } else {
@@ -491,9 +491,9 @@ public class AdminController {
                 throw new AccessDeniedException("You do not have permission to view this organization.");
             } else {
 //                get organization and check if it exists
-                GNZOrganization organization = this.gnzOrganizationDAO.findById(id);
+                Organization organization = this.organizationDAO.findById(id);
                 if (organization != null) {
-                    if (this.gnzOrganizationDAO.delete(organization)) {
+                    if (this.organizationDAO.delete(organization)) {
                         System.out.println("Organization deleted successfully.");
                         return organizations("Successfully deleted the organization.", null);
                     } else {
@@ -694,12 +694,12 @@ public class AdminController {
         }
 
         ModelAndView mv = new ModelAndView("admin/locations");
-        mv.addObject("locations", gnzLocationDAO.findMatching(oidToUse));
+        mv.addObject("locations", locationDAO.findMatching(oidToUse));
 
         GNZUser currentUser = getCurrentUser();
         mv.addObject("user", currentUser);
 
-        GNZOrganization organization = gnzOrganizationDAO.findById(oidToUse);
+        Organization organization = organizationDAO.findById(oidToUse);
         mv.addObject("organization", organization);
 
         Date today = new Date();
@@ -722,8 +722,8 @@ public class AdminController {
             return locations(null, null, "Sorry, an error occurred. The location could not be created.");
         }
 
-        GNZLocation location = new GNZLocation(name, organizationId);
-        if (gnzLocationDAO.save(location)) {
+        Location location = new Location(name, organizationId);
+        if (locationDAO.save(location)) {
             return locations(organizationId,"Successfully created location '" + location.getName() + ".'", null);
         } else {
             return locations(organizationId,null, "Sorry, an error occurred. The location could not be created.");
@@ -732,7 +732,7 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/update-location", method = RequestMethod.POST)
     public ModelAndView updateLocation(@RequestParam(value = "id", required = true) String id, @RequestParam(value = "name", required = true) String newName) {
-        GNZLocation locationToUpdate = gnzLocationDAO.findById(id);
+        Location locationToUpdate = locationDAO.findById(id);
         if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(locationToUpdate.getOrganizationId())) {
             throw new AccessDeniedException("You do not have permission to update a location for this organization.");
         }
@@ -743,8 +743,8 @@ public class AdminController {
             return locations(organizationId, null, "Sorry, an error occurred. The location could not be updated.");
         }
 
-        GNZLocation location = new GNZLocation(id, newName, locationToUpdate.getOrganizationId());
-        if (gnzLocationDAO.update(location)) {
+        Location location = new Location(id, newName, locationToUpdate.getOrganizationId());
+        if (locationDAO.update(location)) {
             return locations(organizationId, "Successfully updated location '" + location.getName() + ".'", null);
         } else {
             return locations(organizationId, null, "Sorry, an error occurred. The location could not be updated.");
@@ -753,13 +753,13 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/delete-location")
     public ModelAndView deleteLocation(@RequestParam(value = "id", required = true) String id) {
-        GNZLocation locationToDelete = gnzLocationDAO.findById(id);
+        Location locationToDelete = locationDAO.findById(id);
         String organizationId = locationToDelete.getOrganizationId();
         if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(locationToDelete.getOrganizationId())) {
             throw new AccessDeniedException("You do not have permission to delete a location for this organization.");
         }
 
-        if (gnzLocationDAO.delete(locationToDelete)) {
+        if (locationDAO.delete(locationToDelete)) {
             return locations(organizationId, "Successfully deleted location '" + locationToDelete.getName() + ".'", null);
         } else {
             return locations(organizationId, null, "Sorry, an error occurred. The location could not be deleted.");

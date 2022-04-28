@@ -1,17 +1,33 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 
 public class Schedule {
-    private Time sunday;
-    private Time monday;
-    private Time tuesday;
-    private Time wednesday;
-    private Time thursday;
-    private Time friday;
-    private Time shabbat;
-    private Time roshChodesh;
-    private Time yomTov;
+    private MinyanTime sunday;
+    private MinyanTime monday;
+    private MinyanTime tuesday;
+    private MinyanTime wednesday;
+    private MinyanTime thursday;
+    private MinyanTime friday;
+    private MinyanTime shabbat;
+    private MinyanTime roshChodesh;
+    private MinyanTime chanukah;
+    private MinyanTime roshChodeshChanukah;
+    private MinyanTime yomTov;
 
-    public Schedule(Time sunday, Time monday, Time tuesday, Time wednesday, Time thursday, Time friday, Time shabbat, Time roshChodesh, Time yomTov) {
+    public Schedule(String sunday, String monday, String tuesday, String wednesday, String thursday, String friday, String shabbat, String roshChodesh, String chanukah, String roshChodeshChanukah, String yomTov) {
+        this.sunday = new MinyanTime(sunday);
+        this.monday = new MinyanTime(monday);
+        this.tuesday = new MinyanTime(tuesday);
+        this.wednesday = new MinyanTime(wednesday);
+        this.thursday = new MinyanTime(thursday);
+        this.friday = new MinyanTime(friday);
+        this.shabbat = new MinyanTime(shabbat);
+        this.roshChodesh = new MinyanTime(roshChodesh);
+        this.chanukah = new MinyanTime(chanukah);
+        this.roshChodeshChanukah = new MinyanTime(roshChodeshChanukah);
+        this.yomTov = new MinyanTime(yomTov);
+    }
+
+    public Schedule(MinyanTime sunday, MinyanTime monday, MinyanTime tuesday, MinyanTime wednesday, MinyanTime thursday, MinyanTime friday, MinyanTime shabbat, MinyanTime roshChodesh, MinyanTime chanukah, MinyanTime roshChodeshChanukah, MinyanTime yomTov) {
         this.sunday = sunday;
         this.monday = monday;
         this.tuesday = tuesday;
@@ -20,42 +36,44 @@ public class Schedule {
         this.friday = friday;
         this.shabbat = shabbat;
         this.roshChodesh = roshChodesh;
+        this.chanukah = chanukah;
+        this.roshChodeshChanukah = roshChodeshChanukah;
         this.yomTov = yomTov;
     }
 
-    public Time getSunday() {
+    public MinyanTime getSunday() {
         return sunday;
     }
 
-    public Time getMonday() {
+    public MinyanTime getMonday() {
         return monday;
     }
 
-    public Time getTuesday() {
+    public MinyanTime getTuesday() {
         return tuesday;
     }
 
-    public Time getWednesday() {
+    public MinyanTime getWednesday() {
         return wednesday;
     }
 
-    public Time getThursday() {
+    public MinyanTime getThursday() {
         return thursday;
     }
 
-    public Time getFriday() {
+    public MinyanTime getFriday() {
         return friday;
     }
 
-    public Time getShabbat() {
+    public MinyanTime getShabbat() {
         return shabbat;
     }
 
-    public Time getRoshChodesh() {
+    public MinyanTime getRoshChodesh() {
         return roshChodesh;
     }
 
-    public Time getYomTov() {
+    public MinyanTime getYomTov() {
         return yomTov;
     }
 }
