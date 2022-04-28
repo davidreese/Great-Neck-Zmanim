@@ -73,6 +73,14 @@ public class Schedule {
         return roshChodesh;
     }
 
+    public MinyanTime getChanukah() {
+        return chanukah;
+    }
+
+    public MinyanTime getRoshChodeshChanukah() {
+        return roshChodeshChanukah;
+    }
+
     public MinyanTime getYomTov() {
         return yomTov;
     }

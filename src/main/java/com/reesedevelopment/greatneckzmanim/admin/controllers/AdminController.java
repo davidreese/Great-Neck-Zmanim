@@ -3,6 +3,9 @@ package com.reesedevelopment.greatneckzmanim.admin.controllers;
 import com.reesedevelopment.greatneckzmanim.admin.structure.*;
 import com.reesedevelopment.greatneckzmanim.admin.structure.location.Location;
 import com.reesedevelopment.greatneckzmanim.admin.structure.location.LocationDAO;
+import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.Minyan;
+import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.MinyanDAO;
+import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.MinyanType;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organization;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.OrganizationDAO;
 import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUser;
@@ -24,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static com.reesedevelopment.greatneckzmanim.admin.structure.Role.ADMIN;
 
@@ -38,8 +42,8 @@ public class AdminController {
     @Autowired
     private LocationDAO locationDAO;
 
-//    @Autowired
-//    private GNZAcc gnzOrganizationDAO;
+    @Autowired
+    private MinyanDAO minyanDAO;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy | hh:mm aa");
 
@@ -48,7 +52,8 @@ public class AdminController {
     }
 
     private boolean isUser() {
-        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()));
+        return SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName())) ||
+                SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(ADMIN.getName()));
     }
 
     private GNZUser getCurrentUser() {
@@ -68,15 +73,19 @@ public class AdminController {
 //        }
 //    }
 
+    private void addStandardPageData(ModelAndView mv) {
+        mv.addObject("user", getCurrentUser());
+
+        Date today = new Date();
+        mv.getModel().put("date", dateFormat.format(today));
+    }
+
     @GetMapping("/admin/dashboard")
     public ModelAndView dashbaord() {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/dashboard");
 
-        mv.addObject("user", getCurrentUser());
-
-        Date today = new Date();
-        mv.getModel().put("date", dateFormat.format(today));
+        addStandardPageData(mv);
 
         return mv;
     }
@@ -92,14 +101,6 @@ public class AdminController {
         return new LoginController().login(error, true);
     }
 
-//    @GetMapping("/admin/organizations")
-//    public ModelAndView organizations() {
-//        ModelAndView mv = new ModelAndView();
-//        mv.setViewName("admin/organizations");
-//        mv.addObject("organizations", gnzUserDAO.findAll());
-//        return mv;
-//    }
-
     @GetMapping("/admin/organizations")
     public ModelAndView organizations(String successMessage, String errorMessage) {
         if (!isSuperAdmin()) {
@@ -110,10 +111,7 @@ public class AdminController {
         mv.setViewName("admin/organizations");
         mv.addObject("organizations", organizationDAO.getAll());
 
-        mv.addObject("user", getCurrentUser());
-
-        Date today = new Date();
-        mv.getModel().put("date", dateFormat.format(today));
+        addStandardPageData(mv);
 
         mv.getModel().put("success", successMessage);
         mv.getModel().put("error", errorMessage);
@@ -128,14 +126,11 @@ public class AdminController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/new-organization");
 
-        Date today = new Date();
-        mv.getModel().put("date", dateFormat.format(today));
-
         mv.getModel().put("successmessage", success);
         mv.getModel().put("errormessage", error);
         mv.getModel().put("inputerrormessage", inputErrorMessage);
 
-        mv.addObject("user", getCurrentUser());
+        addStandardPageData(mv);
 
         return mv;
     }
@@ -257,10 +252,7 @@ public class AdminController {
         }
         mv.addObject("organizationNames", organizationNames);
 
-        mv.addObject("user", getCurrentUser());
-
-        Date today = new Date();
-        mv.getModel().put("date", dateFormat.format(today));
+        addStandardPageData(mv);
 
         mv.getModel().put("successmessage", successMessage);
         mv.getModel().put("errormessahe", errorMessage);
@@ -285,8 +277,6 @@ public class AdminController {
             Organization associatedOrganization = this.organizationDAO.findById(queriedUser.getOrganizationId());
             System.out.println("Associated organization: " + associatedOrganization);
             mv.addObject("associatedorganization", associatedOrganization);
-
-            mv.addObject("user", getCurrentUser());
         } else if (isAdmin()) {
             GNZUser user = getCurrentUser();
             GNZUser queriedUser = this.gnzUserDAO.findById(id);
@@ -300,8 +290,6 @@ public class AdminController {
                 Organization associatedOrganization = this.organizationDAO.findById(queriedUser.getOrganizationId());
                 System.out.println("Associated organization: " + associatedOrganization);
                 mv.addObject("associatedorganization", associatedOrganization);
-
-                mv.addObject("user", user);
             } else {
                 throw new AccessDeniedException("You are not authorized to view this account.");
             }
@@ -323,17 +311,14 @@ public class AdminController {
                 Organization associatedOrganization = this.organizationDAO.findById(queriedUser.getOrganizationId());
                 System.out.println("Associated organization: " + associatedOrganization);
                 mv.addObject("associatedorganization", associatedOrganization);
-
-                mv.addObject("user", user);
-            } else if (isUser()) {} else {
+            } else {
                 throw new AccessDeniedException("You are not authorized to view this account.");
             }
         } else {
             throw new AccessDeniedException("You are not authorized to view this account.");
         }
 
-        Date today = new Date();
-        mv.getModel().put("date", dateFormat.format(today));
+        addStandardPageData(mv);
 
         return mv;
     }
@@ -377,8 +362,6 @@ public class AdminController {
 
             List<GNZUser> associatedUsers = this.organizationDAO.getUsersForOrganization(organization);
             mv.addObject("associatedusers", associatedUsers);
-
-            mv.addObject("user", getCurrentUser());
         } else if (isUser()) {
 //              check if user is associated with organization
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
@@ -401,13 +384,10 @@ public class AdminController {
 
                 List<GNZUser> associatedUsers = this.organizationDAO.getUsersForOrganization(organization);
                 mv.addObject("associatedusers", associatedUsers);
-
-                mv.addObject("user", getCurrentUser());
             }
         }
 
-
-//        mv.addObject("organization", organization);
+        addStandardPageData(mv);
 
         return mv;
     }
@@ -702,9 +682,7 @@ public class AdminController {
         Organization organization = organizationDAO.findById(oidToUse);
         mv.addObject("organization", organization);
 
-        Date today = new Date();
-        mv.getModel().put("date", dateFormat.format(today));
-
+        addStandardPageData(mv);
 
         mv.addObject("successmessage", successMessage);
         mv.addObject("errormessage", errorMessage);
@@ -767,8 +745,50 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/minyanim")
-    public ModelAndView minyanim() {
+    public ModelAndView minyanim(@RequestParam(value = "oid", required = false) String organizationId) {
         ModelAndView mv = new ModelAndView("/admin/minyan-schedule");
+
+        String oidToUse;
+        if (isSuperAdmin()) {
+            if (organizationId == null) {
+                throw new IllegalArgumentException("You must specify an organization ID.");
+            } else {
+                oidToUse = organizationId;
+            }
+        } else if (isUser()) {
+            oidToUse = getCurrentUser().getOrganizationId();
+        } else {
+            throw new AccessDeniedException("You do not have permission to view this page.");
+        }
+
+        List<Minyan> minyanim = minyanDAO.findMatching(oidToUse);
+//        minyanim.stream().filter(m -> m.getType() == MinyanType.SHACHARIT);
+
+//        get elements from list that are shacharit
+//        List<Minyan> shacharitMinyanim = new ArrayList<>();
+//        for (Minyan m : minyanim) {
+//            if (m.getType().equals("shacharit")) {
+//                shacharitMinyanim.add(m);
+//            }
+//        }
+        mv.addObject("shacharitminyanim", minyanim.stream().filter(m -> m.getType() == MinyanType.SHACHARIT).collect(Collectors.toList()));
+        mv.addObject("minchaminyanim", minyanim.stream().filter(m -> m.getType() == MinyanType.MINCHA).collect(Collectors.toList()));
+        mv.addObject("arvitminyanim", minyanim.stream().filter(m -> m.getType() == MinyanType.ARVIT).collect(Collectors.toList()));
+        mv.addObject("selichotminyanim", minyanim.stream().filter(m -> m.getType() == MinyanType.SELICHOT).collect(Collectors.toList()));
+        mv.addObject("megilaminyanim", minyanim.stream().filter(m -> m.getType() == MinyanType.MEGILA_READING).collect(Collectors.toList()));
+
+        Map<String, String> locationNames = new HashMap<>();
+        for (Minyan minyan : minyanim) {
+            Location location = this.locationDAO.findById(minyan.getLocationId());
+//            TODO: DONT JUST SHOW EMPTY STRING
+            String locationDisplayName = location == null ? "" : location.getName();
+            locationNames.put(minyan.getId(), locationDisplayName);
+        }
+        mv.addObject("locationnames", locationNames);
+
+        mv.addObject("organization", organizationDAO.findById(oidToUse));
+
+        addStandardPageData(mv);
 
         return mv;
     }

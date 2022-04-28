@@ -1,6 +1,7 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 
 import com.reesedevelopment.greatneckzmanim.admin.structure.GNZSaveable;
+import com.reesedevelopment.greatneckzmanim.admin.structure.location.Location;
 import com.reesedevelopment.greatneckzmanim.admin.structure.location.LocationMapper;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organization;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.OrganizationMapper;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.sql.ResultSet;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -150,6 +152,20 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        }
+    }
+
+    public List<Minyan> findMatching(String organizationId ){
+        String sql = MinyanMapper.BASE_SQL + " WHERE m.ORGANIZATION_ID = ? ";
+
+        Object[] params = new Object[] { organizationId };
+        MinyanMapper mapper = new MinyanMapper();
+
+        try {
+            List<Minyan> minyanInfo = this.getJdbcTemplate().query(sql, params, mapper);
+            return minyanInfo;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
         }
     }
 }

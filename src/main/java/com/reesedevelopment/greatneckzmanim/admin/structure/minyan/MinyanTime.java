@@ -7,7 +7,10 @@ public class MinyanTime {
     private TimeRule rule;
 
     public MinyanTime(String rawTime) {
-        if (rawTime.equals("INVALID") || rawTime.isEmpty()) {
+        if (rawTime == null || rawTime.isEmpty()) {
+            time = null;
+            rule = null;
+        } else if (rawTime.equals("INVALID")) {
             throw new IllegalArgumentException("Invalid time");
         } else if (rawTime.startsWith("T")) {
             String[] parts = rawTime.substring(1).split(":");
@@ -70,6 +73,61 @@ public class MinyanTime {
 
         public Integer getOffsetMinutes() {
             return offsetMinutes;
+        }
+    }
+
+    public String displayTime() {
+        if (time == null && rule == null) {
+            return "No minyan";
+        } else if (time != null && rule != null) {
+            return "INVALID";
+        } else if (time != null && rule == null) {
+            String timeString = time.toString();
+            String[] parts = timeString.split(":");
+
+            if (parts.length != 3) {
+                return "INVALID";
+            }
+
+            int hours = Integer.parseInt(parts[0]);
+            int minutes = Integer.parseInt(parts[1]);
+            double seconds = Double.parseDouble(parts[2]);
+            boolean isPM = hours >= 12;
+
+            if (seconds > 30) {
+                minutes += 1;
+            }
+
+            if (minutes == 60) {
+                hours += 1;
+                minutes -= 60;
+            }
+
+            if (isPM) {
+                hours -= 12;
+            }
+
+            String hoursString = String.valueOf(hours);
+            String minutesString = minutes < 10 ? "0" + String.valueOf(minutes) : String.valueOf(minutes);
+            String amPmString = isPM ? "PM" : "AM";
+
+            return hoursString + ":" + minutesString + " " + amPmString;
+
+//            int indexOfDot = timeString.indexOf(".");
+//            return timeString.substring(0, indexOfDot);
+//            return String.format("%s:%s:%s", time.getHours(), time.getMinutes(), time.getSeconds());
+        } else if (time == null && rule != null) {
+            if (rule.getOffsetMinutes() < 0) {
+                return String.format("%s minus %d minutes", rule.getZman().displayString(), Math.abs(rule.getOffsetMinutes()));
+            } else if (rule.getOffsetMinutes() == 0) {
+                return rule.getZman().displayString();
+            }  else if (rule.getOffsetMinutes() > 0) {
+                return String.format("%s plus %d minutes", rule.getZman().displayString(), rule.getOffsetMinutes());
+            } else {
+                return "INVALID";
+            }
+        } else {
+            return "INVALID";
         }
     }
 }

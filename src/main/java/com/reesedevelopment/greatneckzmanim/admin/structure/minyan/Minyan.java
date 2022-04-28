@@ -7,7 +7,6 @@ import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organiz
 
 import javax.persistence.Column;
 import javax.persistence.Table;
-import java.util.Locale;
 
 @Table(name = "MINYAN")
 public class Minyan extends GNZObject implements IDGenerator {
@@ -155,7 +154,7 @@ public class Minyan extends GNZObject implements IDGenerator {
         return minyanTypeString;
     }
 
-    public MinyanType getMinyanType() {
+    public MinyanType getType() {
         return minyanType;
     }
 

@@ -31,8 +31,7 @@ public enum Zmanim {
 
     }
 
-    @Override
-    public String toString() {
+    public String displayString() {
         switch (this) {
             case ALOT_HASHACHAR:
                 return "Alot Hashachar";

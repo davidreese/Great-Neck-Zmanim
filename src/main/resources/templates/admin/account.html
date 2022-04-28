@@ -41,8 +41,8 @@
                                             <label th:class="${'btn btn-secondary' + ((queriedaccount.isAdmin()) ? ' active' : '')}">
                                                 <input type="radio" name="privileges" id="admin" value="1" th:checked="${(queriedaccount.isAdmin())}"> Manager
                                             </label>
-                                            <label th:class="${'btn btn-secondary' + ((queriedaccount.isUser()) ? ' active' : '')}">
-                                                <input type="radio" name="privileges" id="user" value="2" th:checked="${(queriedaccount.isUser())}"> User
+                                            <label th:class="${'btn btn-secondary' + ((queriedaccount.isUser() && !queriedaccount.isAdmin()) ? ' active' : '')}">
+                                                <input type="radio" name="privileges" id="user" value="2" th:checked="${(queriedaccount.isUser() && !queriedaccount.isAdmin())}"> User
                                             </label>
                                         </div>
                                         </div>
