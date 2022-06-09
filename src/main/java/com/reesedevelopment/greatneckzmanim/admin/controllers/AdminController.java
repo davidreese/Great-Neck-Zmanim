@@ -3,9 +3,7 @@ package com.reesedevelopment.greatneckzmanim.admin.controllers;
 import com.reesedevelopment.greatneckzmanim.admin.structure.*;
 import com.reesedevelopment.greatneckzmanim.admin.structure.location.Location;
 import com.reesedevelopment.greatneckzmanim.admin.structure.location.LocationDAO;
-import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.Minyan;
-import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.MinyanDAO;
-import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.MinyanType;
+import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.*;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organization;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.OrganizationDAO;
 import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUser;
@@ -771,11 +769,48 @@ public class AdminController {
 //                shacharitMinyanim.add(m);
 //            }
 //        }
-        mv.addObject("shacharitminyanim", minyanim.stream().filter(m -> m.getType() == MinyanType.SHACHARIT).collect(Collectors.toList()));
-        mv.addObject("minchaminyanim", minyanim.stream().filter(m -> m.getType() == MinyanType.MINCHA).collect(Collectors.toList()));
-        mv.addObject("arvitminyanim", minyanim.stream().filter(m -> m.getType() == MinyanType.ARVIT).collect(Collectors.toList()));
-        mv.addObject("selichotminyanim", minyanim.stream().filter(m -> m.getType() == MinyanType.SELICHOT).collect(Collectors.toList()));
-        mv.addObject("megilaminyanim", minyanim.stream().filter(m -> m.getType() == MinyanType.MEGILA_READING).collect(Collectors.toList()));
+        List<Minyan> shacharitMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.SHACHARIT)).collect(Collectors.toList());
+        mv.addObject("shacharitminyanim", shacharitMinyanim);
+        Map<String, HashMap<Day, MinyanTime>> shacharitTimes = new HashMap<>();
+        for (Minyan m : shacharitMinyanim) {
+            shacharitTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
+        }
+
+        List<Minyan> minchaMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.MINCHA)).collect(Collectors.toList());
+        mv.addObject("minchaminyanim", minchaMinyanim);
+        Map<String, HashMap<Day, MinyanTime>> minchaTimes = new HashMap<>();
+        for (Minyan m : minchaMinyanim) {
+            minchaTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
+        }
+
+        List<Minyan> arvitMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.ARVIT)).collect(Collectors.toList());
+        mv.addObject("arvitminyanim", arvitMinyanim);
+        Map<String, HashMap<Day, MinyanTime>> arvitTimes = new HashMap<>();
+        for (Minyan m : arvitMinyanim) {
+            arvitTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
+        }
+
+        List<Minyan> selichotMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.SELICHOT)).collect(Collectors.toList());
+        mv.addObject("selichotminyanim", selichotMinyanim);
+        Map<String, HashMap<Day, MinyanTime>> selichotTimes = new HashMap<>();
+        for (Minyan m : selichotMinyanim) {
+            selichotTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
+        }
+
+        List<Minyan> megilaMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.MEGILA_READING)).collect(Collectors.toList());
+        mv.addObject("megilaminyanim", megilaMinyanim);
+        Map<String, HashMap<Day, MinyanTime>> megilaTimes = new HashMap<>();
+        for (Minyan m : megilaMinyanim) {
+            megilaTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
+        }
+
+        mv.addObject("shacharittimes", shacharitTimes);
+        mv.addObject("minchatimes", minchaTimes);
+        mv.addObject("arvittimes", arvitTimes);
+        mv.addObject("selichottimes", selichotTimes);
+        mv.addObject("megilatimes", megilaTimes);
+
+        mv.addObject("Day", Day.class);
 
         Map<String, String> locationNames = new HashMap<>();
         for (Minyan minyan : minyanim) {
@@ -790,6 +825,55 @@ public class AdminController {
 
         addStandardPageData(mv);
 
+        return mv;
+    }
+
+//    enable and disable pages
+    @RequestMapping(value = "/admin/enableminyan")
+    public ModelAndView enableMinyan(@RequestParam(value = "id", required = true) String id, @RequestParam(value = "rd", required = false) String rd) {
+        Minyan minyan = minyanDAO.findById(id);
+        if (minyan == null) {
+            throw new IllegalArgumentException("Invalid minyan ID.");
+        }
+
+//        ensure that user is admin or minyan is in their organization
+        if (!isSuperAdmin() && !minyan.getOrganizationId().equals(getCurrentUser().getOrganizationId())) {
+            throw new AccessDeniedException("You do not have permission to enable this minyan.");
+        }
+
+        minyan.setEnabled(true);
+        minyanDAO.update(minyan);
+
+        ModelAndView mv = new ModelAndView();
+        if (rd != null) {
+            mv.setViewName("redirect:" + rd);
+        } else {
+            mv.setViewName("redirect:/admin/minyanim");
+        }
+        return mv;
+    }
+
+    @RequestMapping(value = "/admin/disableminyan")
+    public ModelAndView disableMinyan(@RequestParam(value = "id", required = true) String id, @RequestParam(value = "rd", required = false) String rd) {
+        Minyan minyan = minyanDAO.findById(id);
+        if (minyan == null) {
+            throw new IllegalArgumentException("Invalid minyan ID.");
+        }
+
+//        ensure that user is admin or minyan is in their organization
+        if (!isSuperAdmin() && !minyan.getOrganizationId().equals(getCurrentUser().getOrganizationId())) {
+            throw new AccessDeniedException("You do not have permission to disable this minyan.");
+        }
+
+        minyan.setEnabled(false);
+        minyanDAO.update(minyan);
+
+        ModelAndView mv = new ModelAndView();
+        if (rd != null) {
+            mv.setViewName("redirect:" + rd);
+        } else {
+            mv.setViewName("redirect:/admin/minyanim");
+        }
         return mv;
     }
 }

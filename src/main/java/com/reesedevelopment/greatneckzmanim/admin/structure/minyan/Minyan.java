@@ -233,4 +233,8 @@ public class Minyan extends GNZObject implements IDGenerator {
     public String getNusach() {
         return nusach;
     }
+
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
+    }
 }

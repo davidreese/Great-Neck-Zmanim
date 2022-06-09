@@ -1,5 +1,7 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 
+import java.util.HashMap;
+
 public class Schedule {
     private MinyanTime sunday;
     private MinyanTime monday;
@@ -9,11 +11,11 @@ public class Schedule {
     private MinyanTime friday;
     private MinyanTime shabbat;
     private MinyanTime roshChodesh;
-    private MinyanTime chanukah;
-    private MinyanTime roshChodeshChanukah;
+    private MinyanTime chanuka;
+    private MinyanTime roshChodeshChanuka;
     private MinyanTime yomTov;
 
-    public Schedule(String sunday, String monday, String tuesday, String wednesday, String thursday, String friday, String shabbat, String roshChodesh, String chanukah, String roshChodeshChanukah, String yomTov) {
+    public Schedule(String sunday, String monday, String tuesday, String wednesday, String thursday, String friday, String shabbat, String roshChodesh, String chanuka, String roshChodeshChanukah, String yomTov) {
         this.sunday = new MinyanTime(sunday);
         this.monday = new MinyanTime(monday);
         this.tuesday = new MinyanTime(tuesday);
@@ -22,12 +24,12 @@ public class Schedule {
         this.friday = new MinyanTime(friday);
         this.shabbat = new MinyanTime(shabbat);
         this.roshChodesh = new MinyanTime(roshChodesh);
-        this.chanukah = new MinyanTime(chanukah);
-        this.roshChodeshChanukah = new MinyanTime(roshChodeshChanukah);
+        this.chanuka = new MinyanTime(chanuka);
+        this.roshChodeshChanuka = new MinyanTime(roshChodeshChanukah);
         this.yomTov = new MinyanTime(yomTov);
     }
 
-    public Schedule(MinyanTime sunday, MinyanTime monday, MinyanTime tuesday, MinyanTime wednesday, MinyanTime thursday, MinyanTime friday, MinyanTime shabbat, MinyanTime roshChodesh, MinyanTime chanukah, MinyanTime roshChodeshChanukah, MinyanTime yomTov) {
+    public Schedule(MinyanTime sunday, MinyanTime monday, MinyanTime tuesday, MinyanTime wednesday, MinyanTime thursday, MinyanTime friday, MinyanTime shabbat, MinyanTime roshChodesh, MinyanTime chanuka, MinyanTime roshChodeshChanukah, MinyanTime yomTov) {
         this.sunday = sunday;
         this.monday = monday;
         this.tuesday = tuesday;
@@ -36,8 +38,8 @@ public class Schedule {
         this.friday = friday;
         this.shabbat = shabbat;
         this.roshChodesh = roshChodesh;
-        this.chanukah = chanukah;
-        this.roshChodeshChanukah = roshChodeshChanukah;
+        this.chanuka = chanuka;
+        this.roshChodeshChanuka = roshChodeshChanukah;
         this.yomTov = yomTov;
     }
 
@@ -73,15 +75,32 @@ public class Schedule {
         return roshChodesh;
     }
 
-    public MinyanTime getChanukah() {
-        return chanukah;
+    public MinyanTime getChanuka() {
+        return chanuka;
     }
 
-    public MinyanTime getRoshChodeshChanukah() {
-        return roshChodeshChanukah;
+    public MinyanTime getRoshChodeshChanuka() {
+        return roshChodeshChanuka;
     }
 
     public MinyanTime getYomTov() {
         return yomTov;
+    }
+
+    public HashMap<Day, MinyanTime> getMappedSchedule() {
+        HashMap<Day, MinyanTime> schedule = new HashMap<>();
+        schedule.put(Day.SUNDAY, sunday);
+        schedule.put(Day.MONDAY, monday);
+        schedule.put(Day.TUESDAY, tuesday);
+        schedule.put(Day.WEDNESDAY, wednesday);
+        schedule.put(Day.THURSDAY, thursday);
+        schedule.put(Day.FRIDAY, friday);
+        schedule.put(Day.SHABBAT, shabbat);
+        schedule.put(Day.ROSH_CHODESH, roshChodesh);
+        schedule.put(Day.CHANUKA, chanuka);
+        schedule.put(Day.ROSH_CHODESH_CHANUKA, roshChodeshChanuka);
+        schedule.put(Day.YOM_TOV, yomTov);
+
+        return schedule;
     }
 }

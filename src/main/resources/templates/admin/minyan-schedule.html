@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <title>Minyan Schedule</title>
 
-    <link th:rel="stylesheet" th:href="@{/admin/minyan-schedule.css} "/>
+    <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.1/css/bootstrap.min.css} "/>
+    <link th:rel="stylesheet" th:href="@{/styles.css}">
+    <link th:rel="stylesheet" th:href="@{/admin/styles.css}">
+    <link th:rel="stylesheet" th:href="@{/admin/minyan-schedule.css}"/>
 </head>
 <body>
 <div class="horizontal-container d-flex" id="wrapper">
@@ -107,9 +110,9 @@
                                             <table class="table table-striped">
                                                 <thead class="thead-inverse">
                                                 <tr>
-                                                    <th>ID</th>
-                                                    <th>Location</th>
+                                                    <th class="mini-column">Manage</th>
                                                     <th>Active</th>
+                                                    <th>Location</th>
                                                     <th>Sunday</th>
                                                     <th>Monday</th>
                                                     <th>Tuesday</th>
@@ -126,21 +129,60 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr th:each="minyan: ${minchaminyanim}">
-                                                    <td th:text="${minyan.id}" />
+                                                <tr th:each="minyan: ${minchaminyanim}" th:with="minyantimes=${minchatimes.get(minyan.getId())}">
+                                                    <td>
+                                                        <div>
+                                                            <button type="button" class="btn btn-dark btn-sm" data-toggle="modal" data-target="#edit-minyan-modal">
+                                                                Edit
+                                                            </button>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <div th:if="${minyan.isEnabled()}">
+                                                            <a role="button" class="btn btn-danger btn-sm" th:href="@{/admin/disableminyan(id=${minyan.id},rd=@{/admin/minyanim(oid=${organization.id})})}">
+                                                                Disable
+                                                            </a>
+                                                        </div>
+                                                        <div th:if="${!minyan.isEnabled()}">
+                                                            <a role="button" class="btn btn-success btn-sm" th:href="@{/admin/enableminyan(id=${minyan.id},rd=@{/admin/minyanim(oid=${organization.id})})}">
+                                                                Enable
+                                                            </a>
+                                                        </div>
+                                                    </td>
                                                     <td th:text="${locationnames.get(minyan.getId())}" />
-                                                    <td th:text="${minyan.isEnabled() ? 'Yes' : No}" />
-                                                    <td th:text="${minyan.getSchedule().getSunday().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getMonday().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getTuesday().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getWednesday().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getThursday().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getFriday().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getShabbat().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getRoshChodesh().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getChanukah().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getRoshChodeshChanukah().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getYomTov().displayTime()}" />
+                                                    <td th:with="sundaytime=${minyantimes.get(Day.SUNDAY)}">
+                                                        <div th:text="${sundaytime.displayTime()}"></div>
+                                                    </td>
+                                                    <td th:with="mondaytime=${minyantimes.get(Day.MONDAY)}">
+                                                        <div th:text="${mondaytime.displayTime()}"></div>
+                                                    </td>
+                                                    <td th:with="tuesdaytime=${minyantimes.get(Day.TUESDAY)}">
+                                                        <div th:text="${tuesdaytime.displayTime()}"></div>
+                                                    </td>
+                                                    <td th:with="wednesdaytime=${minyantimes.get(Day.WEDNESDAY)}">
+                                                        <div th:text="${wednesdaytime.displayTime()}"></div>
+                                                    </td>
+                                                    <td th:with="thursdaytime=${minyantimes.get(Day.THURSDAY)}">
+                                                        <div th:text="${thursdaytime.displayTime()}"></div>
+                                                    </td>
+                                                    <td th:with="fridaytime=${minyantimes.get(Day.FRIDAY)}">
+                                                        <div th:text="${fridaytime.displayTime()}"></div>
+                                                    </td>
+                                                    <td th:with="shabbattime=${minyantimes.get(Day.SHABBAT)}">
+                                                        <div th:text="${shabbattime.displayTime()}"></div>
+                                                    </td>
+                                                    <td th:with="roshchodeshtime=${minyantimes.get(Day.ROSH_CHODESH)}">
+                                                        <div th:text="${roshchodeshtime.displayTime()}"></div>
+                                                    </td>
+                                                    <td th:with="chanukatime=${minyantimes.get(Day.CHANUKA)}">
+                                                        <div th:text="${chanukatime.displayTime()}"></div>
+                                                    </td>
+                                                    <td th:with="roshchodeshchanukatime=${minyantimes.get(Day.ROSH_CHODESH_CHANUKA)}">
+                                                        <div th:text="${roshchodeshchanukatime.displayTime()}"></div>
+                                                    </td>
+                                                    <td th:with="yomtovtime=${minyantimes.get(Day.YOM_TOV)}">
+                                                        <div th:text="${yomtovtime.displayTime()}"></div>
+                                                    </td>
                                                     <td th:text="${minyan.getNusach()}" />
                                                     <td th:text="${minyan.getNotes()}" />
                                                 </tr>
@@ -266,7 +308,7 @@
                                             <table class="table table-striped">
                                                 <thead class="thead-inverse">
                                                 <tr>
-                                                    <th>ID</th>
+                                                    <th>Manage</th>
                                                     <th>Location</th>
                                                     <th>Active</th>
                                                     <th>Sunday</th>
@@ -286,7 +328,16 @@
                                                 </thead>
                                                 <tbody>
                                                 <tr th:each="minyan: ${megilaminyanim}">
-                                                    <td th:text="${minyan.id}" />
+                                                    <td>
+                                                        <div>
+                                                            <button type="button" class="btn btn-dark" data-toggle="modal" data-target="#edit-minyan-modal">
+                                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                                            </button>
+<!--                                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#deleteMinyanModal" th:onclick="${deleteMinyan(minyan)}">-->
+<!--                                                                <i class="fa fa-trash" aria-hidden="true"></i>-->
+<!--                                                            </button>-->
+                                                        </div>
+                                                    </td>
                                                     <td th:text="${locationnames.get(minyan.getId())}" />
                                                     <td th:text="${minyan.isEnabled() ? 'Yes' : No}" />
                                                     <td th:text="${minyan.getSchedule().getSunday().displayTime()}" />
@@ -349,4 +400,8 @@
     <!--/.container-->
 </div>
 </body>
+<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
+<script th:src="@{/webjars/bootstrap/4.6.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/admin/minyan-schedule.js}"></script>
 </html>

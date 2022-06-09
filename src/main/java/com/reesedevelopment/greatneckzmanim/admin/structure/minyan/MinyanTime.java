@@ -8,8 +8,7 @@ public class MinyanTime {
 
     public MinyanTime(String rawTime) {
         if (rawTime == null || rawTime.isEmpty()) {
-            time = null;
-            rule = null;
+            return;
         } else if (rawTime.equals("INVALID")) {
             throw new IllegalArgumentException("Invalid time");
         } else if (rawTime.startsWith("T")) {
@@ -20,18 +19,17 @@ public class MinyanTime {
             time = new Time(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
         } else if (rawTime.startsWith("R")) {
             String[] parts = rawTime.substring(2).split(":");
-            if (parts.length != 2) {
-                throw new IllegalArgumentException("Invalid time");
-            }
 //          TODO: VERIFY THIS WORKS WITH NEGATIVE OFFSETS
 //          TODO: FIX valueOf
             if (parts.length == 2) {
-            rule = new TimeRule(Zmanim.fromString(parts[0]), Integer.parseInt(parts[1]));
+                rule = new TimeRule(Zmanim.fromString(parts[0]), Integer.parseInt(parts[1]));
             } else {
-                throw new IllegalArgumentException("Invalid time");
+                System.out.println("Invalid time rule: " + rawTime);
+                return;
             }
         } else {
-            throw new IllegalArgumentException("Invalid time");
+            System.out.println("Invalid time: " + rawTime);
+            return;
         }
     }
 
@@ -43,6 +41,10 @@ public class MinyanTime {
     public MinyanTime(TimeRule rule) {
         this.rule = rule;
         this.time = null;
+    }
+
+    public boolean isDynamic() {
+        return rule != null && time == null;
     }
 
     @Override
@@ -78,7 +80,7 @@ public class MinyanTime {
 
     public String displayTime() {
         if (time == null && rule == null) {
-            return "No minyan";
+            return "No Minyan";
         } else if (time != null && rule != null) {
             return "INVALID";
         } else if (time != null && rule == null) {
@@ -116,7 +118,8 @@ public class MinyanTime {
 //            int indexOfDot = timeString.indexOf(".");
 //            return timeString.substring(0, indexOfDot);
 //            return String.format("%s:%s:%s", time.getHours(), time.getMinutes(), time.getSeconds());
-        } else if (time == null && rule != null) {
+        } else if (isDynamic()) {
+//            return "Dynamic";
             if (rule.getOffsetMinutes() < 0) {
                 return String.format("%s minus %d minutes", rule.getZman().displayString(), Math.abs(rule.getOffsetMinutes()));
             } else if (rule.getOffsetMinutes() == 0) {
