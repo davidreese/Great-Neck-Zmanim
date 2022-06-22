@@ -13,10 +13,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.net.URI;
@@ -876,4 +873,26 @@ public class AdminController {
         }
         return mv;
     }
+
+    @RequestMapping(value="/admin/{id}/minyanim/new")
+    public ModelAndView newMinyan(@PathVariable String id) {
+//        check security
+        if (isUser() && !isSuperAdmin()) {
+//            check for organization match
+            if (!getCurrentUser().getOrganizationId().equals(id)) {
+                throw new AccessDeniedException("You do not have permission to create a minyan for this organization.");
+            }
+        } else if (!isUser()) {
+            throw new AccessDeniedException("You do not have permission to create a minyan.");
+        }
+
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("admin/new-minyan");
+
+        mv.addObject("organization", organizationDAO.findById(id));
+        addStandardPageData(mv);
+
+        return mv;
+    }
+
 }

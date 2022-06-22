@@ -51,7 +51,7 @@
 
                             <hr>
 
-                            <div  th:if="${user.isAdmin()}" sec:authorize="hasRole('ROLE_ADMIN')">
+                            <div th:if="${user.isAdmin()}" sec:authorize="hasRole('ROLE_ADMIN')">
                                 <div class="horizontal-container">
                                     <h5>Associated Accounts</h5>
                                     <div style="padding-bottom: 10px;">
