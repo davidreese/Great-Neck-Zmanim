@@ -374,7 +374,7 @@
                                 <div class="card-body">
                                     <h4 class="card-title">Add a Minyan</h4>
                                     <p class="card-text">Create a scheduled minyan with all associated data.</p>
-                                    <a href="/admin/new-organization" class="btn btn-primary">New Minyan</a>
+                                    <a th:href="${'/admin/' + organization.id + '/minyanim/new'}" class="btn btn-primary">New Minyan</a>
                                 </div>
                             </div>
                             <div class="card card-inverse bg-inverse mt-3">
@@ -404,4 +404,5 @@
 <script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.6.1/js/bootstrap.min.js}"></script>
 <script th:src="@{/admin/minyan-schedule.js}"></script>
+
 </html>
