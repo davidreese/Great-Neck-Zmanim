@@ -192,6 +192,19 @@
                                             <div class="col" id="dynamic-time-box-rcc"></div>
                                         </div>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="type">Nusach</label>
+                                        <select class="custom-select" name="nusach" id="nusach" required>
+                                            <option selected>None specified</option>
+                                            <option value="sha">Edot HaMizrach</option>
+                                            <option value="min">Sefard</option>
+                                            <option value="arv">Ashkenaz</option>
+                                        </select>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="notes">Notes</label>
+                                        <input type="text" class="form-control" name="notes" id="notes" aria-describedby="notes-help">
+                                    </div>
                                     <div class="custom-control custom-switch" style="z-index: auto;">
                                         <input type="checkbox" class="custom-control-input" id="enabled-switch">
                                         <label class="custom-control-label" for="enabled-switch">Display this minyan immediately</label>
@@ -208,9 +221,9 @@
                         <div class="col-lg-3 col-md-4">
                             <div class="card">
                                 <div class="card-body">
-                                    <h4 class="card-title">Organizations</h4>
-                                    <p class="card-text">See a list of all organizations and manage their data and details.</p>
-                                    <a href="/admin/organizations" class="btn btn-primary">Go</a>
+                                    <h4 class="card-title">Minyanim</h4>
+                                    <p class="card-text" th:text="${'View and manage all minyanim for ' + organization.name + '.'}"></p>
+                                    <a th:href="@{/admin/minyanim(oid=${organization.id})}" class="btn btn-primary">Go</a>
                                 </div>
                             </div>
                             <div class="card card-inverse bg-inverse mt-3">
@@ -249,6 +262,9 @@
                 </p>
                 <p>
                     To specify when in prayers the minyan will officially begin, such as Yishtabach, add a note to the minyan.
+                </p>
+                <p>
+                    To indicate no minyan on a certain day, just leave the field blank.
                 </p>
             </div>
             <div class="modal-footer">
