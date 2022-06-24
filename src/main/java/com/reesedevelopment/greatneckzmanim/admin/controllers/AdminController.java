@@ -874,12 +874,12 @@ public class AdminController {
         return mv;
     }
 
-    @RequestMapping(value="/admin/{id}/minyanim/new")
-    public ModelAndView newMinyan(@PathVariable String id) {
+    @RequestMapping(value="/admin/{orgId}/minyanim/new")
+    public ModelAndView newMinyan(@PathVariable String orgId) {
 //        check security
         if (isUser() && !isSuperAdmin()) {
 //            check for organization match
-            if (!getCurrentUser().getOrganizationId().equals(id)) {
+            if (!getCurrentUser().getOrganizationId().equals(orgId)) {
                 throw new AccessDeniedException("You do not have permission to create a minyan for this organization.");
             }
         } else if (!isUser()) {
@@ -889,7 +889,9 @@ public class AdminController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/new-minyan");
 
-        mv.addObject("organization", organizationDAO.findById(id));
+//        add locations to mv
+        mv.addObject("locations", locationDAO.findMatching(orgId));
+        mv.addObject("organization", organizationDAO.findById(orgId));
         addStandardPageData(mv);
 
         return mv;
