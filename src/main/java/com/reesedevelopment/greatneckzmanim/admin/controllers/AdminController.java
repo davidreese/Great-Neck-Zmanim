@@ -8,6 +8,7 @@ import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organiz
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.OrganizationDAO;
 import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUser;
 import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUserDAO;
+import com.reesedevelopment.greatneckzmanim.global.Nusach;
 import org.hibernate.type.TimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
@@ -946,9 +947,9 @@ public class AdminController {
                                      @RequestParam(value = "rcc-fixed-time", required = false) String rccTimeString,
                                      @RequestParam(value = "rcc-zman", required = false) String rccZman,
                                      @RequestParam(value = "rcc-zman-offset", required = false) Integer rccZmanOffset,
-                                     @RequestParam(value = "nusach", required = false) String nusach,
+                                     @RequestParam(value = "nusach", required = false) String nusachString,
                                      @RequestParam(value = "notes", required = false) String notes,
-                                     @RequestParam(value = "enabled", required = true) String enabledString) {
+                                     @RequestParam(value = "enabled", required = true) String enabledString) throws Exception {
 
         //        print data
         System.out.println();
@@ -957,11 +958,7 @@ public class AdminController {
 //        verify rganization
         Organization organization = organizationDAO.findById(orgId);
         if (organization == null) {
-            try {
-                throw new Exception("Organization not found.");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            throw new Exception("Organization not found.");
         } else {
 //            verify user has permission to create minyan for this organization
             if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(organization.getId())) {
@@ -1014,7 +1011,15 @@ public class AdminController {
         System.out.println("Chanuka minyan time: " + chanukaTime);
         System.out.println("RCC minyan time: " + rccTime);
 
-        System.out.println("Nusach: " + nusach);
+//        validate nusach
+        Nusach nusach;
+        if (nusachString != null && !nusachString.isEmpty()) {
+            nusach = Nusach.fromString(nusachString);
+            System.out.println("Nusach: " + nusach);
+        } else {
+            throw new Exception("Nusach is required.");
+        }
+
         System.out.println("Notes: " + notes);
 
         Schedule schedule = new Schedule(sundayTime, mondayTime, tuesdayTime, wednesdayTime, thursdayTime, fridayTime, shabbatTime, ytTime, rcTime, chanukaTime, rccTime);
@@ -1034,7 +1039,7 @@ public class AdminController {
         }
         System.out.println("Enabled: " + enabled);
 
-        Minyan minyan = new Minyan(organization, minyanType, location, schedule, nusach, notes, enabled);
+        Minyan minyan = new Minyan(organization, minyanType, location, schedule, notes, nusach, enabled);
 
         try {
             minyanDAO.save(minyan);

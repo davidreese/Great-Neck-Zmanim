@@ -4,6 +4,7 @@ import com.reesedevelopment.greatneckzmanim.admin.structure.GNZObject;
 import com.reesedevelopment.greatneckzmanim.admin.structure.IDGenerator;
 import com.reesedevelopment.greatneckzmanim.admin.structure.location.Location;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organization;
+import com.reesedevelopment.greatneckzmanim.global.Nusach;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
@@ -67,7 +68,9 @@ public class Minyan extends GNZObject implements IDGenerator {
     private String notes;
 
     @Column(name = "NUSACH", nullable = false)
-    private String nusach;
+    private String nusachString;
+
+    private Nusach nusach;
 
     public Minyan(String id,
                   String minyanTypeString,
@@ -107,7 +110,8 @@ public class Minyan extends GNZObject implements IDGenerator {
         this.startTimeYT = startTimeYT;
         this.schedule = new Schedule(startTime1, startTime2, startTime3, startTime4, startTime5, startTime6, startTime7, startTimeRC, startTimeCH, startTimeCHRC, startTimeYT);
         this.notes = notes;
-        this.nusach = nusach;
+        this.nusachString = nusach;
+        this.nusach = Nusach.fromString(nusach);
     }
 
     public Minyan(String minyanTypeString,
@@ -147,10 +151,11 @@ public class Minyan extends GNZObject implements IDGenerator {
         this.startTimeYT = startTimeYT;
         this.schedule = new Schedule(startTime1, startTime2, startTime3, startTime4, startTime5, startTime6, startTime7, startTimeRC, startTimeCH, startTimeCHRC, startTimeYT);
         this.notes = notes;
-        this.nusach = nusach;
+        this.nusachString = nusach;
+        this.nusach = Nusach.fromString(nusach);
     }
 
-    public Minyan(Organization organization, MinyanType type, Location location, Schedule schedule, String notes, String nusach, boolean enabled) {
+    public Minyan(Organization organization, MinyanType type, Location location, Schedule schedule, String notes, Nusach nusach, boolean enabled) {
         super.id = generateID('M');
         this.minyanTypeString = type.toString();
         this.minyanType = type;
@@ -174,7 +179,7 @@ public class Minyan extends GNZObject implements IDGenerator {
         this.schedule = schedule;
         this.enabled = enabled;
         this.notes = notes;
-        this.nusach = nusach;
+        this.nusachString = nusach.toString();
     }
 
     public String getMinyanTypeString() {
@@ -257,7 +262,11 @@ public class Minyan extends GNZObject implements IDGenerator {
         return notes;
     }
 
-    public String getNusach() {
+    public String getNusachString() {
+        return nusachString;
+    }
+
+    public Nusach getNusach() {
         return nusach;
     }
 

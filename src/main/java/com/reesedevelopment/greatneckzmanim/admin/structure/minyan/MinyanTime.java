@@ -124,7 +124,7 @@ public class MinyanTime {
 
     public String displayTime() {
         if (time == null && rule == null) {
-            return "No Minyan";
+            return "";
         } else if (time != null && rule != null) {
             return "INVALID";
         } else if (time != null && rule == null) {

@@ -139,12 +139,12 @@
                                                     </td>
                                                     <td>
                                                         <div th:if="${minyan.isEnabled()}">
-                                                            <a role="button" class="btn btn-danger btn-sm" th:href="@{/admin/disableminyan(id=${minyan.id},rd=@{/admin/minyanim(oid=${organization.id})})}">
+                                                            <a role="button" class="btn btn-danger btn-sm" th:href="@{/admin/disableminyan(id=${minyan.id},rd=@{/admin/minyanim(oid=${organization.id},st=mi)})}">
                                                                 Disable
                                                             </a>
                                                         </div>
                                                         <div th:if="${!minyan.isEnabled()}">
-                                                            <a role="button" class="btn btn-success btn-sm" th:href="@{/admin/enableminyan(id=${minyan.id},rd=@{/admin/minyanim(oid=${organization.id})})}">
+                                                            <a role="button" class="btn btn-success btn-sm" th:href="@{/admin/enableminyan(id=${minyan.id},rd=@{/admin/minyanim(oid=${organization.id},st=mi)})}">
                                                                 Enable
                                                             </a>
                                                         </div>
@@ -183,7 +183,7 @@
                                                     <td th:with="yomtovtime=${minyantimes.get(Day.YOM_TOV)}">
                                                         <div th:text="${yomtovtime.displayTime()}"></div>
                                                     </td>
-                                                    <td th:text="${minyan.getNusach()}" />
+                                                    <td th:text="${minyan.getNusach().displayString()}" />
                                                     <td th:text="${minyan.getNotes()}" />
                                                 </tr>
                                                 </tbody>

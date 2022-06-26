@@ -80,7 +80,7 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
                 objectToSave.getStartTimeCHRC(),
                 objectToSave.getStartTimeYT(),
                 objectToSave.getNotes(),
-                objectToSave.getNusach()
+                objectToSave.getNusachString()
         );
 
         try {
@@ -142,7 +142,7 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
                 objectToUpdate.getStartTimeCHRC(),
                 objectToUpdate.getStartTimeYT(),
                 objectToUpdate.getNotes(),
-                objectToUpdate.getNusach(),
+                objectToUpdate.getNusachString(),
                 objectToUpdate.getId()
         );
 
