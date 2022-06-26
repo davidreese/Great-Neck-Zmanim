@@ -1,5 +1,6 @@
-package com.reesedevelopment.greatneckzmanim.admin.structure;
+package com.reesedevelopment.greatneckzmanim.admin.structure.location;
 
+import com.reesedevelopment.greatneckzmanim.admin.structure.GNZSaveable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -13,23 +14,23 @@ import java.util.Map;
 
 @Repository
 @Transactional
-public class GNZLocationDAO extends JdbcDaoSupport implements GNZSaveable<GNZLocation> {
+public class LocationDAO extends JdbcDaoSupport implements GNZSaveable<Location> {
 
     @Autowired
-    public GNZLocationDAO(DataSource dataSource) {
+    public LocationDAO(DataSource dataSource) {
         this.setDataSource(dataSource);
     }
 
-    @Override
-    public GNZLocation findByName(String name) {
+//    @Override
+    public Location findByName(String name) {
 //        TODO: DEAL WITH DUPLICATE NAMES
-        String sql = GNZLocationMapper.BASE_SQL + " WHERE l.NAME = ? ";
+        String sql = LocationMapper.BASE_SQL + " WHERE l.NAME = ? ";
 
         Object[] params = new Object[] { name };
-        GNZLocationMapper mapper = new GNZLocationMapper();
+        LocationMapper mapper = new LocationMapper();
 
         try {
-            GNZLocation locationInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            Location locationInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
             return locationInfo;
         } catch (EmptyResultDataAccessException e) {
             return null;
@@ -37,28 +38,28 @@ public class GNZLocationDAO extends JdbcDaoSupport implements GNZSaveable<GNZLoc
     }
 
     @Override
-    public GNZLocation findById(String id) {
-        String sql = GNZLocationMapper.BASE_SQL + " WHERE l.ID = ? ";
+    public Location findById(String id) {
+        String sql = LocationMapper.BASE_SQL + " WHERE l.ID = ? ";
 
         Object[] params = new Object[] { id };
-        GNZLocationMapper mapper = new GNZLocationMapper();
+        LocationMapper mapper = new LocationMapper();
 
         try {
-            GNZLocation locationInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            Location locationInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
             return locationInfo;
         } catch (EmptyResultDataAccessException e) {
             return null;
         }
     }
 
-    public List<GNZLocation> findMatching(String organizationId) {
-        String sql = GNZLocationMapper.BASE_SQL + " WHERE l.ORGANIZATION_ID = ? ";
+    public List<Location> findMatching(String organizationId) {
+        String sql = LocationMapper.BASE_SQL + " WHERE l.ORGANIZATION_ID = ? ";
 
         Object[] params = new Object[] { organizationId };
-        GNZLocationMapper mapper = new GNZLocationMapper();
+        LocationMapper mapper = new LocationMapper();
 
         try {
-            List<GNZLocation> locationInfo = this.getJdbcTemplate().query(sql, params, mapper);
+            List<Location> locationInfo = this.getJdbcTemplate().query(sql, params, mapper);
             return locationInfo;
         } catch (EmptyResultDataAccessException e) {
             return null;
@@ -66,14 +67,14 @@ public class GNZLocationDAO extends JdbcDaoSupport implements GNZSaveable<GNZLoc
     }
 
     @Override
-    public List<GNZLocation> getAll() {
+    public List<Location> getAll() {
         String sql = "SELECT * FROM LOCATION";
 
-        GNZLocationMapper mapper = new GNZLocationMapper();
+        LocationMapper mapper = new LocationMapper();
 
         List<Map<String, Object>> locationMaps = this.getJdbcTemplate().queryForList(sql);
 
-        List<GNZLocation> locations = new ArrayList<>();
+        List<Location> locations = new ArrayList<>();
 
 //        iterate through the list and create an GNZUser object for each row
         for (Map<String, Object> locationMap : locationMaps) {
@@ -84,7 +85,7 @@ public class GNZLocationDAO extends JdbcDaoSupport implements GNZSaveable<GNZLoc
     }
 
     @Override
-    public boolean save(GNZLocation location) {
+    public boolean save(Location location) {
         String sql = String.format("INSERT INTO LOCATION VALUES ('%s', '%s', '%s')", location.getId(), location.getName(), location.getOrganizationId());
 
         try {
@@ -97,8 +98,8 @@ public class GNZLocationDAO extends JdbcDaoSupport implements GNZSaveable<GNZLoc
     }
 
     @Override
-    public boolean delete(GNZLocation objectToDelete) {
-        String sql = String.format("DELETE FROM LOCATION WHERE ID='%s'", objectToDelete.id);
+    public boolean delete(Location objectToDelete) {
+        String sql = String.format("DELETE FROM LOCATION WHERE ID='%s'", objectToDelete.getId());
 
         try {
             this.getConnection().createStatement().execute(sql);
@@ -110,7 +111,7 @@ public class GNZLocationDAO extends JdbcDaoSupport implements GNZSaveable<GNZLoc
     }
 
     @Override
-    public boolean update(GNZLocation locationToUpdate) {
+    public boolean update(Location locationToUpdate) {
         String sql = String.format("UPDATE LOCATION SET NAME='%s' WHERE ID='%s'", locationToUpdate.getName(), locationToUpdate.getId());
 
         try {

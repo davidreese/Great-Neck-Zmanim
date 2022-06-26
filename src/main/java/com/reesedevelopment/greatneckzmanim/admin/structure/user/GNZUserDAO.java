@@ -1,5 +1,6 @@
-package com.reesedevelopment.greatneckzmanim.admin.structure;
+package com.reesedevelopment.greatneckzmanim.admin.structure.user;
 
+import com.reesedevelopment.greatneckzmanim.admin.structure.GNZSaveable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
@@ -18,7 +19,6 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         this.setDataSource(dataSource);
     }
 
-    @Override
     public GNZUser findByName(String username) {
         String sql = GNZUserMapper.BASE_SQL + " WHERE u.USERNAME = ? ";
 
@@ -109,7 +109,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
 
     @Override
     public boolean delete(GNZUser objectToDelete) {
-        String sql = String.format("DELETE FROM ACCOUNT WHERE ID='%s'", objectToDelete.id);
+        String sql = String.format("DELETE FROM ACCOUNT WHERE ID='%s'", objectToDelete.getId());
 
         try {
             this.getConnection().createStatement().execute(sql);

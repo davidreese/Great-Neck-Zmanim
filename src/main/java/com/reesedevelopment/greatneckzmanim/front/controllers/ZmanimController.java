@@ -1,7 +1,7 @@
 package com.reesedevelopment.greatneckzmanim.front.controllers;
 
 import com.kosherjava.zmanim.util.GeoLocation;
-import com.reesedevelopment.greatneckzmanim.front.Zmanim;
+import com.reesedevelopment.greatneckzmanim.global.Zman;
 import com.reesedevelopment.greatneckzmanim.front.ZmanimHandler;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -49,13 +49,15 @@ public class ZmanimController {
 
         Dictionary zmanim = zmanimHandler.getZmanim();
 
-        mv.getModel().put("alotHashachar", timeFormat.format(zmanim.get(Zmanim.alotHashachar)));
-        mv.getModel().put("sunrise", timeFormat.format(zmanim.get(Zmanim.sunrise)));
-        mv.getModel().put("chatzot", timeFormat.format(zmanim.get(Zmanim.chatzot)));
-        mv.getModel().put("minchaGedola", timeFormat.format(zmanim.get(Zmanim.minchaGedola)));
-        mv.getModel().put("minchaKetana", timeFormat.format(zmanim.get(Zmanim.minchaKetana)));
-        mv.getModel().put("sunset", timeFormat.format(zmanim.get(Zmanim.sunset)));
-        mv.getModel().put("tzait", timeFormat.format(zmanim.get(Zmanim.tzait)));
+        mv.getModel().put("alotHashachar", timeFormat.format(zmanim.get(Zman.ALOT_HASHACHAR)));
+        mv.getModel().put("sunrise", timeFormat.format(zmanim.get(Zman.NETZ)));
+        mv.getModel().put("chatzot", timeFormat.format(zmanim.get(Zman.CHATZOT)));
+        mv.getModel().put("minchaGedola", timeFormat.format(zmanim.get(Zman.MINCHA_GEDOLA)));
+        mv.getModel().put("minchaKetana", timeFormat.format(zmanim.get(Zman.MINCHA_KETANA)));
+        mv.getModel().put("plagHamincha", timeFormat.format(zmanim.get(Zman.PLAG_HAMINCHA)));
+        mv.getModel().put("shekiya", timeFormat.format(zmanim.get(Zman.SHEKIYA)));
+        mv.getModel().put("tzet", timeFormat.format(zmanim.get(Zman.TZET)));
+
         return mv;
     }
 }

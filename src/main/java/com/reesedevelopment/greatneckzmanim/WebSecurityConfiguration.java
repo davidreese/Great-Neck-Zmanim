@@ -31,24 +31,6 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     }
 
-//    @Override
-//    protected void configure(HttpSecurity http) throws Exception {
-//        http
-//                .authorizeRequests()
-//                    .antMatchers("/", "/webjars/**", "/**/*.css", "/**/*.js", "/static/**", "/db/**").permitAll()
-//                    .anyRequest().authenticated()
-//                    .and()
-//                .formLogin()
-//                    .loginPage("/admin/login")
-//                    .permitAll()
-//                    .and()
-//                .logout()
-//                    .permitAll();
-//
-//        http.csrf().disable();
-//        http.headers().frameOptions().disable();
-//    }
-
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -59,6 +41,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers("/", "/admin/login", "/admin/logout", "/webjars/**", "/**/*.css", "/**/*.js", "/static/**", "/db/**").permitAll()
+                    .antMatchers("/admin/update-location").hasAnyRole("USER", "ADMIN")
                     .antMatchers("/admin/organizations", "/admin/new-organization", "/admin/create-organization", "/admin/accounts").hasAnyRole("ADMIN")
                     .anyRequest().authenticated()
                     .and()

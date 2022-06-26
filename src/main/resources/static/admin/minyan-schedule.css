@@ -1,0 +1,20 @@
+.table th {
+    white-space: nowrap;
+}
+
+.table th {
+min-width: 150px;
+}
+
+th.mini-column {
+    min-width: 80px!important;
+}
+
+.grayscale {
+    -webkit-filter: grayscale(100%);
+    -moz-filter: grayscale(100%);
+    -ms-filter: grayscale(100%);
+    -o-filter: grayscale(100%);
+    filter: grayscale(100%);
+    filter: gray;
+  }

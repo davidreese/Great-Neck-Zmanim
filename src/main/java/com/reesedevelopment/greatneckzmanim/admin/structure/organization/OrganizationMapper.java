@@ -1,22 +1,20 @@
-package com.reesedevelopment.greatneckzmanim.admin.structure;
+package com.reesedevelopment.greatneckzmanim.admin.structure.organization;
 
 import org.springframework.jdbc.core.RowMapper;
 
 import java.io.Serializable;
-import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.net.URL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Map;
 
-public class GNZOrganizationMapper implements RowMapper<GNZOrganization>, Serializable {
+public class OrganizationMapper implements RowMapper<Organization>, Serializable {
 
     public static final String BASE_SQL = "SELECT u.ID, u.NAME, u.ADDRESS, u.SITE_URI FROM ORGANIZATION u ";
 
     @Override
-    public GNZOrganization mapRow(ResultSet rs, int rowNum) throws SQLException {
+    public Organization mapRow(ResultSet rs, int rowNum) throws SQLException {
         String id = rs.getString("ID");
         String name = rs.getString("NAME");
         String address = rs.getString("ADDRESS");
@@ -31,10 +29,10 @@ public class GNZOrganizationMapper implements RowMapper<GNZOrganization>, Serial
             e.printStackTrace();
         }
 
-        return new GNZOrganization(id, name, address, siteURI);
+        return new Organization(id, name, address, siteURI);
     }
 
-    public GNZOrganization mapRow(Map<String, Object> m) {
+    public Organization mapRow(Map<String, Object> m) {
         String id = (String) m.get("ID");
         String name = (String) m.get("NAME");
         String address = (String) m.get("ADDRESS");
@@ -49,6 +47,6 @@ public class GNZOrganizationMapper implements RowMapper<GNZOrganization>, Serial
             e.printStackTrace();
         }
 
-        return new GNZOrganization(id, name, address, siteURI);
+        return new Organization(id, name, address, siteURI);
     }
 }
