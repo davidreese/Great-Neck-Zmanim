@@ -8,6 +8,7 @@ import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organiz
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.OrganizationDAO;
 import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUser;
 import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUserDAO;
+import org.hibernate.type.TimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -561,7 +562,7 @@ public class AdminController {
             if (isAdmin()) {
                 System.out.println("Creating account...");
 
-                GNZUser user = new GNZUser(username, email, Encrypter.encrytedPassword(password), organizationId, role);
+                GNZUser user = new GNZUser(username.toLowerCase(), email.toLowerCase(), Encrypter.encrytedPassword(password), organizationId, role);
 
                 if (this.gnzUserDAO.save(user)) {
                     return organization(organizationId, "Successfully created a new account with username '" + user.getUsername() + ".'", null, null, null);
@@ -576,7 +577,7 @@ public class AdminController {
             if (isAdmin()) {
                 System.out.println("Creating account...");
 
-                GNZUser user = new GNZUser(username, email, Encrypter.encrytedPassword(password), organizationId, role);
+                GNZUser user = new GNZUser(username.toLowerCase(), email.toLowerCase(), Encrypter.encrytedPassword(password), organizationId, role);
 
                 if (this.gnzUserDAO.save(user)) {
                     return organization(organizationId, "Successfully created a new account with username '" + user.getUsername() + ".'", null, null, null);
@@ -590,7 +591,7 @@ public class AdminController {
                     if (gnzUserDAO.findByName(username).getId().equals(organizationId)) {
                         System.out.println("Creating account...");
 
-                        GNZUser user = new GNZUser(username, email, Encrypter.encrytedPassword(password), organizationId, role);
+                        GNZUser user = new GNZUser(username.toLowerCase(), email.toLowerCase(), Encrypter.encrytedPassword(password), organizationId, role);
 
                         if (this.gnzUserDAO.save(user)) {
                             return organization(organizationId, "Successfully created a new account with username '" + user.getUsername() + ".'", null, null, null);
@@ -643,14 +644,14 @@ public class AdminController {
 
 //        TODO: DECIDE ABOUT CONTROL OF SUPER ADMIN STATUSES
         if (isAdmin() && !userToUpdate.isSuperAdmin()) {
-            GNZUser updatedUser = new GNZUser(id, newUsername, newEmail, userToUpdate.getEncryptedPassword(), userToUpdate.getOrganizationId(), newRole);
+            GNZUser updatedUser = new GNZUser(id, newUsername.toLowerCase(), newEmail.toLowerCase(), userToUpdate.getEncryptedPassword(), userToUpdate.getOrganizationId(), newRole);
             if (gnzUserDAO.update(updatedUser)) {
                 return account(id,"Successfully updated account with username '" + updatedUser.getUsername() + "'.", null);
             } else {
                 return account(id,null, "Sorry, an error occurred. The account could not be updated.");
             }
         } else {
-            GNZUser updatedUser = new GNZUser(id, newUsername, newEmail, userToUpdate.getEncryptedPassword(), userToUpdate.getOrganizationId(), userToUpdate.role());
+            GNZUser updatedUser = new GNZUser(id, newUsername.toLowerCase(), newEmail.toLowerCase(), userToUpdate.getEncryptedPassword(), userToUpdate.getOrganizationId(), userToUpdate.role());
             if (gnzUserDAO.update(updatedUser)) {
                 return account(id,"Successfully updated account with username '" + updatedUser.getUsername() + "'.", null);
             } else {
@@ -897,4 +898,150 @@ public class AdminController {
         return mv;
     }
 
+    @RequestMapping(value="/admin/{orgId}/minyanim/create")
+    public ModelAndView createMinyan(@PathVariable String orgId,
+                                     @RequestParam(value = "type", required = false) String type,
+                                     @RequestParam(value = "location", required = false) String locationId,
+                                     @RequestParam(value = "sunday-time-type", required = true) String sundayTimeType,
+                                     @RequestParam(value = "sunday-fixed-time", required = false) String sundayTimeString,
+                                     @RequestParam(value = "sunday-zman", required = false) String sundayZman,
+                                     @RequestParam(value = "sunday-zman-offset", required = false) Integer sundayZmanOffset,
+                                     @RequestParam(value = "monday-time-type", required = true) String mondayTimeType,
+                                     @RequestParam(value = "monday-fixed-time", required = false) String mondayTimeString,
+                                     @RequestParam(value = "monday-zman", required = false) String mondayZman,
+                                     @RequestParam(value = "monday-zman-offset", required = false) Integer mondayZmanOffset,
+                                     @RequestParam(value = "tuesday-time-type", required = true) String tuesdayTimeType,
+                                     @RequestParam(value = "tuesday-fixed-time", required = false) String tuesdayTimeString,
+                                     @RequestParam(value = "tuesday-zman", required = false) String tuesdayZman,
+                                     @RequestParam(value = "tuesday-zman-offset", required = false) Integer tuesdayZmanOffset,
+                                     @RequestParam(value = "wednesday-time-type", required = true) String wednesdayTimeType,
+                                     @RequestParam(value = "wednesday-fixed-time", required = false) String wednesdayTimeString,
+                                     @RequestParam(value = "wednesday-zman", required = false) String wednesdayZman,
+                                     @RequestParam(value = "wednesday-zman-offset", required = false) Integer wednesdayZmanOffset,
+                                     @RequestParam(value = "thursday-time-type", required = true) String thursdayTimeType,
+                                     @RequestParam(value = "thursday-fixed-time", required = false) String thursdayTimeString,
+                                     @RequestParam(value = "thursday-zman", required = false) String thursdayZman,
+                                     @RequestParam(value = "thursday-zman-offset", required = false) Integer thursdayZmanOffset,
+                                     @RequestParam(value = "friday-time-type", required = true) String fridayTimeType,
+                                     @RequestParam(value = "friday-fixed-time", required = false) String fridayTimeString,
+                                     @RequestParam(value = "friday-zman", required = false) String fridayZman,
+                                     @RequestParam(value = "friday-zman-offset", required = false) Integer fridayZmanOffset,
+                                     @RequestParam(value = "shabbat-time-type", required = true) String shabbatTimeType,
+                                     @RequestParam(value = "shabbat-fixed-time", required = false) String shabbatTimeString,
+                                     @RequestParam(value = "shabbat-zman", required = false) String shabbatZman,
+                                     @RequestParam(value = "shabbat-zman-offset", required = false) Integer shabbatZmanOffset,
+                                     @RequestParam(value = "yt-time-type", required = true) String ytTimeType,
+                                     @RequestParam(value = "yt-fixed-time", required = false) String ytTimeString,
+                                     @RequestParam(value = "yt-zman", required = false) String ytZman,
+                                     @RequestParam(value = "yt-zman-offset", required = false) Integer ytZmanOffset,
+                                     @RequestParam(value = "rc-time-type", required = true) String rcTimeType,
+                                     @RequestParam(value = "rc-fixed-time", required = false) String rcTimeString,
+                                     @RequestParam(value = "rc-zman", required = false) String rcZman,
+                                     @RequestParam(value = "rc-zman-offset", required = false) Integer rcZmanOffset,
+                                     @RequestParam(value = "chanuka-time-type", required = true) String chanukaTimeType,
+                                     @RequestParam(value = "chanuka-fixed-time", required = false) String chanukaTimeString,
+                                     @RequestParam(value = "chanuka-zman", required = false) String chanukaZman,
+                                     @RequestParam(value = "chanuka-zman-offset", required = false) Integer chanukaZmanOffset,
+                                     @RequestParam(value = "rcc-time-type", required = true) String rccTimeType,
+                                     @RequestParam(value = "rcc-fixed-time", required = false) String rccTimeString,
+                                     @RequestParam(value = "rcc-zman", required = false) String rccZman,
+                                     @RequestParam(value = "rcc-zman-offset", required = false) Integer rccZmanOffset,
+                                     @RequestParam(value = "nusach", required = false) String nusach,
+                                     @RequestParam(value = "notes", required = false) String notes,
+                                     @RequestParam(value = "enabled", required = true) String enabledString) {
+
+        //        print data
+        System.out.println();
+        System.out.println("Creating minyan...");
+
+//        verify rganization
+        Organization organization = organizationDAO.findById(orgId);
+        if (organization == null) {
+            try {
+                throw new Exception("Organization not found.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        } else {
+//            verify user has permission to create minyan for this organization
+            if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(organization.getId())) {
+                throw new AccessDeniedException("You do not have permission to create a minyan for this organization.");
+            }
+        }
+
+//        verify minyan type
+        MinyanType minyanType = MinyanType.fromString(type);
+        if (minyanType == null) {
+            try {
+                throw new Exception("Invalid minyan type.");
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+
+        System.out.println("Minyan type: " + minyanType);
+
+//        get and verify location
+        Location location = locationDAO.findById(locationId);
+        if (location != null) {
+            if (location.getOrganizationId() != organization.getId()) {
+                throw new AccessDeniedException("You do not have permission to create a minyan using this location.");
+            }
+        }
+
+//        create minyan times
+        MinyanTime sundayTime = MinyanTime.fromFormData(sundayTimeType, sundayTimeString, sundayZman, sundayZmanOffset);
+        MinyanTime mondayTime = MinyanTime.fromFormData(mondayTimeType, mondayTimeString, mondayZman, mondayZmanOffset);
+        MinyanTime tuesdayTime = MinyanTime.fromFormData(tuesdayTimeType, tuesdayTimeString, tuesdayZman, tuesdayZmanOffset);
+        MinyanTime wednesdayTime = MinyanTime.fromFormData(wednesdayTimeType, wednesdayTimeString, wednesdayZman, wednesdayZmanOffset);
+        MinyanTime thursdayTime = MinyanTime.fromFormData(thursdayTimeType, thursdayTimeString, thursdayZman, thursdayZmanOffset);
+        MinyanTime fridayTime = MinyanTime.fromFormData(fridayTimeType, fridayTimeString, fridayZman, fridayZmanOffset);
+        MinyanTime shabbatTime = MinyanTime.fromFormData(shabbatTimeType, shabbatTimeString, shabbatZman, shabbatZmanOffset);
+        MinyanTime ytTime = MinyanTime.fromFormData(ytTimeType, ytTimeString, ytZman, ytZmanOffset);
+        MinyanTime rcTime = MinyanTime.fromFormData(rcTimeType, rcTimeString, rcZman, rcZmanOffset);
+        MinyanTime chanukaTime = MinyanTime.fromFormData(chanukaTimeType, chanukaTimeString, chanukaZman, chanukaZmanOffset);
+        MinyanTime rccTime = MinyanTime.fromFormData(rccTimeType, rccTimeString, rccZman, rccZmanOffset);
+
+        System.out.println("Sunday minyan time: " + sundayTime);
+        System.out.println("Monday minyan time: " + mondayTime);
+        System.out.println("Tuesday minyan time: " + tuesdayTime);
+        System.out.println("Wednesday minyan time: " + wednesdayTime);
+        System.out.println("Thursday minyan time: " + thursdayTime);
+        System.out.println("Friday minyan time: " + fridayTime);
+        System.out.println("Shabbat minyan time: " + shabbatTime);
+        System.out.println("Yom Tov minyan time: " + ytTime);
+        System.out.println("Rosh Chodesh minyan time: " + rcTime);
+        System.out.println("Chanuka minyan time: " + chanukaTime);
+        System.out.println("RCC minyan time: " + rccTime);
+
+        System.out.println("Nusach: " + nusach);
+        System.out.println("Notes: " + notes);
+
+        Schedule schedule = new Schedule(sundayTime, mondayTime, tuesdayTime, wednesdayTime, thursdayTime, fridayTime, shabbatTime, ytTime, rcTime, chanukaTime, rccTime);
+
+        boolean enabled;
+        switch (enabledString) {
+            case "on":
+                enabled = true;
+                break;
+            case "off":
+                enabled = false;
+                break;
+                default:
+                    enabled = false;
+                    break;
+
+        }
+        System.out.println("Enabled: " + enabled);
+
+        Minyan minyan = new Minyan(organization, minyanType, location, schedule, nusach, notes, enabled);
+
+        try {
+            minyanDAO.save(minyan);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return newMinyan(orgId);
+    }
 }
