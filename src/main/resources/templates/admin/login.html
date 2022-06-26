@@ -13,7 +13,7 @@
 <div id="container">
     <div class="center-container" id="body">
         <div class="dropdown-menu center" style="position: relative; display: block;">
-            <form class="px-4 py-3" th:action="@{/j_spring_security_check}" method="post">
+            <form class="px-4 py-3" onsubmit="lowercase()" th:action="@{/j_spring_security_check}" method="post">
                 <div class="form-group">
                     <label for="username-field">Username</label>
                     <input type="text" class="form-control" name="username" id="username-field" placeholder="Username">
@@ -51,6 +51,7 @@
 <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.6.1/js/bootstrap.min.js}"></script>
+<script th:src="@{/admin/login.js}"></script>
 <!--<script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>-->
 <!--<script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>-->
 <!--<script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>-->
