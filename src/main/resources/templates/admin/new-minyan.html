@@ -23,37 +23,38 @@
                     <div th:if="${errormessage}">
                         <div class="alert alert-danger" role="alert" th:text="${errormessage}"></div>
                     </div>
-                    <h1 class="display-4 d-none d-sm-block">
+                    <h1 class="display-4 d-sm-block">
                         New Minyan
                     </h1>
 
                     <p th:if="${user.isSuperAdmin()}" sec:authorize="hasRole('ROLE_ADMIN')" class="lead d-none d-sm-block" th:text="${'Add a new minyan for ' + organization.name + ' with a set location, times for every occasion, and other important information.'}"></p>
                     <p th:if="${!user.isSuperAdmin()}" class="lead d-none d-sm-block">Add a new minyan with a set location, times for every occasion, and other important information.</p>
 
-                    <hr>
+                    <hr class="">
 
-                    <p class="lead">
+                    <p class="lead d-none">
                         The minyan defined below will be created with automatically be enabled and show on the public Great Neck Zmanim site.
                     </p>
 
                     <div class="row my-4 footer-pusher">
                         <div class="col-lg-9 col-md-8">
                             <div class="table-responsive">
-                                <form th:action="@{/admin/create-organization}" method="post">
+                                <form onsubmit="validateData()" th:action="@{|/admin/${organization.id}/minyanim/create|}" method="post" style="overflow-x: hidden;">
                                     <div class="form-group">
                                         <label for="type">Minyan Type</label>
                                         <select class="custom-select" name="type" id="type" required>
-                                            <option disabled>Choose a type</option>
-                                            <option value="sha">Shacharit</option>
-                                            <option value="min">Mincha</option>
-                                            <option value="arv">Arvit</option>
-                                            <option value="sel">Selichot</option>
+                                            <option value="" disabled>Choose a type</option>
+                                            <option value="shacharit">Shacharit</option>
+                                            <option value="mincha">Mincha</option>
+                                            <option value="arvit">Arvit</option>
+                                            <option value="selichot">Selichot</option>
+                                            <option value="megilareading">Megila Reading</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
                                         <label for="location">Location</label>
                                         <select class="custom-select" name="location" id="location" required>
-                                            <option>None</option>
+                                            <option value="null" selected>None specified</option>
                                             <div th:each="location: ${locations}">
                                                 <option th:value="${location.id}" th:text="${location.name}"></option>
                                             </div>
@@ -65,7 +66,8 @@
                                         <div class="form-row" id="sunday-box">
                                             <div class="col">
                                                 <select class="custom-select" name="sunday-time-type" id="sunday-time-type" onchange="update('sunday')" required>
-                                                    <option value="fixed" selected>Fixed</option>
+                                                    <option value="nm" selected>No Minyan</option>
+                                                    <option value="fixed">Fixed</option>
                                                     <option value="dynamic">Dynamic</option>
                                                 </select>
                                             </div>
@@ -76,8 +78,9 @@
                                         <label for="monday-box">Monday</label>
                                         <div class="form-row" id="monday-box">
                                             <div class="col">
-                                                <select class="custom-select" name="sunday-time-type" id="monday-time-type" onchange="update('monday')" required>
-                                                    <option value="fixed" selected>Fixed</option>
+                                                <select class="custom-select" name="monday-time-type" id="monday-time-type" onchange="update('monday')" required>
+                                                    <option value="nm" selected>No Minyan</option>
+                                                    <option value="fixed">Fixed</option>
                                                     <option value="dynamic">Dynamic</option>
                                                 </select>
                                             </div>
@@ -89,7 +92,8 @@
                                         <div class="form-row" id="tuesday-box">
                                             <div class="col">
                                                 <select class="custom-select" name="tuesday-time-type" id="tuesday-time-type" onchange="update('tuesday')" required>
-                                                    <option value="fixed" selected>Fixed</option>
+                                                    <option value="nm" selected>No Minyan</option>
+                                                    <option value="fixed">Fixed</option>
                                                     <option value="dynamic">Dynamic</option>
                                                 </select>
                                             </div>
@@ -101,7 +105,8 @@
                                         <div class="form-row" id="wednesday-box">
                                             <div class="col">
                                                 <select class="custom-select" name="wednesday-time-type" id="wednesday-time-type" onchange="update('wednesday')" required>
-                                                    <option value="fixed" selected>Fixed</option>
+                                                    <option value="nm" selected>No Minyan</option>
+                                                    <option value="fixed">Fixed</option>
                                                     <option value="dynamic">Dynamic</option>
                                                 </select>
                                             </div>
@@ -112,8 +117,9 @@
                                         <label for="thursday-box">Thursday</label>
                                         <div class="form-row" id="thursday-box">
                                             <div class="col">
-                                                <select class="custom-select" name="sunday-time-type" id="thursday-time-type" onchange="update('thursday')" required>
-                                                    <option value="fixed" selected>Fixed</option>
+                                                <select class="custom-select" name="thursday-time-type" id="thursday-time-type" onchange="update('thursday')" required>
+                                                    <option value="nm" selected>No Minyan</option>
+                                                    <option value="fixed">Fixed</option>
                                                     <option value="dynamic">Dynamic</option>
                                                 </select>
                                             </div>
@@ -125,7 +131,8 @@
                                         <div class="form-row" id="friday-box">
                                             <div class="col">
                                                 <select class="custom-select" name="friday-time-type" id="friday-time-type" onchange="update('friday')" required>
-                                                    <option value="fixed" selected>Fixed</option>
+                                                    <option value="nm" selected>No Minyan</option>
+                                                    <option value="fixed">Fixed</option>
                                                     <option value="dynamic">Dynamic</option>
                                                 </select>
                                             </div>
@@ -137,7 +144,8 @@
                                         <div class="form-row" id="shabbat-box">
                                             <div class="col">
                                                 <select class="custom-select" name="shabbat-time-type" id="shabbat-time-type" onchange="update('shabbat')" required>
-                                                    <option value="fixed" selected>Fixed</option>
+                                                    <option value="nm" selected>No Minyan</option>
+                                                    <option value="fixed">Fixed</option>
                                                     <option value="dynamic">Dynamic</option>
                                                 </select>
                                             </div>
@@ -149,7 +157,8 @@
                                         <div class="form-row" id="yt-box">
                                             <div class="col">
                                                 <select class="custom-select" name="yt-time-type" id="yt-time-type" onchange="update('yt')" required>
-                                                    <option value="fixed" selected>Fixed</option>
+                                                    <option value="nm" selected>No Minyan</option>
+                                                    <option value="fixed">Fixed</option>
                                                     <option value="dynamic">Dynamic</option>
                                                 </select>
                                             </div>
@@ -161,7 +170,8 @@
                                         <div class="form-row" id="rc-box">
                                             <div class="col">
                                                 <select class="custom-select" name="rc-time-type" id="rc-time-type" onchange="update('rc')" required>
-                                                    <option value="fixed" selected>Fixed</option>
+                                                    <option value="nm" selected>No Minyan</option>
+                                                    <option value="fixed">Fixed</option>
                                                     <option value="dynamic">Dynamic</option>
                                                 </select>
                                             </div>
@@ -172,8 +182,9 @@
                                         <label for="chanuka-box">Chanuka</label>
                                         <div class="form-row" id="chanuka-box">
                                             <div class="col">
-                                                <select class="custom-select" name="friday-time-type" id="chanuka-time-type" onchange="update('chanuka')" required>
-                                                    <option value="fixed" selected>Fixed</option>
+                                                <select class="custom-select" name="chanuka-time-type" id="chanuka-time-type" onchange="update('chanuka')" required>
+                                                    <option value="nm" selected>No Minyan</option>
+                                                    <option value="fixed">Fixed</option>
                                                     <option value="dynamic">Dynamic</option>
                                                 </select>
                                             </div>
@@ -184,8 +195,9 @@
                                         <label for="rcc-box">Rosh Chodesh Chanuka</label>
                                         <div class="form-row" id="rcc-box">
                                             <div class="col">
-                                                <select class="custom-select" name="friday-time-type" id="rcc-time-type" onchange="update('rcc')" required>
-                                                    <option value="fixed" selected>Fixed</option>
+                                                <select class="custom-select" name="rcc-time-type" id="rcc-time-type" onchange="update('rcc')" required>
+                                                    <option value="nm" selected>No Minyan</option>
+                                                    <option value="fixed">Fixed</option>
                                                     <option value="dynamic">Dynamic</option>
                                                 </select>
                                             </div>
@@ -194,11 +206,11 @@
                                     </div>
                                     <div class="form-group">
                                         <label for="type">Nusach</label>
-                                        <select class="custom-select" name="nusach" id="nusach" required>
-                                            <option selected>None specified</option>
-                                            <option value="sha">Edot HaMizrach</option>
-                                            <option value="min">Sefard</option>
-                                            <option value="arv">Ashkenaz</option>
+                                        <select class="custom-select" name="nusach" id="nusach">
+                                            <option value="" selected>None specified</option>
+                                            <option value="edothamizrach">Edot HaMizrach</option>
+                                            <option value="sefard">Sefard</option>
+                                            <option value="ashkenaz">Ashkenaz</option>
                                         </select>
                                     </div>
                                     <div class="form-group">
@@ -206,8 +218,8 @@
                                         <input type="text" class="form-control" name="notes" id="notes" aria-describedby="notes-help">
                                     </div>
                                     <div class="custom-control custom-switch" style="z-index: auto;">
-                                        <input type="checkbox" class="custom-control-input" id="enabled-switch">
-                                        <label class="custom-control-label" for="enabled-switch">Display this minyan immediately</label>
+                                        <input type="checkbox" class="custom-control-input" name="enabled" id="enabled" checked>
+                                        <label class="custom-control-label" for="enabled">Display this minyan immediately</label>
                                     </div>
                                     <div class="login-msg-box" th:if="${inputerrormessage}">
                                         <div class="form-msg-fatal" th:text="${inputerrormessage}"></div>
