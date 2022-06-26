@@ -88,8 +88,8 @@
                                                     <td th:text="${minyan.getSchedule().getFriday().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getShabbat().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getRoshChodesh().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getChanukah().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getRoshChodeshChanukah().displayTime()}" />
+                                                    <td th:text="${minyan.getSchedule().getChanuka().displayTime()}" />
+                                                    <td th:text="${minyan.getSchedule().getRoshChodeshChanuka().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getYomTov().displayTime()}" />
                                                     <td th:text="${minyan.getNusach()}" />
                                                     <td th:text="${minyan.getNotes()}" />
@@ -101,7 +101,7 @@
                                             <div class="container">
                                                 <h3>You don't have any shacharit minyanim saved.</h3>
                                                 <hr>
-                                                <button type="button" class="btn btn-primary">Add a Minyan</button>
+                                                <a th:href="@{|/admin/${organization.id}/minyanim/new?st=sh|}" role="button" class="btn btn-primary">Add a Minyan</a>
                                             </div>
                                         </div>
                                     </div>
@@ -193,7 +193,7 @@
                                             <div class="container">
                                                 <h3>You don't have any mincha minyanim saved.</h3>
                                                 <hr>
-                                                <button type="button" class="btn btn-primary">Add a Minyan</button>
+                                                <a th:href="@{|/admin/${organization.id}/minyanim/new?st=mi|}" role="button" class="btn btn-primary">Add a Minyan</a>
                                             </div>
                                         </div>
                                     </div>
@@ -233,8 +233,8 @@
                                                     <td th:text="${minyan.getSchedule().getFriday().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getShabbat().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getRoshChodesh().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getChanukah().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getRoshChodeshChanukah().displayTime()}" />
+                                                    <td th:text="${minyan.getSchedule().getChanuka().displayTime()}" />
+                                                    <td th:text="${minyan.getSchedule().getRoshChodeshChanuka().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getYomTov().displayTime()}" />
                                                     <td th:text="${minyan.getNusach()}" />
                                                     <td th:text="${minyan.getNotes()}" />
@@ -246,7 +246,7 @@
                                             <div class="container">
                                                 <h3>You don't have any arvit minyanim saved.</h3>
                                                 <hr>
-                                                <button type="button" class="btn btn-primary">Add a Minyan</button>
+                                                <a th:href="@{|/admin/${organization.id}/minyanim/new?st=ar|}" role="button" class="btn btn-primary">Add a Minyan</a>
                                             </div>
                                         </div>
                                     </div>
@@ -286,8 +286,8 @@
                                                     <td th:text="${minyan.getSchedule().getFriday().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getShabbat().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getRoshChodesh().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getChanukah().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getRoshChodeshChanukah().displayTime()}" />
+                                                    <td th:text="${minyan.getSchedule().getChanuka().displayTime()}" />
+                                                    <td th:text="${minyan.getSchedule().getRoshChodeshChanuka().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getYomTov().displayTime()}" />
                                                     <td th:text="${minyan.getNusach()}" />
                                                     <td th:text="${minyan.getNotes()}" />
@@ -299,7 +299,7 @@
                                             <div class="container">
                                                 <h3>You don't have any selichot minyanim saved.</h3>
                                                 <hr>
-                                                <button type="button" class="btn btn-primary">Add a Minyan</button>
+                                                <a th:href="@{|/admin/${organization.id}/minyanim/new?st=se|}" role="button" class="btn btn-primary">Add a Minyan</a>
                                             </div>
                                         </div>
                                     </div>
@@ -348,8 +348,8 @@
                                                     <td th:text="${minyan.getSchedule().getFriday().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getShabbat().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getRoshChodesh().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getChanukah().displayTime()}" />
-                                                    <td th:text="${minyan.getSchedule().getRoshChodeshChanukah().displayTime()}" />
+                                                    <td th:text="${minyan.getSchedule().getChanuka().displayTime()}" />
+                                                    <td th:text="${minyan.getSchedule().getRoshChodeshChanuka().displayTime()}" />
                                                     <td th:text="${minyan.getSchedule().getYomTov().displayTime()}" />
                                                     <td th:text="${minyan.getNusach()}" />
                                                     <td th:text="${minyan.getNotes()}" />
@@ -361,7 +361,7 @@
                                             <div class="container">
                                                 <h3>You don't have any megila readings saved.</h3>
                                                 <hr>
-                                                <button type="button" class="btn btn-primary">Add a Reading</button>
+                                                <a th:href="@{|/admin/${organization.id}/minyanim/new?st=mr|}" role="button" class="btn btn-primary">Add a Reading</a>
                                             </div>
                                         </div>
                                     </div>
