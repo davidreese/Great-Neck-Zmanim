@@ -150,6 +150,33 @@ public class Minyan extends GNZObject implements IDGenerator {
         this.nusach = nusach;
     }
 
+    public Minyan(Organization organization, MinyanType type, Location location, Schedule schedule, String notes, String nusach, boolean enabled) {
+        super.id = generateID('M');
+        this.minyanTypeString = type.toString();
+        this.minyanType = type;
+        if (location != null) {
+            this.locationId = location.getId();
+            this.location = location;
+        }
+        this.organizationId = organization.getId();
+        this.organization = organization;
+        this.startTime1 = schedule.getSunday().toString();
+        this.startTime2 = schedule.getMonday().toString();
+        this.startTime3 = schedule.getTuesday().toString();
+        this.startTime4 = schedule.getWednesday().toString();
+        this.startTime5 = schedule.getThursday().toString();
+        this.startTime6 = schedule.getFriday().toString();
+        this.startTime7 = schedule.getShabbat().toString();
+        this.startTimeYT = schedule.getYomTov().toString();
+        this.startTimeRC = schedule.getRoshChodesh().toString();
+        this.startTimeCH = schedule.getChanuka().toString();
+        this.startTimeCHRC = schedule.getRoshChodeshChanuka().toString();
+        this.schedule = schedule;
+        this.enabled = enabled;
+        this.notes = notes;
+        this.nusach = nusach;
+    }
+
     public String getMinyanTypeString() {
         return minyanTypeString;
     }

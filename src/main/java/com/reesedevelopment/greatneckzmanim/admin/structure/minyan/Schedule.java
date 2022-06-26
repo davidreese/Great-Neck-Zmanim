@@ -15,7 +15,7 @@ public class Schedule {
     private MinyanTime roshChodeshChanuka;
     private MinyanTime yomTov;
 
-    public Schedule(String sunday, String monday, String tuesday, String wednesday, String thursday, String friday, String shabbat, String roshChodesh, String chanuka, String roshChodeshChanukah, String yomTov) {
+    public Schedule(String sunday, String monday, String tuesday, String wednesday, String thursday, String friday, String shabbat, String roshChodesh, String chanuka, String roshChodeshChanuka, String yomTov) {
         this.sunday = new MinyanTime(sunday);
         this.monday = new MinyanTime(monday);
         this.tuesday = new MinyanTime(tuesday);
@@ -25,11 +25,11 @@ public class Schedule {
         this.shabbat = new MinyanTime(shabbat);
         this.roshChodesh = new MinyanTime(roshChodesh);
         this.chanuka = new MinyanTime(chanuka);
-        this.roshChodeshChanuka = new MinyanTime(roshChodeshChanukah);
+        this.roshChodeshChanuka = new MinyanTime(roshChodeshChanuka);
         this.yomTov = new MinyanTime(yomTov);
     }
 
-    public Schedule(MinyanTime sunday, MinyanTime monday, MinyanTime tuesday, MinyanTime wednesday, MinyanTime thursday, MinyanTime friday, MinyanTime shabbat, MinyanTime roshChodesh, MinyanTime chanuka, MinyanTime roshChodeshChanukah, MinyanTime yomTov) {
+    public Schedule(MinyanTime sunday, MinyanTime monday, MinyanTime tuesday, MinyanTime wednesday, MinyanTime thursday, MinyanTime friday, MinyanTime shabbat, MinyanTime roshChodesh, MinyanTime chanuka, MinyanTime roshChodeshChanuka, MinyanTime yomTov) {
         this.sunday = sunday;
         this.monday = monday;
         this.tuesday = tuesday;
@@ -39,7 +39,7 @@ public class Schedule {
         this.shabbat = shabbat;
         this.roshChodesh = roshChodesh;
         this.chanuka = chanuka;
-        this.roshChodeshChanuka = roshChodeshChanukah;
+        this.roshChodeshChanuka = roshChodeshChanuka;
         this.yomTov = yomTov;
     }
 

@@ -1,17 +1,18 @@
 package com.reesedevelopment.greatneckzmanim.global;
 
-public enum Zmanim {
+public enum Zman {
     ALOT_HASHACHAR("ALOTHASHACHAR"),
-    SUNRISE("SUNRISE"),
+    NETZ("NETZ"),
     CHATZOT("CHATZOT"),
     MINCHA_GEDOLA("MINCHAGEDOLA"),
     MINCHA_KETANA("MINCHAKETANA"),
-    SUNSET("SUNSET"),
-    TZAIT("TZAIT");
+    PLAG_HAMINCHA("PLAGHAMINCHA"),
+    SHEKIYA("SHEKIYA"),
+    TZET("TZET");
 
     private String text;
 
-    Zmanim(String s) {
+    Zman(String s) {
         this.text = s;
     }
 
@@ -19,9 +20,9 @@ public enum Zmanim {
         return this.text;
     }
 
-    public static Zmanim fromString(String text) {
+    public static Zman fromString(String text) {
         if (text != null) {
-        for (Zmanim b : Zmanim.values()) {
+        for (Zman b : Zman.values()) {
             if (b.text.equalsIgnoreCase(text)) {
                 return b;
             }
@@ -35,7 +36,7 @@ public enum Zmanim {
         switch (this) {
             case ALOT_HASHACHAR:
                 return "Alot Hashachar";
-            case SUNRISE:
+            case NETZ:
                 return "Sunrise";
             case CHATZOT:
                 return "Chatzot";
@@ -43,10 +44,12 @@ public enum Zmanim {
                 return "Mincha Gedola";
             case MINCHA_KETANA:
                 return "Mincha Ketana";
-            case SUNSET:
-                return "Sunset";
-            case TZAIT:
-                return "Tzait";
+            case PLAG_HAMINCHA:
+                return "Plag Hamincha";
+            case SHEKIYA:
+                return "Shekiya";
+            case TZET:
+                return "Tzet";
             default:
                 return null;
         }
