@@ -828,8 +828,8 @@ public class AdminController {
     }
 
 //    enable and disable pages
-    @RequestMapping(value = "/admin/enableminyan")
-    public ModelAndView enableMinyan(@RequestParam(value = "id", required = true) String id, @RequestParam(value = "rd", required = false) String rd) {
+    @RequestMapping(value = "/admin/minyanim/{id}/enable")
+    public ModelAndView enableMinyan(@PathVariable String id, @RequestParam(value = "rd", required = false) String rd) {
         Minyan minyan = minyanDAO.findById(id);
         if (minyan == null) {
             throw new IllegalArgumentException("Invalid minyan ID.");
@@ -852,8 +852,8 @@ public class AdminController {
         return mv;
     }
 
-    @RequestMapping(value = "/admin/disableminyan")
-    public ModelAndView disableMinyan(@RequestParam(value = "id", required = true) String id, @RequestParam(value = "rd", required = false) String rd) {
+    @RequestMapping(value = "/admin/minyanim/{id}/disable")
+    public ModelAndView disableMinyan(@PathVariable String id, @RequestParam(value = "rd", required = false) String rd) {
         Minyan minyan = minyanDAO.findById(id);
         if (minyan == null) {
             throw new IllegalArgumentException("Invalid minyan ID.");
