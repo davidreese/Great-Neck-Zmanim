@@ -949,7 +949,7 @@ public class AdminController {
                                      @RequestParam(value = "rcc-zman-offset", required = false) Integer rccZmanOffset,
                                      @RequestParam(value = "nusach", required = false) String nusachString,
                                      @RequestParam(value = "notes", required = false) String notes,
-                                     @RequestParam(value = "enabled", required = true) String enabledString) throws Exception {
+                                     @RequestParam(value = "enabled", required = false) String enabledString) throws Exception {
 
         //        print data
         System.out.println();
@@ -1025,28 +1025,26 @@ public class AdminController {
         Schedule schedule = new Schedule(sundayTime, mondayTime, tuesdayTime, wednesdayTime, thursdayTime, fridayTime, shabbatTime, ytTime, rcTime, chanukaTime, rccTime);
 
         boolean enabled;
-        switch (enabledString) {
-            case "on":
-                enabled = true;
-                break;
-            case "off":
-                enabled = false;
-                break;
-                default:
-                    enabled = false;
-                    break;
-
+        if (enabledString != null && !enabledString.isEmpty()) {
+            enabled = Boolean.parseBoolean(enabledString);
+        } else {
+            enabled = false;
         }
         System.out.println("Enabled: " + enabled);
 
         Minyan minyan = new Minyan(organization, minyanType, location, schedule, notes, nusach, enabled);
 
+        ModelAndView nm = newMinyan(orgId);
         try {
             minyanDAO.save(minyan);
+
+            nm.addObject("successmessage", "Minyan created successfully. Click <a href='/admin/minyanim/'>here</a> to return to the minyan schedule.");
+            return nm;
         } catch (Exception e) {
             e.printStackTrace();
-        }
 
-        return newMinyan(orgId);
+            nm.addObject("errormessage", "Sorry, there was an error saving the minyan.");
+            return nm;
+        }
     }
 }
