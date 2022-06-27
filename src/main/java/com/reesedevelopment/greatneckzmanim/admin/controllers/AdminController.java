@@ -955,7 +955,9 @@ public class AdminController {
         System.out.println();
         System.out.println("Creating minyan...");
 
-//        verify rganization
+        ModelAndView nm = newMinyan(orgId);
+
+//        verify organization
         Organization organization = organizationDAO.findById(orgId);
         if (organization == null) {
             throw new Exception("Organization not found.");
@@ -969,11 +971,8 @@ public class AdminController {
 //        verify minyan type
         MinyanType minyanType = MinyanType.fromString(type);
         if (minyanType == null) {
-            try {
-                throw new Exception("Invalid minyan type.");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            nm.addObject("errormessage", "Sorry, there was an error creating the minyan. Please try again. (M01)");
+            return nm;
         }
 
         System.out.println("Minyan type: " + minyanType);
@@ -1017,7 +1016,8 @@ public class AdminController {
             nusach = Nusach.fromString(nusachString);
             System.out.println("Nusach: " + nusach);
         } else {
-            throw new Exception("Nusach is required.");
+            nm.addObject("errormessage", "Sorry, there was an error creating the minyan. Please try again. (M02)");
+            return nm;
         }
 
         System.out.println("Notes: " + notes);
@@ -1034,7 +1034,6 @@ public class AdminController {
 
         Minyan minyan = new Minyan(organization, minyanType, location, schedule, notes, nusach, enabled);
 
-        ModelAndView nm = newMinyan(orgId);
         try {
             minyanDAO.save(minyan);
 
@@ -1043,7 +1042,7 @@ public class AdminController {
         } catch (Exception e) {
             e.printStackTrace();
 
-            nm.addObject("errormessage", "Sorry, there was an error saving the minyan.");
+            nm.addObject("errormessage", "Sorry, there was an error saving the minyan. (M03)");
             return nm;
         }
     }
