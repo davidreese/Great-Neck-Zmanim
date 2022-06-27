@@ -949,13 +949,15 @@ public class AdminController {
                                      @RequestParam(value = "rcc-zman-offset", required = false) Integer rccZmanOffset,
                                      @RequestParam(value = "nusach", required = false) String nusachString,
                                      @RequestParam(value = "notes", required = false) String notes,
-                                     @RequestParam(value = "enabled", required = true) String enabledString) throws Exception {
+                                     @RequestParam(value = "enabled", required = false) String enabledString) throws Exception {
 
         //        print data
         System.out.println();
         System.out.println("Creating minyan...");
 
-//        verify rganization
+        ModelAndView nm = newMinyan(orgId);
+
+//        verify organization
         Organization organization = organizationDAO.findById(orgId);
         if (organization == null) {
             throw new Exception("Organization not found.");
@@ -969,11 +971,8 @@ public class AdminController {
 //        verify minyan type
         MinyanType minyanType = MinyanType.fromString(type);
         if (minyanType == null) {
-            try {
-                throw new Exception("Invalid minyan type.");
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
+            nm.addObject("errormessage", "Sorry, there was an error creating the minyan. Please try again. (M01)");
+            return nm;
         }
 
         System.out.println("Minyan type: " + minyanType);
@@ -1017,7 +1016,8 @@ public class AdminController {
             nusach = Nusach.fromString(nusachString);
             System.out.println("Nusach: " + nusach);
         } else {
-            throw new Exception("Nusach is required.");
+            nm.addObject("errormessage", "Sorry, there was an error creating the minyan. Please try again. (M02)");
+            return nm;
         }
 
         System.out.println("Notes: " + notes);
@@ -1025,17 +1025,10 @@ public class AdminController {
         Schedule schedule = new Schedule(sundayTime, mondayTime, tuesdayTime, wednesdayTime, thursdayTime, fridayTime, shabbatTime, ytTime, rcTime, chanukaTime, rccTime);
 
         boolean enabled;
-        switch (enabledString) {
-            case "on":
-                enabled = true;
-                break;
-            case "off":
-                enabled = false;
-                break;
-                default:
-                    enabled = false;
-                    break;
-
+        if (enabledString != null && !enabledString.isEmpty()) {
+            enabled = Boolean.parseBoolean(enabledString);
+        } else {
+            enabled = false;
         }
         System.out.println("Enabled: " + enabled);
 
@@ -1043,10 +1036,14 @@ public class AdminController {
 
         try {
             minyanDAO.save(minyan);
+
+            nm.addObject("successmessage", "Minyan created successfully. Click <a href='/admin/minyanim/'>here</a> to return to the minyan schedule.");
+            return nm;
         } catch (Exception e) {
             e.printStackTrace();
-        }
 
-        return newMinyan(orgId);
+            nm.addObject("errormessage", "Sorry, there was an error saving the minyan. (M03)");
+            return nm;
+        }
     }
 }

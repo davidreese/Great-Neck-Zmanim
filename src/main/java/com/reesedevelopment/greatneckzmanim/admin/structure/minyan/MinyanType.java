@@ -33,6 +33,23 @@ public enum MinyanType {
     public String toString() {
         switch (this) {
             case SHACHARIT:
+                return "SHACHARIT";
+            case MINCHA:
+                return "MINCHA";
+            case ARVIT:
+                return "ARVIT";
+            case SELICHOT:
+                return "SELICHOT";
+            case MEGILA_READING:
+                return "MEGILAREADING";
+            default:
+                return null;
+        }
+    }
+
+    public String displayName() {
+        switch (this) {
+            case SHACHARIT:
                 return "Shacharit";
             case MINCHA:
                 return "Mincha";
