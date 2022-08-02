@@ -22,7 +22,7 @@ public class MinyanTime {
             }
             time = new Time(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
         } else if (rawTime.startsWith("R")) {
-            String[] parts = rawTime.substring(2).split(":");
+            String[] parts = rawTime.substring(1).split(":");
 //          TODO: VERIFY THIS WORKS WITH NEGATIVE OFFSETS
 //          TODO: FIX valueOf
             if (parts.length == 2) {
@@ -49,29 +49,53 @@ public class MinyanTime {
         this.time = null;
     }
 
-    public static MinyanTime fromFormData(String timeTypeString, String fixedTimeString, String zmanString, Integer zmanOffset) {
-        enum TimeType {
-            NONE,
-            FIXED,
-            DYNAMIC;
+//    computed property
+    public TimeType type() {
+        if (time != null) {
+            return TimeType.FIXED;
+        } else if (rule != null) {
+            return TimeType.DYNAMIC;
+        } else {
+            return TimeType.NONE;
+        }
+    }
 
-            public static TimeType fromString(String s) {
-                if (s == null) {
+//    functions used for HTML/thymeleaf
+    public boolean isFixed() {
+        return type() == TimeType.FIXED;
+    }
+
+    public boolean isDynamic() {
+        return type() == TimeType.DYNAMIC;
+    }
+
+    public boolean isNone() {
+        return type() == TimeType.NONE;
+    }
+
+    enum TimeType {
+        NONE,
+        FIXED,
+        DYNAMIC;
+
+        public static TimeType fromString(String s) {
+            if (s == null) {
+                return null;
+            }
+            switch (s.toLowerCase()) {
+                case "fixed":
+                    return FIXED;
+                case "dynamic":
+                    return DYNAMIC;
+                case "nm":
+                    return NONE;
+                default:
                     return null;
-                }
-                switch (s.toLowerCase()) {
-                    case "fixed":
-                        return FIXED;
-                    case "dynamic":
-                        return DYNAMIC;
-                    case "nm":
-                        return NONE;
-                    default:
-                        return null;
-                }
             }
         }
+    }
 
+    public static MinyanTime fromFormData(String timeTypeString, String fixedTimeString, String zmanString, Integer zmanOffset) {
         TimeType timeType = TimeType.fromString(timeTypeString);
 
         switch (timeType) {
@@ -103,19 +127,16 @@ public class MinyanTime {
         }
     }
 
-    public boolean isDynamic() {
-        return rule != null && time == null;
-    }
-
     @Override
     public String toString() {
+        TimeType t = type();
         if (time != null && rule != null) {
             return "INVALID";
-        } else if (time != null) {
+        } else if (t == TimeType.FIXED) {
             return String.format("T%d:%d:%d:%d", time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
-        } else if (rule != null) {
+        } else if (t == TimeType.DYNAMIC) {
             return String.format("R%s:%d", rule.getZman(), rule.getOffsetMinutes());
-        } else if (time == null && rule == null) {
+        } else if (t == TimeType.NONE) {
             return "NM";
         } else {
             return "INVALID";
@@ -123,11 +144,12 @@ public class MinyanTime {
     }
 
     public String displayTime() {
-        if (time == null && rule == null) {
+        TimeType t = type();
+        if (t == TimeType.NONE) {
             return "";
         } else if (time != null && rule != null) {
             return "INVALID";
-        } else if (time != null && rule == null) {
+        } else if (t == TimeType.FIXED) {
             String timeString = time.toString();
             String[] parts = timeString.split(":");
 
@@ -162,7 +184,7 @@ public class MinyanTime {
 //            int indexOfDot = timeString.indexOf(".");
 //            return timeString.substring(0, indexOfDot);
 //            return String.format("%s:%s:%s", time.getHours(), time.getMinutes(), time.getSeconds());
-        } else if (isDynamic()) {
+        } else if (t == TimeType.DYNAMIC) {
 //            return "Dynamic";
             if (rule.getOffsetMinutes() < 0) {
                 return String.format("%s minus %d minutes", rule.getZman().displayString(), Math.abs(rule.getOffsetMinutes()));
@@ -176,5 +198,23 @@ public class MinyanTime {
         } else {
             return "INVALID";
         }
+    }
+
+    public String getFixedTimeShort() {
+        if (type() == TimeType.FIXED) {
+//            get 24 hour time
+            int hours = time.getHours();
+            int minutes = time.getMinutes();
+            String hoursString = hours < 10 ? "0" + String.valueOf(hours) : String.valueOf(hours);
+            String minutesString = minutes < 10 ? "0" + String.valueOf(minutes) : String.valueOf(minutes);
+
+            return hoursString + ":" + minutesString;
+        } else {
+            return null;
+        }
+    }
+
+    public TimeRule getRule() {
+        return rule;
     }
 }

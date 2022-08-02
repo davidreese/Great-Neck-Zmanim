@@ -63,4 +63,24 @@ public enum MinyanType {
                 return null;
         }
     }
+
+    public boolean isShacharit() {
+        return this == SHACHARIT;
+    }
+
+    public boolean isMincha() {
+        return this == MINCHA;
+    }
+
+    public boolean isArvit() {
+        return this == ARVIT;
+    }
+
+    public boolean isSelichot() {
+        return this == SELICHOT;
+    }
+
+    public boolean isMegilaReading() {
+        return this == MEGILA_READING;
+    }
 }

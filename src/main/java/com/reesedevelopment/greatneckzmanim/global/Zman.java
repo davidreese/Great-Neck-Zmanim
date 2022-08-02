@@ -35,7 +35,7 @@ public enum Zman {
     public String displayString() {
         switch (this) {
             case ALOT_HASHACHAR:
-                return "Alot Hashachar";
+                return "Alot HaShachar";
             case NETZ:
                 return "Sunrise";
             case CHATZOT:
@@ -45,7 +45,7 @@ public enum Zman {
             case MINCHA_KETANA:
                 return "Mincha Ketana";
             case PLAG_HAMINCHA:
-                return "Plag Hamincha";
+                return "Plag HaMincha";
             case SHEKIYA:
                 return "Shekiya";
             case TZET:

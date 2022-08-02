@@ -235,13 +235,13 @@
                                 <div class="card-body">
                                     <h4 class="card-title">Minyanim</h4>
                                     <p class="card-text" th:text="${'View and manage all minyanim for ' + organization.name + '.'}"></p>
-                                    <a th:href="@{/admin/minyanim(oid=${organization.id})}" class="btn btn-primary">Go</a>
+                                    <a th:href="@{|/admin/${organization.id}/minyanim|}" class="btn btn-primary">Go</a>
                                 </div>
                             </div>
                             <div class="card card-inverse bg-inverse mt-3">
                                 <div class="card-body">
                                     <h4 class="card-title">Need help?</h4>
-                                    <p class="card-text">Click <a href="#" data-toggle="modal" data-target="#dynamic-time-help-modal">here</a> for an explanation of how to use the time settings.</p>
+                                    <p class="card-text">Click <a href="#" data-toggle="modal" data-target="#dynamic-time-help-modal">here</a> for an explanation of how to use the minyan time settings.</p>
                                 </div>
                             </div>
                         </div>

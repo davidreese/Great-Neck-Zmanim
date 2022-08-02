@@ -741,8 +741,8 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/admin/minyanim")
-    public ModelAndView minyanim(@RequestParam(value = "oid", required = false) String organizationId) {
+    @RequestMapping(value = "/admin/{organizationId}/minyanim")
+    public ModelAndView minyanim(@PathVariable String organizationId) {
         ModelAndView mv = new ModelAndView("/admin/minyan-schedule");
 
         String oidToUse;
@@ -847,7 +847,7 @@ public class AdminController {
         if (rd != null) {
             mv.setViewName("redirect:" + rd);
         } else {
-            mv.setViewName("redirect:/admin/minyanim");
+            mv.setViewName("redirect:/admin/" + minyan.getOrganizationId() + "/minyanim");
         }
         return mv;
     }
@@ -871,7 +871,7 @@ public class AdminController {
         if (rd != null) {
             mv.setViewName("redirect:" + rd);
         } else {
-            mv.setViewName("redirect:/admin/minyanim");
+            mv.setViewName("redirect:/admin/" + minyan.getOrganizationId() + "/minyanim");
         }
         return mv;
     }
@@ -889,7 +889,7 @@ public class AdminController {
         }
 
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/new-minyan");
+        mv.setViewName("admin/minyanim/new");
 
 //        add locations to mv
         mv.addObject("locations", locationDAO.findMatching(orgId));
@@ -1045,5 +1045,24 @@ public class AdminController {
             nm.addObject("errormessage", "Sorry, there was an error saving the minyan. (M03)");
             return nm;
         }
+    }
+
+    @RequestMapping(value = "/admin/minyanim/{id}/edit", method = RequestMethod.GET)
+    public ModelAndView editMinyan(@PathVariable("id") String id) throws Exception {
+        ModelAndView mv = new ModelAndView("admin/minyanim/edit");
+        Minyan minyan = minyanDAO.findById(id);
+//        authenticate user has permission to edit minyan
+        Organization minyanOrganization = organizationDAO.findById(minyan.getOrganizationId());
+        if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(minyanOrganization.getId())) {
+            throw new AccessDeniedException("You do not have permission to edit this minyan.");
+        }
+
+        mv.addObject("minyan", minyan);
+        mv.addObject("organization", minyanOrganization);
+        mv.addObject("locations", locationDAO.findMatching(minyanOrganization.getId()));
+
+        addStandardPageData(mv);
+
+        return mv;
     }
 }

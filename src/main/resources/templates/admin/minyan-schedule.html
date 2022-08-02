@@ -86,12 +86,12 @@
                                                     </td>
                                                     <td>
                                                         <div th:if="${minyan.isEnabled()}">
-                                                            <a role="button" class="btn btn-danger btn-sm" th:href="@{|/admin/minyanim/${minyan.id}/disable|(rd=@{/admin/minyanim(oid=${organization.id},st=sh)})}">
+                                                            <a role="button" class="btn btn-danger btn-sm" th:href="@{|/admin/minyanim/${minyan.id}/disable|(rd=@{|/admin/${organization.id}/minyanim|(st=sh)})}">
                                                                 Disable
                                                             </a>
                                                         </div>
                                                         <div th:if="${!minyan.isEnabled()}">
-                                                            <a role="button" class="btn btn-success btn-sm" th:href="@{|/admin/minyanim/${minyan.id}/enable|(rd=@{/admin/minyanim(oid=${organization.id},st=sh)})}">
+                                                            <a role="button" class="btn btn-success btn-sm" th:href="@{|/admin/minyanim/${minyan.id}/enable|(rd=@{|/admin/${organization.id}/minyanim|(st=sh)})}">
                                                                 Enable
                                                             </a>
                                                         </div>
@@ -416,13 +416,13 @@
                                     <a th:href="${'/admin/' + organization.id + '/minyanim/new'}" class="btn btn-primary">New Minyan</a>
                                 </div>
                             </div>
-                            <div class="card card-inverse bg-inverse mt-3">
-                                <div class="card-body">
-                                    <h4 class="card-title">Add an Exception</h4>
-                                    <p class="card-text">Temporary change in the schedule? Click here to temporarily disable or alter minyanim to accommodate for chagim and other circumstances.</p>
-                                    <a href="/admin/new-organization" class="btn btn-primary">New Exception</a>
-                                </div>
-                            </div>
+<!--                            <div class="card card-inverse bg-inverse mt-3">-->
+<!--                                <div class="card-body">-->
+<!--                                    <h4 class="card-title">Add a One-Time Minyan</h4>-->
+<!--                                    <p class="card-text">Temporary change in the schedule? Click here to temporarily disable or alter minyanim to accommodate for chagim and other circumstances.</p>-->
+<!--                                    <a href="/admin/new-organization" class="btn btn-primary">New Exception</a>-->
+<!--                                </div>-->
+<!--                            </div>-->
                         </div>
                     </div>
                     <!--/row-->
