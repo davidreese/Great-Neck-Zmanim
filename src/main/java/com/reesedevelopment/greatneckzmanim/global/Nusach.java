@@ -1,7 +1,7 @@
 package com.reesedevelopment.greatneckzmanim.global;
 
 public enum Nusach {
-    EDOT_HAMIZRACH("EDOTHAMIZRACH"),
+    EDOT_HAMIZRACH("EDOT_HAMIZRACH"),
     SEFARD("SEFARD"),
     ASHKENAZ("ASHKENAZ"),
     UNSPECIFIED("UNSPECIFIED");
@@ -41,5 +41,21 @@ public enum Nusach {
             default:
                 return null;
         }
+    }
+
+    public boolean isUnspecified() {
+        return this == UNSPECIFIED;
+    }
+
+    public boolean isEdotHamizrach() {
+        return this == EDOT_HAMIZRACH;
+    }
+
+    public boolean isSefard() {
+        return this == SEFARD;
+    }
+
+    public boolean isAshkenaz() {
+        return this == ASHKENAZ;
     }
 }

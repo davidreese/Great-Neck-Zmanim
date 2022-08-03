@@ -28,9 +28,9 @@ function update(name) {
                                                                             <option disabled selected>Choose a zman</option>
                                                                             <option value="netz">Netz</option>
                                                                             <option value="chatzot">Chatzot</option>
-                                                                            <option value="minchagedola">Mincha Gedola</option>
-                                                                            <option value="minchaketana">Mincha Ketana</option>
-                                                                            <option value="plaghamincha">Plag HaMincha</option>
+                                                                            <option value="mincha_gedola">Mincha Gedola</option>
+                                                                            <option value="mincha_ketana">Mincha Ketana</option>
+                                                                            <option value="plag_hamincha">Plag HaMincha</option>
                                                                             <option value="shekiya">Shekiya</option>
                                                                             <option value="tzet">Tzet Hakochavim</option>
                                                                         </select>

@@ -952,7 +952,6 @@ public class AdminController {
                                      @RequestParam(value = "enabled", required = false) String enabledString) throws Exception {
 
         //        print data
-        System.out.println();
         System.out.println("Creating minyan...");
 
         ModelAndView nm = newMinyan(orgId);
@@ -1037,7 +1036,7 @@ public class AdminController {
         try {
             minyanDAO.save(minyan);
 
-            nm.addObject("successmessage", "Minyan created successfully. Click <a href='/admin/minyanim/'>here</a> to return to the minyan schedule.");
+            nm.addObject("successmessage", "You successfully created a minyan. Click <a href='/admin/minyanim/'>here</a> to return to the minyan schedule.");
             return nm;
         } catch (Exception e) {
             e.printStackTrace();
@@ -1047,9 +1046,9 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/admin/minyanim/{id}/edit", method = RequestMethod.GET)
-    public ModelAndView editMinyan(@PathVariable("id") String id) throws Exception {
-        ModelAndView mv = new ModelAndView("admin/minyanim/edit");
+    @RequestMapping(value = "/admin/minyanim/{id}/view", method = RequestMethod.GET)
+    public ModelAndView viewMinyan(@PathVariable("id") String id) throws Exception {
+        ModelAndView mv = new ModelAndView("admin/minyanim/update");
         Minyan minyan = minyanDAO.findById(id);
 //        authenticate user has permission to edit minyan
         Organization minyanOrganization = organizationDAO.findById(minyan.getOrganizationId());
@@ -1064,5 +1063,155 @@ public class AdminController {
         addStandardPageData(mv);
 
         return mv;
+    }
+
+    @RequestMapping(value = "/admin/{organizationId}/minyanim/{minyanId}/update", method = RequestMethod.POST)
+    public ModelAndView updateMinyan(@PathVariable("organizationId") String organizationId,
+                                     @PathVariable("minyanId") String minyanId,
+                                     @RequestParam(value = "type", required = false) String type,
+                                     @RequestParam(value = "location", required = false) String locationId,
+                                     @RequestParam(value = "sunday-time-type", required = true) String sundayTimeType,
+                                     @RequestParam(value = "sunday-fixed-time", required = false) String sundayTimeString,
+                                     @RequestParam(value = "sunday-zman", required = false) String sundayZman,
+                                     @RequestParam(value = "sunday-zman-offset", required = false) Integer sundayZmanOffset,
+                                     @RequestParam(value = "monday-time-type", required = true) String mondayTimeType,
+                                     @RequestParam(value = "monday-fixed-time", required = false) String mondayTimeString,
+                                     @RequestParam(value = "monday-zman", required = false) String mondayZman,
+                                     @RequestParam(value = "monday-zman-offset", required = false) Integer mondayZmanOffset,
+                                     @RequestParam(value = "tuesday-time-type", required = true) String tuesdayTimeType,
+                                     @RequestParam(value = "tuesday-fixed-time", required = false) String tuesdayTimeString,
+                                     @RequestParam(value = "tuesday-zman", required = false) String tuesdayZman,
+                                     @RequestParam(value = "tuesday-zman-offset", required = false) Integer tuesdayZmanOffset,
+                                     @RequestParam(value = "wednesday-time-type", required = true) String wednesdayTimeType,
+                                     @RequestParam(value = "wednesday-fixed-time", required = false) String wednesdayTimeString,
+                                     @RequestParam(value = "wednesday-zman", required = false) String wednesdayZman,
+                                     @RequestParam(value = "wednesday-zman-offset", required = false) Integer wednesdayZmanOffset,
+                                     @RequestParam(value = "thursday-time-type", required = true) String thursdayTimeType,
+                                     @RequestParam(value = "thursday-fixed-time", required = false) String thursdayTimeString,
+                                     @RequestParam(value = "thursday-zman", required = false) String thursdayZman,
+                                     @RequestParam(value = "thursday-zman-offset", required = false) Integer thursdayZmanOffset,
+                                     @RequestParam(value = "friday-time-type", required = true) String fridayTimeType,
+                                     @RequestParam(value = "friday-fixed-time", required = false) String fridayTimeString,
+                                     @RequestParam(value = "friday-zman", required = false) String fridayZman,
+                                     @RequestParam(value = "friday-zman-offset", required = false) Integer fridayZmanOffset,
+                                     @RequestParam(value = "shabbat-time-type", required = true) String shabbatTimeType,
+                                     @RequestParam(value = "shabbat-fixed-time", required = false) String shabbatTimeString,
+                                     @RequestParam(value = "shabbat-zman", required = false) String shabbatZman,
+                                     @RequestParam(value = "shabbat-zman-offset", required = false) Integer shabbatZmanOffset,
+                                     @RequestParam(value = "yt-time-type", required = true) String ytTimeType,
+                                     @RequestParam(value = "yt-fixed-time", required = false) String ytTimeString,
+                                     @RequestParam(value = "yt-zman", required = false) String ytZman,
+                                     @RequestParam(value = "yt-zman-offset", required = false) Integer ytZmanOffset,
+                                     @RequestParam(value = "rc-time-type", required = true) String rcTimeType,
+                                     @RequestParam(value = "rc-fixed-time", required = false) String rcTimeString,
+                                     @RequestParam(value = "rc-zman", required = false) String rcZman,
+                                     @RequestParam(value = "rc-zman-offset", required = false) Integer rcZmanOffset,
+                                     @RequestParam(value = "chanuka-time-type", required = true) String chanukaTimeType,
+                                     @RequestParam(value = "chanuka-fixed-time", required = false) String chanukaTimeString,
+                                     @RequestParam(value = "chanuka-zman", required = false) String chanukaZman,
+                                     @RequestParam(value = "chanuka-zman-offset", required = false) Integer chanukaZmanOffset,
+                                     @RequestParam(value = "rcc-time-type", required = true) String rccTimeType,
+                                     @RequestParam(value = "rcc-fixed-time", required = false) String rccTimeString,
+                                     @RequestParam(value = "rcc-zman", required = false) String rccZman,
+                                     @RequestParam(value = "rcc-zman-offset", required = false) Integer rccZmanOffset,
+                                     @RequestParam(value = "nusach", required = false) String nusachString,
+                                     @RequestParam(value = "notes", required = false) String notes,
+                                     @RequestParam(value = "enabled", required = false) String enabledString) throws Exception {
+
+//        print starting message
+        System.out.println("Updating minyan with id " + minyanId);
+
+//        confirm user has access to organization
+        Organization organization = organizationDAO.findById(organizationId);
+        if (organization == null) {
+            throw new Exception("Organization not found.");
+        } else {
+//            verify user has permission to create minyan for this organization
+            if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(organization.getId())) {
+                throw new AccessDeniedException("You do not have permission to create a minyan for this organization.");
+            }
+        }
+
+        Minyan oldMinyan = minyanDAO.findById(minyanId);
+        if (oldMinyan == null) {
+            throw new Exception("Minyan not found.");
+        }
+
+
+//        verify minyan type
+        MinyanType minyanType = MinyanType.fromString(type);
+        if (minyanType == null) {
+            ModelAndView vm = viewMinyan(minyanId);
+            vm.addObject("errormessage", "Sorry, there was an error creating the minyan. Please try again. (M01)");
+            return vm;
+        }
+
+        System.out.println("Minyan type: " + minyanType);
+
+//        get and verify location
+        Location location = locationDAO.findById(locationId);
+        if (location != null) {
+            if (location.getOrganizationId() != organization.getId()) {
+                throw new AccessDeniedException("You do not have permission to create a minyan using this location.");
+            }
+        }
+
+//        create minyan times
+        MinyanTime sundayTime = MinyanTime.fromFormData(sundayTimeType, sundayTimeString, sundayZman, sundayZmanOffset);
+        MinyanTime mondayTime = MinyanTime.fromFormData(mondayTimeType, mondayTimeString, mondayZman, mondayZmanOffset);
+        MinyanTime tuesdayTime = MinyanTime.fromFormData(tuesdayTimeType, tuesdayTimeString, tuesdayZman, tuesdayZmanOffset);
+        MinyanTime wednesdayTime = MinyanTime.fromFormData(wednesdayTimeType, wednesdayTimeString, wednesdayZman, wednesdayZmanOffset);
+        MinyanTime thursdayTime = MinyanTime.fromFormData(thursdayTimeType, thursdayTimeString, thursdayZman, thursdayZmanOffset);
+        MinyanTime fridayTime = MinyanTime.fromFormData(fridayTimeType, fridayTimeString, fridayZman, fridayZmanOffset);
+        MinyanTime shabbatTime = MinyanTime.fromFormData(shabbatTimeType, shabbatTimeString, shabbatZman, shabbatZmanOffset);
+        MinyanTime ytTime = MinyanTime.fromFormData(ytTimeType, ytTimeString, ytZman, ytZmanOffset);
+        MinyanTime rcTime = MinyanTime.fromFormData(rcTimeType, rcTimeString, rcZman, rcZmanOffset);
+        MinyanTime chanukaTime = MinyanTime.fromFormData(chanukaTimeType, chanukaTimeString, chanukaZman, chanukaZmanOffset);
+        MinyanTime rccTime = MinyanTime.fromFormData(rccTimeType, rccTimeString, rccZman, rccZmanOffset);
+
+        System.out.println("Sunday minyan time: " + sundayTime);
+        System.out.println("Monday minyan time: " + mondayTime);
+        System.out.println("Tuesday minyan time: " + tuesdayTime);
+        System.out.println("Wednesday minyan time: " + wednesdayTime);
+        System.out.println("Thursday minyan time: " + thursdayTime);
+        System.out.println("Friday minyan time: " + fridayTime);
+        System.out.println("Shabbat minyan time: " + shabbatTime);
+        System.out.println("Yom Tov minyan time: " + ytTime);
+        System.out.println("Rosh Chodesh minyan time: " + rcTime);
+        System.out.println("Chanuka minyan time: " + chanukaTime);
+        System.out.println("RCC minyan time: " + rccTime);
+
+//        validate nusach
+        Nusach nusach;
+        if (nusachString != null && !nusachString.isEmpty()) {
+            nusach = Nusach.fromString(nusachString);
+            System.out.println("Nusach: " + nusach);
+        } else {
+            ModelAndView vm = viewMinyan(minyanId);
+            vm.addObject("errormessage", "Sorry, there was an error updating the minyan. Please try again. (M02)");
+            return vm;
+        }
+
+        System.out.println("Notes: " + notes);
+
+        Schedule schedule = new Schedule(sundayTime, mondayTime, tuesdayTime, wednesdayTime, thursdayTime, fridayTime, shabbatTime, ytTime, rcTime, chanukaTime, rccTime);
+
+        Minyan updatedMinyan = new Minyan(oldMinyan.getId(), organization, minyanType, location, schedule, notes, nusach, oldMinyan.isEnabled());
+
+        try {
+            minyanDAO.update(updatedMinyan);
+
+            ModelAndView vm = viewMinyan(minyanId);
+            vm.addObject("successmessage", "The minyan was successfully updated. Click <a href='/admin/" + organizationId + "/minyanim/'>here</a> to return to the minyan schedule.");
+            return vm;
+        } catch (Exception e) {
+            e.printStackTrace();
+
+            ModelAndView vm = viewMinyan(minyanId);
+            vm.addObject("errormessage", "Sorry, there was an error saving the minyan. (M03)");
+            return vm;
+        }
+
+
     }
 }

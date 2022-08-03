@@ -79,8 +79,8 @@
                                                 <tr th:each="minyan: ${shacharitminyanim}" th:with="minyantimes=${shacharittimes.get(minyan.getId())}">
                                                     <td>
                                                         <div>
-                                                            <a role="button" class="btn btn-dark btn-sm" th:href="@{|/admin/minyanim/${minyan.getId()}/edit|}">
-                                                                Edit
+                                                            <a role="button" class="btn btn-dark btn-sm" th:href="@{|/admin/minyanim/${minyan.getId()}/view|}">
+                                                                Update
                                                             </a>
                                                         </div>
                                                     </td>
