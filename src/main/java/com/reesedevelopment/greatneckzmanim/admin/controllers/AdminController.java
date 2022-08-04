@@ -1039,7 +1039,7 @@ public class AdminController {
         try {
             minyanDAO.save(minyan);
 
-            nm.addObject("successmessage", "You successfully created a minyan. Click <a href='/admin/minyanim/'>here</a> to return to the minyan schedule.");
+            nm.addObject("successmessage", "You successfully created a minyan. Click <a href='/admin/" + orgId + "minyanim/'>here</a> to return to the minyan schedule.");
             return nm;
         } catch (Exception e) {
             e.printStackTrace();
