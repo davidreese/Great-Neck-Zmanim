@@ -492,6 +492,11 @@
                                         <div class="btn-group" role="group">
                                             <button type="submit" class="btn btn-primary">Update</button>
                                         </div>
+                                        <div class="btn-group ml-auto" role="group">
+                                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#delete-modal">
+                                                Delete Minyan
+                                            </button>
+                                        </div>
                                     </div>
                                 </form>
                             </div>
@@ -549,6 +554,26 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
                 </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="delete-modal" tabindex="-1" aria-labelledby="delete-modal-label" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="delete-modal-label">Delete this minyan?</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                This action cannot be undone.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+                <a role="button" class="btn btn-danger" th:href="@{|/admin/${organization.id}/minyanim/${minyan.id}/delete|}">Delete</a>
             </div>
         </div>
     </div>
