@@ -742,7 +742,7 @@ public class AdminController {
     }
 
     @RequestMapping(value = "/admin/{organizationId}/minyanim")
-    public ModelAndView minyanim(@PathVariable String organizationId) {
+    public ModelAndView minyanim(@PathVariable String organizationId, String successMessage, String errorMessage) {
         ModelAndView mv = new ModelAndView("/admin/minyan-schedule");
 
         String oidToUse;
@@ -822,12 +822,15 @@ public class AdminController {
 
         mv.addObject("organization", organizationDAO.findById(oidToUse));
 
+        mv.addObject("successmessage", successMessage);
+        mv.addObject("errormessage", errorMessage);
+
         addStandardPageData(mv);
 
         return mv;
     }
 
-//    enable and disable pages
+    //    enable and disable pages
     @RequestMapping(value = "/admin/minyanim/{id}/enable")
     public ModelAndView enableMinyan(@PathVariable String id, @RequestParam(value = "rd", required = false) String rd) {
         Minyan minyan = minyanDAO.findById(id);
@@ -1211,7 +1214,27 @@ public class AdminController {
             vm.addObject("errormessage", "Sorry, there was an error saving the minyan. (M03)");
             return vm;
         }
+    }
 
+    @RequestMapping(value = "/admin/{organizationId}/minyanim/{minyanId}/delete", method = RequestMethod.GET)
+    public ModelAndView deleteMinyan(@PathVariable("organizationId") String organizationId, @PathVariable("minyanId") String minyanId) throws Exception {
+        System.out.println("Deleting minyan with id " + minyanId);
 
+        Minyan minyan = minyanDAO.findById(minyanId);
+        if (minyan == null) {
+            throw new Exception("Minyan not found.");
+        } else {
+            if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(minyan.getOrganizationId())) {
+                throw new AccessDeniedException("You do not have permission to delete this minyan.");
+            }
+
+            try {
+                minyanDAO.delete(minyan);
+                return minyanim(organizationId, "The minyan was successfully deleted.", null);
+            } catch (Exception e) {
+                e.printStackTrace();
+                throw new Exception("Sorry, there was an error deleting the minyan.");
+            }
+        }
     }
 }
