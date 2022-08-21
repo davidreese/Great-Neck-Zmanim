@@ -28,7 +28,7 @@ public enum Nusach {
         throw new IllegalArgumentException("No constant with text " + text + " found");
     }
 
-    public String displayString() {
+    public String displayName() {
         switch (this) {
             case EDOT_HAMIZRACH:
                 return "Edot Hamizrach";

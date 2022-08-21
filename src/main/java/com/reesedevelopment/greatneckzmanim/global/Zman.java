@@ -32,7 +32,7 @@ public enum Zman {
 
     }
 
-    public String displayString() {
+    public String displayName() {
         switch (this) {
             case ALOT_HASHACHAR:
                 return "Alot HaShachar";
