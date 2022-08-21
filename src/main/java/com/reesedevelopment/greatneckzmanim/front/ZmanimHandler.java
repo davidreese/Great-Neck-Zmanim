@@ -2,6 +2,7 @@ package com.reesedevelopment.greatneckzmanim.front;
 
 import com.kosherjava.zmanim.ComplexZmanimCalendar;
 //import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
+import com.kosherjava.zmanim.hebrewcalendar.HebrewDateFormatter;
 import com.kosherjava.zmanim.hebrewcalendar.JewishDate;
 import com.kosherjava.zmanim.util.GeoLocation;
 import com.reesedevelopment.greatneckzmanim.global.Zman;
@@ -58,7 +59,9 @@ public class ZmanimHandler {
 
     public String getHebrewDate() {
         JewishDate jd = new JewishDate();
-        return jd.toString();
+        HebrewDateFormatter hdf = new HebrewDateFormatter();
+        hdf.setHebrewFormat(true);
+        return hdf.format(jd);
     }
 
 }
