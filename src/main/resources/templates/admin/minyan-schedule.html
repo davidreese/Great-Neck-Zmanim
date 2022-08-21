@@ -130,7 +130,7 @@
                                                     <td th:with="yomtovtime=${minyantimes.get(Day.YOM_TOV)}">
                                                         <div th:text="${yomtovtime.displayTime()}"></div>
                                                     </td>
-                                                    <td th:text="${minyan.getNusach().displayString()}" />
+                                                    <td th:text="${minyan.getNusach().displayName()}" />
                                                     <td th:text="${minyan.getNotes()}" />
                                                 </tr>
                                                 </tbody>
@@ -222,7 +222,7 @@
                                                     <td th:with="yomtovtime=${minyantimes.get(Day.YOM_TOV)}">
                                                         <div th:text="${yomtovtime.displayTime()}"></div>
                                                     </td>
-                                                    <td th:text="${minyan.getNusach().displayString()}" />
+                                                    <td th:text="${minyan.getNusach().displayName()}" />
                                                     <td th:text="${minyan.getNotes()}" />
                                                 </tr>
                                                 </tbody>
@@ -315,7 +315,7 @@
                                                     <td th:with="yomtovtime=${minyantimes.get(Day.YOM_TOV)}">
                                                         <div th:text="${yomtovtime.displayTime()}"></div>
                                                     </td>
-                                                    <td th:text="${minyan.getNusach().displayString()}" />
+                                                    <td th:text="${minyan.getNusach().displayName()}" />
                                                     <td th:text="${minyan.getNotes()}" />
                                                 </tr>
                                                 </tbody>
@@ -408,7 +408,7 @@
                                                     <td th:with="yomtovtime=${minyantimes.get(Day.YOM_TOV)}">
                                                         <div th:text="${yomtovtime.displayTime()}"></div>
                                                     </td>
-                                                    <td th:text="${minyan.getNusach().displayString()}" />
+                                                    <td th:text="${minyan.getNusach().displayName()}" />
                                                     <td th:text="${minyan.getNotes()}" />
                                                 </tr>
                                                 </tbody>
@@ -501,7 +501,7 @@
                                                     <td th:with="yomtovtime=${minyantimes.get(Day.YOM_TOV)}">
                                                         <div th:text="${yomtovtime.displayTime()}"></div>
                                                     </td>
-                                                    <td th:text="${minyan.getNusach().displayString()}" />
+                                                    <td th:text="${minyan.getNusach().displayName()}" />
                                                     <td th:text="${minyan.getNotes()}" />
                                                 </tr>
                                                 </tbody>
@@ -515,7 +515,6 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
