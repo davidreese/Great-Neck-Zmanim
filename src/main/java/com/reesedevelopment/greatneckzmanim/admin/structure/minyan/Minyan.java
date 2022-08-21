@@ -1,5 +1,7 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 
+import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
+import com.kosherjava.zmanim.util.Time;
 import com.reesedevelopment.greatneckzmanim.admin.structure.GNZObject;
 import com.reesedevelopment.greatneckzmanim.admin.structure.IDGenerator;
 import com.reesedevelopment.greatneckzmanim.admin.structure.location.Location;
@@ -8,6 +10,8 @@ import com.reesedevelopment.greatneckzmanim.global.Nusach;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Table(name = "MINYAN")
 public class Minyan extends GNZObject implements IDGenerator {
@@ -71,6 +75,9 @@ public class Minyan extends GNZObject implements IDGenerator {
     private String nusachString;
 
     private Nusach nusach;
+
+//    @Autowired
+//    private OrganizationDAO organizationDAO;
 
     public Minyan(String id,
                   String minyanTypeString,
@@ -230,6 +237,9 @@ public class Minyan extends GNZObject implements IDGenerator {
     }
 
     public Organization getOrganization() {
+//        if (organization == null) {
+//            organization = organizationDAO.findById(organizationId);
+//        }
         return organization;
     }
 
@@ -299,5 +309,75 @@ public class Minyan extends GNZObject implements IDGenerator {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+//    public [Date] getStartTimes(int next)
+
+    public Date getStartDate() {
+        return getStartDate(LocalDate.now());
+    }
+
+    public Date getStartDate(LocalDate date) {
+//        need to check if that date is a special day
+        MinyanTime mt = getMinyanTime(date);
+        Time t = mt.getTime(date);
+        if (t == null) {
+            return null;
+        }
+        return new Date(date.minusYears(1900).getYear(), date.getMonthValue() - 1, date.getDayOfMonth(), t.getHours(), t.getMinutes(), t.getSeconds());
+    }
+
+    public Time getStartTime() {
+        return getStartTime(LocalDate.now());
+    }
+
+    public Time getStartTime(LocalDate date) {
+//        need to check if that date is a special day
+        MinyanTime mt = getMinyanTime(date);
+        Time t = mt.getTime(date);
+        return t;
+    }
+
+    public MinyanTime getMinyanTime() {
+        return getMinyanTime(LocalDate.now());
+    }
+
+    public MinyanTime getMinyanTime(LocalDate date) {
+        JewishCalendar jc = new JewishCalendar(date);
+        if (jc.isRoshChodesh()) {
+            if (jc.isChanukah()) {
+                return schedule.getRoshChodeshChanuka();
+            } else {
+                return schedule.getRoshChodesh();
+            }
+        } else if (jc.isChanukah()) {
+            return schedule.getChanuka();
+//            TODO: DEAL WITH FAST DAY TIME
+//        } else if (jc.) {
+//            return schedule.getYomTov().getStartTime();
+        } else {
+            switch (date.getDayOfWeek()) {
+                case SUNDAY:
+                    return schedule.getSunday();
+                case MONDAY:
+                    return schedule.getMonday();
+                case TUESDAY:
+                    return schedule.getTuesday();
+                case WEDNESDAY:
+                    return schedule.getWednesday();
+                case THURSDAY:
+                    return schedule.getThursday();
+                case FRIDAY:
+                    return schedule.getFriday();
+                case SATURDAY:
+                    return schedule.getShabbat();
+                default:
+                    return null;
+            }
+        }
     }
 }

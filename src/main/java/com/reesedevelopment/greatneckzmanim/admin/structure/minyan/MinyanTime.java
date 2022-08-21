@@ -2,6 +2,9 @@ package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 import com.kosherjava.zmanim.util.Time;
 import com.reesedevelopment.greatneckzmanim.global.Zman;
 
+import java.time.LocalDate;
+import java.util.Date;
+
 public class MinyanTime {
     private Time time;
     private TimeRule rule;
@@ -187,11 +190,11 @@ public class MinyanTime {
         } else if (t == TimeType.DYNAMIC) {
 //            return "Dynamic";
             if (rule.getOffsetMinutes() < 0) {
-                return String.format("%s minus %d minutes", rule.getZman().displayString(), Math.abs(rule.getOffsetMinutes()));
+                return String.format("%s minus %d minutes", rule.getZman().displayName(), Math.abs(rule.getOffsetMinutes()));
             } else if (rule.getOffsetMinutes() == 0) {
-                return rule.getZman().displayString();
+                return rule.getZman().displayName();
             }  else if (rule.getOffsetMinutes() > 0) {
-                return String.format("%s plus %d minutes", rule.getZman().displayString(), rule.getOffsetMinutes());
+                return String.format("%s plus %d minutes", rule.getZman().displayName(), rule.getOffsetMinutes());
             } else {
                 return "INVALID";
             }
@@ -214,7 +217,37 @@ public class MinyanTime {
         }
     }
 
+    public String dynamicDisplayName() {
+        if (isDynamic()) {
+            if (rule.getOffsetMinutes() < 0) {
+                return String.format("%d minutes before %s", Math.abs(rule.getOffsetMinutes()), rule.getZman().displayName());
+            } else if (rule.getOffsetMinutes() == 0) {
+                return rule.getZman().displayName();
+            }  else if (rule.getOffsetMinutes() > 0) {
+                return String.format("%d minutes after %s ", rule.getOffsetMinutes(), rule.getZman().displayName());
+            } else {
+                return "INVALID";
+            }
+        } else {
+            return null;
+        }
+    }
+
     public TimeRule getRule() {
         return rule;
+    }
+
+    public Time getTime() {
+        return time;
+    }
+
+    public Time getTime(LocalDate date) {
+        if (type() == TimeType.FIXED) {
+            return time;
+        } else if (type() == TimeType.DYNAMIC) {
+            return rule.getTime(date);
+        } else {
+            return null;
+        }
     }
 }

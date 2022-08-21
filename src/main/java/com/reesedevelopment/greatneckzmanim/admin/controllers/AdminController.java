@@ -9,7 +9,6 @@ import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organiz
 import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUser;
 import com.reesedevelopment.greatneckzmanim.admin.structure.user.GNZUserDAO;
 import com.reesedevelopment.greatneckzmanim.global.Nusach;
-import org.hibernate.type.TimeType;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -770,35 +769,35 @@ public class AdminController {
 //        }
         List<Minyan> shacharitMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.SHACHARIT)).collect(Collectors.toList());
         mv.addObject("shacharitminyanim", shacharitMinyanim);
-        Map<String, HashMap<Day, MinyanTime>> shacharitTimes = new HashMap<>();
+        Map<String, HashMap<MinyanDay, MinyanTime>> shacharitTimes = new HashMap<>();
         for (Minyan m : shacharitMinyanim) {
             shacharitTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
         }
 
         List<Minyan> minchaMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.MINCHA)).collect(Collectors.toList());
         mv.addObject("minchaminyanim", minchaMinyanim);
-        Map<String, HashMap<Day, MinyanTime>> minchaTimes = new HashMap<>();
+        Map<String, HashMap<MinyanDay, MinyanTime>> minchaTimes = new HashMap<>();
         for (Minyan m : minchaMinyanim) {
             minchaTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
         }
 
         List<Minyan> arvitMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.ARVIT)).collect(Collectors.toList());
         mv.addObject("arvitminyanim", arvitMinyanim);
-        Map<String, HashMap<Day, MinyanTime>> arvitTimes = new HashMap<>();
+        Map<String, HashMap<MinyanDay, MinyanTime>> arvitTimes = new HashMap<>();
         for (Minyan m : arvitMinyanim) {
             arvitTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
         }
 
         List<Minyan> selichotMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.SELICHOT)).collect(Collectors.toList());
         mv.addObject("selichotminyanim", selichotMinyanim);
-        Map<String, HashMap<Day, MinyanTime>> selichotTimes = new HashMap<>();
+        Map<String, HashMap<MinyanDay, MinyanTime>> selichotTimes = new HashMap<>();
         for (Minyan m : selichotMinyanim) {
             selichotTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
         }
 
         List<Minyan> megilaMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.MEGILA_READING)).collect(Collectors.toList());
         mv.addObject("megilaminyanim", megilaMinyanim);
-        Map<String, HashMap<Day, MinyanTime>> megilaTimes = new HashMap<>();
+        Map<String, HashMap<MinyanDay, MinyanTime>> megilaTimes = new HashMap<>();
         for (Minyan m : megilaMinyanim) {
             megilaTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
         }
@@ -809,7 +808,7 @@ public class AdminController {
         mv.addObject("selichottimes", selichotTimes);
         mv.addObject("megilatimes", megilaTimes);
 
-        mv.addObject("Day", Day.class);
+        mv.addObject("Day", MinyanDay.class);
 
         Map<String, String> locationNames = new HashMap<>();
         for (Minyan minyan : minyanim) {
@@ -1028,7 +1027,11 @@ public class AdminController {
 
         boolean enabled;
         if (enabledString != null && !enabledString.isEmpty()) {
-            enabled = Boolean.parseBoolean(enabledString);
+            if (enabledString.equals("on")) {
+                enabled = true;
+            } else {
+                enabled = Boolean.parseBoolean(enabledString);
+            }
         } else {
             enabled = false;
         }
@@ -1039,7 +1042,7 @@ public class AdminController {
         try {
             minyanDAO.save(minyan);
 
-            nm.addObject("successmessage", "You successfully created a minyan. Click <a href='/admin/" + orgId + "minyanim/'>here</a> to return to the minyan schedule.");
+            nm.addObject("successmessage", "You successfully created a minyan. Click <a href='/admin/" + orgId + "/minyanim/'>here</a> to return to the minyan schedule.");
             return nm;
         } catch (Exception e) {
             e.printStackTrace();

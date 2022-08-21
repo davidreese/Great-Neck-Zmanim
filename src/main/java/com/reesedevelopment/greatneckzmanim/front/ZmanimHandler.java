@@ -1,32 +1,64 @@
 package com.reesedevelopment.greatneckzmanim.front;
 
 import com.kosherjava.zmanim.ComplexZmanimCalendar;
+//import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
+import com.kosherjava.zmanim.hebrewcalendar.JewishDate;
 import com.kosherjava.zmanim.util.GeoLocation;
 import com.reesedevelopment.greatneckzmanim.global.Zman;
 
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.Dictionary;
 import java.util.Hashtable;
+import java.util.TimeZone;
 
 public class ZmanimHandler {
     private GeoLocation geoLocation;
-    private ComplexZmanimCalendar complexZmanimCalendar;
+//    private ComplexZmanimCalendar complexZmanimCalendar;
 
     public ZmanimHandler(GeoLocation geoLocation) {
         this.geoLocation = geoLocation;
-        this.complexZmanimCalendar = new ComplexZmanimCalendar(geoLocation);
+//        this.complexZmanimCalendar = new ComplexZmanimCalendar(geoLocation);
     }
 
+    public ZmanimHandler() {
+        TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
+
+        String locationName = "Great Neck, NY";
+        double latitude = 40.8007;
+        double longitude = -73.7285;
+        double elevation = 0;
+        GeoLocation geoLocation = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
+        this.geoLocation = geoLocation;
+    }
+
+
     public Dictionary getZmanim() {
-        Dictionary dictionary = new Hashtable();
+        return getZmanim(LocalDate.now());
+    }
+    public Dictionary<Zman, Date> getZmanim(LocalDate date) {
+        Dictionary<Zman, Date> dictionary = new Hashtable();
+
+        ComplexZmanimCalendar complexZmanimCalendar = new ComplexZmanimCalendar(geoLocation);
+        complexZmanimCalendar.getCalendar().set(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
+//        complexZmanimCalendar.getCalendar().
 
         dictionary.put(Zman.ALOT_HASHACHAR, complexZmanimCalendar.getAlosHashachar());
         dictionary.put(Zman.NETZ, complexZmanimCalendar.getSunrise());
         dictionary.put(Zman.CHATZOT, complexZmanimCalendar.getChatzos());
         dictionary.put(Zman.MINCHA_GEDOLA, complexZmanimCalendar.getMinchaGedola());
         dictionary.put(Zman.MINCHA_KETANA, complexZmanimCalendar.getMinchaKetana());
+        dictionary.put(Zman.PLAG_HAMINCHA, complexZmanimCalendar.getPlagHamincha());
         dictionary.put(Zman.SHEKIYA, complexZmanimCalendar.getSunset());
         dictionary.put(Zman.TZET, complexZmanimCalendar.getTzais());
+//        dictionary.put(Zman.L, complexZmanimCalendar.getsoshmfzmank());
 
         return dictionary;
     }
+
+    public String getHebrewDate() {
+        JewishDate jd = new JewishDate();
+        return jd.toString();
+    }
+
 }
