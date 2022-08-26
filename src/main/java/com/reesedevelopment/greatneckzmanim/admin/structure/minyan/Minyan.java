@@ -317,7 +317,7 @@ public class Minyan extends GNZObject implements IDGenerator {
 
 //    public [Date] getStartTimes(int next)
 
-    public Date getStartDate() {
+    public Date getStartDateFromNow() {
         return getStartDate(LocalDate.now());
     }
 

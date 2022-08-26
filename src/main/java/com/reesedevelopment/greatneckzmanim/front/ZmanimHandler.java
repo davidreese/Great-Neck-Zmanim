@@ -34,7 +34,7 @@ public class ZmanimHandler {
     }
 
 
-    public Dictionary getZmanim() {
+    public Dictionary getZmanimForNow() {
         return getZmanim(LocalDate.now());
     }
     public Dictionary<Zman, Date> getZmanim(LocalDate date) {
@@ -57,11 +57,15 @@ public class ZmanimHandler {
         return dictionary;
     }
 
-    public String getHebrewDate() {
-        JewishDate jd = new JewishDate();
+    public String getHebrewDate(Date date) {
+        JewishDate jd = new JewishDate(date);
         HebrewDateFormatter hdf = new HebrewDateFormatter();
         hdf.setHebrewFormat(true);
         return hdf.format(jd);
+    }
+
+    public String getTodaysHebrewDate() {
+        return getHebrewDate(new Date());
     }
 
 }

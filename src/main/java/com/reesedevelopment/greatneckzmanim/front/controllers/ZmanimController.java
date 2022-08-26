@@ -14,9 +14,11 @@ import com.reesedevelopment.greatneckzmanim.front.ZmanimHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @Controller
@@ -48,28 +50,32 @@ public class ZmanimController {
 
     @GetMapping("/")
     public ModelAndView home() {
-        return zmanim();
+        return todaysZmanim();
     }
 
     @GetMapping("/zmanim")
-    public ModelAndView zmanim() {
+    public ModelAndView todaysZmanim() {
+        return zmanim(new Date());
+    }
+
+    public ModelAndView zmanim(Date date) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("front/home");
 
         dateFormat.setTimeZone(timeZone);
 
-        Date today = new Date();
 //        String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, java.util.Locale.US);
-        mv.getModel().put("date", dateFormat.format(today));
-        mv.getModel().put("onlyDate", onlyDateFormat.format(today));
+        mv.getModel().put("date", dateFormat.format(date));
+        mv.getModel().put("onlyDate", onlyDateFormat.format(date));
+        mv.getModel().put("dateString", date.toString());
 //        mv.getModel(),put("longdate", )
 
 //        add hebrew date
-        mv.getModel().put("hebrewDate", zmanimHandler.getHebrewDate());
+        mv.getModel().put("hebrewDate", zmanimHandler.getHebrewDate(date));
 
         timeFormat.setTimeZone(timeZone);
 
-        Dictionary zmanim = zmanimHandler.getZmanim();
+        Dictionary zmanim = zmanimHandler.getZmanim(LocalDate.of(date.getYear(), date.getMonth(), date.getDate()));
 
         mv.getModel().put("alotHashachar", timeFormat.format(zmanim.get(Zman.ALOT_HASHACHAR)));
         mv.getModel().put("sunrise", timeFormat.format(zmanim.get(Zman.NETZ)));
@@ -85,8 +91,8 @@ public class ZmanimController {
         List<MinyanEvent> minyanEvents = new ArrayList<>();
 
         for (Minyan minyan : enabledMinyanim) {
-            Date startDate = minyan.getStartDate();
-            Date terminationDate = new Date(today.getTime() - (60000 * 20));
+            Date startDate = minyan.getStartDate(LocalDate.of(date.getYear(), date.getMonth(), date.getDate()));
+            Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
             if (startDate != null && startDate.after(terminationDate)) {
                 String organizationName;
                 Organization organization = minyan.getOrganization();
@@ -120,5 +126,21 @@ public class ZmanimController {
         mv.getModel().put("allminyanim", minyanEvents);
 
         return mv;
+    }
+
+    @GetMapping("/zmanim/next")
+    public ModelAndView nextAfter(@RequestParam(value = "after", required = true) String dateString) {
+        Date date = new Date(dateString);
+        return navigate(new Date(date.getYear(), date.getMonth(), date.getDate() + 1, date.getHours(), date.getMinutes(), date.getSeconds()));
+    }
+
+    @GetMapping("/zmanim/last")
+    public ModelAndView lastBefore(@RequestParam(value = "before", required = true) String dateString) {
+        Date date = new Date(dateString);
+        return navigate(new Date(date.getYear(), date.getMonth(), date.getDate() - 1, date.getHours(), date.getMinutes(), date.getSeconds()));
+    }
+
+    public ModelAndView navigate(Date date) {
+        return zmanim(date);
     }
 }
