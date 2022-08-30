@@ -26,7 +26,8 @@ class TimeRule {
 
     public Time getTime(LocalDate date) {
         ZmanimHandler zmanimHandler = new ZmanimHandler();
-        Date zmanTime = zmanimHandler.getZmanim(date).get(zman);
+        LocalDate temp = date.minusMonths(1);
+        Date zmanTime = zmanimHandler.getZmanim(temp).get(zman);
 //        TODO: DEAL WITH DEPRECATED FUNCTIONS
         Time t = new Time(zmanTime.getHours(), zmanTime.getMinutes() + offsetMinutes, zmanTime.getSeconds(), 0);
         return t;

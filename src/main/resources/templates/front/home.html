@@ -17,14 +17,12 @@
             <!--/col-->
             <main class="col main pt-5 mt-3 h-100 overflow-auto" >
                 <div class="d-flex">
+                    <p class="col-md-4 h3 mt-3" th:text="${'Schedule | ' + onlyDate}"></p>
+                    <p class="h3 mt-3 ml-auto mobile-hide"  style="font-weight: 430;" th:text="${hebrewDate}"></p>
                     <div class="col-md-4 mt-2 btn-group mobile-hide" style="max-width: 150px" role="group">
                         <button type="button" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary">‹</button>
                         <button type="button" th:data-url="@{/zmanim/next(after=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary">›</button>
                     </div>
-
-                    <p class="col-md-4 h3 mt-3" th:text="${'Schedule | ' + onlyDate}"></p>
-
-                    <p class="h3 mt-3 ml-auto mobile-hide"  style="font-weight: 430;" th:text="${hebrewDate}"></p>
                 </div>
                 <hr>
                 <div class="row my-4">

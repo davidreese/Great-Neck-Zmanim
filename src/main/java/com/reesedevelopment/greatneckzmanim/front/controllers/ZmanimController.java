@@ -75,7 +75,7 @@ public class ZmanimController {
 
         timeFormat.setTimeZone(timeZone);
 
-        Dictionary zmanim = zmanimHandler.getZmanim(LocalDate.of(date.getYear(), date.getMonth(), date.getDate()));
+        Dictionary zmanim = zmanimHandler.getZmanim(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()));
 
         mv.getModel().put("alotHashachar", timeFormat.format(zmanim.get(Zman.ALOT_HASHACHAR)));
         mv.getModel().put("sunrise", timeFormat.format(zmanim.get(Zman.NETZ)));
@@ -91,7 +91,7 @@ public class ZmanimController {
         List<MinyanEvent> minyanEvents = new ArrayList<>();
 
         for (Minyan minyan : enabledMinyanim) {
-            Date startDate = minyan.getStartDate(LocalDate.of(date.getYear(), date.getMonth(), date.getDate()));
+            Date startDate = minyan.getStartDate(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1));
             Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
             if (startDate != null && startDate.after(terminationDate)) {
                 String organizationName;

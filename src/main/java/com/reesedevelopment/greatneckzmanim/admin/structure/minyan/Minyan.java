@@ -328,7 +328,8 @@ public class Minyan extends GNZObject implements IDGenerator {
         if (t == null) {
             return null;
         }
-        return new Date(date.minusYears(1900).getYear(), date.getMonthValue() - 1, date.getDayOfMonth(), t.getHours(), t.getMinutes(), t.getSeconds());
+        LocalDate temp = date.minusMonths(1).minusYears(1900);
+        return new Date(temp.getYear(), temp.getMonthValue(), temp.getDayOfMonth(), t.getHours(), t.getMinutes(), t.getSeconds());
     }
 
     public Time getStartTime() {
@@ -347,6 +348,7 @@ public class Minyan extends GNZObject implements IDGenerator {
     }
 
     public MinyanTime getMinyanTime(LocalDate date) {
+//        LocalDate temp = date.plusMonths(1);
         JewishCalendar jc = new JewishCalendar(date);
         if (jc.isRoshChodesh()) {
             if (jc.isChanukah()) {
