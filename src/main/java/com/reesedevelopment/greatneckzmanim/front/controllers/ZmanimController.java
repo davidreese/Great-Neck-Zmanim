@@ -33,7 +33,7 @@ public class ZmanimController {
 
     Calendar calendar = Calendar.getInstance();
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy | h:mm aa");
-    SimpleDateFormat onlyDateFormat = new SimpleDateFormat("MMMM d, yyyy");
+    SimpleDateFormat onlyDateFormat = new SimpleDateFormat("EEEE, MMMM d");
     SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm:ss aa");
 
     ZmanimHandler zmanimHandler = new ZmanimHandler(geoLocation);
