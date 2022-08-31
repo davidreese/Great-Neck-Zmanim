@@ -67,6 +67,20 @@ public class ZmanimController {
 //        String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, java.util.Locale.US);
         mv.getModel().put("date", dateFormat.format(date));
         mv.getModel().put("onlyDate", onlyDateFormat.format(date));
+
+        Calendar c = Calendar.getInstance();
+
+        c.setTime(date);
+        c.add(Calendar.DATE, 1);
+        mv.getModel().put("tommorowOnlyDate", onlyDateFormat.format(c.getTime()));
+
+        c.setTime(date);
+        c.add(Calendar.DATE, -1);
+        mv.getModel().put("yesterdayOnlyDate", onlyDateFormat.format(c.getTime()));
+
+        Date today = new Date();
+        mv.getModel().put("isToday", onlyDateFormat.format(date).equals(onlyDateFormat.format(today)));
+
         mv.getModel().put("dateString", date.toString());
 //        mv.getModel(),put("longdate", )
 

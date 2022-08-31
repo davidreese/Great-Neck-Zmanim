@@ -1,13 +1,3 @@
-.btn-primary {
-    background-color: #035174;
-    border-color: #035174;
-}
-
-.btn-primary:hover {
-    background-color: #033A62;
-    border-color: #033A62;
-}
-
 .dropdown-item:active {
     background-color: #035174;
 }
@@ -105,3 +95,4 @@ a {
         padding-top: 10px;
     }
 }
+

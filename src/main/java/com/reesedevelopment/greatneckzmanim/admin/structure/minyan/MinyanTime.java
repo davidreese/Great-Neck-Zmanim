@@ -220,11 +220,11 @@ public class MinyanTime {
     public String dynamicDisplayName() {
         if (isDynamic()) {
             if (rule.getOffsetMinutes() < 0) {
-                return String.format("%d minutes before %s", Math.abs(rule.getOffsetMinutes()), rule.getZman().displayName());
+                return String.format("%d minutes before %s", Math.abs(rule.getOffsetMinutes()), rule.getZman().displayName().toLowerCase());
             } else if (rule.getOffsetMinutes() == 0) {
                 return rule.getZman().displayName();
             }  else if (rule.getOffsetMinutes() > 0) {
-                return String.format("%d minutes after %s ", rule.getOffsetMinutes(), rule.getZman().displayName());
+                return String.format("%d minutes after %s ", rule.getOffsetMinutes(), rule.getZman().displayName().toLowerCase());
             } else {
                 return "INVALID";
             }
