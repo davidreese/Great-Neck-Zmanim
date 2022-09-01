@@ -25,7 +25,9 @@ public enum Nusach {
                 }
             }
         }
-        throw new IllegalArgumentException("No constant with text " + text + " found");
+//        throw new IllegalArgumentException("No constant with text " + text + " found");
+        System.out.println("No nusach constant with text " + text + " found");
+        return null;
     }
 
     public String displayName() {

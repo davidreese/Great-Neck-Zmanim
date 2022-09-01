@@ -9,6 +9,7 @@ import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.MinyanDAO;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organization;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.OrganizationDAO;
 import com.reesedevelopment.greatneckzmanim.front.MinyanEvent;
+import com.reesedevelopment.greatneckzmanim.global.Nusach;
 import com.reesedevelopment.greatneckzmanim.global.Zman;
 import com.reesedevelopment.greatneckzmanim.front.ZmanimHandler;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -203,6 +204,10 @@ public class ZmanimController {
 
         List<Minyan> enabledMinyanim = minyanDAO.findEnabledMatching(orgId);
         List<MinyanEvent> minyanEvents = new ArrayList<>();
+//        boolean usesLocations;
+//        boolean nusachChanges;
+//        Nusach lastNusach;
+//        boolean usesNotes;
 
         for (Minyan minyan : enabledMinyanim) {
             Date startDate = minyan.getStartDate(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1));
@@ -242,6 +247,7 @@ public class ZmanimController {
 
         minyanEvents.sort(Comparator.comparing(MinyanEvent::getStartTime));
         mv.getModel().put("allminyanim", minyanEvents);
+//        mv.getModel().put("usesLocations", minyanEvents.)
 
         return mv;
     }

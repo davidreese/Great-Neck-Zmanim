@@ -90,4 +90,17 @@ public class MinyanEvent {
     public String getNotes() {
         return notes;
     }
+
+    public String getInformation() {
+        String result = "";
+
+        if (!notes.isEmpty()) {
+
+        } else {
+
+        }
+
+
+        return result;
+    }
 }

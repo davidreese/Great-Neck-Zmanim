@@ -14,6 +14,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -137,6 +138,7 @@ public class AdminController {
                                            @RequestParam(value = "username", required = true) String username,
                                            @RequestParam(value = "email", required = true) String email,
                                            @RequestParam(value = "site-url", required = false) String siteURIString,
+                                           @RequestParam(value = "nusach", required = false) String nusachString,
                                            @RequestParam(value = "password", required = true) String password,
                                            @RequestParam(value = "cpassword", required = true) String cpassword) {
         if (!isSuperAdmin()) {
@@ -202,7 +204,13 @@ public class AdminController {
 
         System.out.println("Creating organization...");
 
-        Organization organization = new Organization(name, address, siteURI);
+        Nusach nusach = Nusach.fromString(nusachString);
+        if (nusach == null) {
+            System.out.println("Sorry, this nusach couldn't be validated.");
+            return addOrganization(false, "The organization could not be created.", "Sorry, the organization could not be created.");
+        }
+
+        Organization organization = new Organization(name, address, siteURI, nusach);
 
         if  (this.organizationDAO.save(organization)) {
             System.out.println("Organization created successfully.");
@@ -392,7 +400,8 @@ public class AdminController {
     public ModelAndView updateOrganization(@RequestParam(value = "id", required = true) String id,
                                            @RequestParam(value = "name", required = true) String name,
                                            @RequestParam(value = "address", required = false) String address,
-                                           @RequestParam(value = "site-url", required = false) String siteURIString) throws Exception {
+                                           @RequestParam(value = "site-url", required = false) String siteURIString,
+                                           @RequestParam(value = "nusach", required = true) String nusachString) throws Exception {
 
 //        validate input
         if (name == null || name.isEmpty()) {
@@ -409,7 +418,11 @@ public class AdminController {
             }
         }
 
-        Organization organization = new Organization(id, name, address, siteURI);
+        Nusach nusach = Nusach.fromString(nusachString);
+        if (nusach == null) {
+            return organization(id, null, null, "Invalid nusach type.", null);
+        }
+        Organization organization = new Organization(id, name, address, siteURI, nusach);
 
 //        check permissions
         if (isAdmin()) {
@@ -1012,12 +1025,9 @@ public class AdminController {
         System.out.println("RCC minyan time: " + rccTime);
 
 //        validate nusach
-        Nusach nusach;
-        if (nusachString != null && !nusachString.isEmpty()) {
-            nusach = Nusach.fromString(nusachString);
-            System.out.println("Nusach: " + nusach);
-        } else {
-            nm.addObject("errormessage", "Sorry, there was an error creating the minyan. Please try again. (M02)");
+        Nusach nusach = Nusach.fromString(nusachString);
+        if (nusach == null) {
+            nm.addObject("errormessage", "Sorry, there was an error updating the minyan. Please try again. (M02)");
             return nm;
         }
 
@@ -1188,15 +1198,13 @@ public class AdminController {
         System.out.println("RCC minyan time: " + rccTime);
 
 //        validate nusach
-        Nusach nusach;
-        if (nusachString != null && !nusachString.isEmpty()) {
-            nusach = Nusach.fromString(nusachString);
-            System.out.println("Nusach: " + nusach);
-        } else {
-            ModelAndView vm = viewMinyan(minyanId);
-            vm.addObject("errormessage", "Sorry, there was an error updating the minyan. Please try again. (M02)");
-            return vm;
+        Nusach nusach = Nusach.fromString(nusachString);
+        if (nusach == null) {
+            ModelAndView mv = viewMinyan(minyanId);
+            mv.addObject("errormessage", "Sorry, there was an error updating the minyan. Please try again. (M02)");
+            return mv;
         }
+        System.out.println("Nusach: " + nusach);
 
         System.out.println("Notes: " + notes);
 
@@ -1207,15 +1215,15 @@ public class AdminController {
         try {
             minyanDAO.update(updatedMinyan);
 
-            ModelAndView vm = viewMinyan(minyanId);
-            vm.addObject("successmessage", "The minyan was successfully updated. Click <a href='/admin/" + organizationId + "/minyanim/'>here</a> to return to the minyan schedule.");
-            return vm;
+            ModelAndView mv = viewMinyan(minyanId);
+            mv.addObject("successmessage", "The minyan was successfully updated. Click <a href='/admin/" + organizationId + "/minyanim/'>here</a> to return to the minyan schedule.");
+            return mv;
         } catch (Exception e) {
             e.printStackTrace();
 
-            ModelAndView vm = viewMinyan(minyanId);
-            vm.addObject("errormessage", "Sorry, there was an error saving the minyan. (M03)");
-            return vm;
+            ModelAndView mv = viewMinyan(minyanId);
+            mv.addObject("errormessage", "Sorry, there was an error saving the minyan. (M03)");
+            return mv;
         }
     }
 

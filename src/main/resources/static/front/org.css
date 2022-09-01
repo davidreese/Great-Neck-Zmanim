@@ -32,7 +32,6 @@
     background: var(--secondary-color);
     border-color: var(--secondary-color);
     color: gray;
-    box-shadow: 1px 1px 5px -2px #888888;
 }
 
 .switcher-btn:focus {
@@ -52,7 +51,7 @@
     max-width: 60%!important;
   }
 
-  #zmanim-box {
+  #org-box {
     max-width: none;
     max-width: 40%!important;
     flex: auto;

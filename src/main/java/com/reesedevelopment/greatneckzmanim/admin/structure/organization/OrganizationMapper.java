@@ -1,5 +1,6 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure.organization;
 
+import com.reesedevelopment.greatneckzmanim.global.Nusach;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.io.Serializable;
@@ -11,13 +12,14 @@ import java.util.Map;
 
 public class OrganizationMapper implements RowMapper<Organization>, Serializable {
 
-    public static final String BASE_SQL = "SELECT u.ID, u.NAME, u.ADDRESS, u.SITE_URI FROM ORGANIZATION u ";
+    public static final String BASE_SQL = "SELECT u.ID, u.NAME, u.ADDRESS, u.SITE_URI, u.NUSACH FROM ORGANIZATION u ";
 
     @Override
     public Organization mapRow(ResultSet rs, int rowNum) throws SQLException {
         String id = rs.getString("ID");
         String name = rs.getString("NAME");
         String address = rs.getString("ADDRESS");
+        String nusach = rs.getString("NUSACH");
 
         URI siteURI = null;
         try {
@@ -29,13 +31,14 @@ public class OrganizationMapper implements RowMapper<Organization>, Serializable
             e.printStackTrace();
         }
 
-        return new Organization(id, name, address, siteURI);
+        return new Organization(id, name, address, siteURI, Nusach.fromString(nusach));
     }
 
     public Organization mapRow(Map<String, Object> m) {
         String id = (String) m.get("ID");
         String name = (String) m.get("NAME");
         String address = (String) m.get("ADDRESS");
+        String nusach = (String) m.get("NUSACH");
 
         URI siteURI = null;
         try {
@@ -47,6 +50,6 @@ public class OrganizationMapper implements RowMapper<Organization>, Serializable
             e.printStackTrace();
         }
 
-        return new Organization(id, name, address, siteURI);
+        return new Organization(id, name, address, siteURI, Nusach.fromString(nusach));
     }
 }

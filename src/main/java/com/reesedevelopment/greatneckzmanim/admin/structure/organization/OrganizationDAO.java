@@ -74,9 +74,9 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
     public boolean save(Organization organization) {
         String sql;
         if (organization.getWebsiteURI() != null) {
-            sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getWebsiteURI());
+            sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getWebsiteURI(), organization.getNusach().getText());
         } else {
-            sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s', NULL)", organization.getId(), organization.getName(), organization.getAddress());
+            sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s', NULL, '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getNusach().getText());
         }
 
         try {
@@ -114,9 +114,9 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
     public boolean update(Organization organizationToUpdate) {
         String sql;
         if (organizationToUpdate.getWebsiteURI() != null) {
-            sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI='%s' WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getWebsiteURI(), organizationToUpdate.getId());
+            sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI='%s', NUSACH='%s' WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getWebsiteURI(), organizationToUpdate.getNusach().getText(), organizationToUpdate.getId());
         } else {
-            sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI=NULL WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getId());
+            sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI=NULL, NUSACH='%s' WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getNusach().getText(), organizationToUpdate.getId());
         }
 
         try {
