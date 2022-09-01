@@ -40,7 +40,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         // The pages does not require login
         http
                 .authorizeRequests()
-                    .antMatchers("/", "/zmanim/**", "/admin/login", "/admin/logout", "/webjars/**", "/**/*.css", "/**/*.js", "/static/**", "/db/**").permitAll()
+                    .antMatchers("/", "/zmanim/**", "/orgs/**", "/admin/login", "/admin/logout", "/webjars/**", "/**/*.css", "/**/*.js", "/static/**", "/db/**").permitAll()
                     .antMatchers("/admin/update-location").hasAnyRole("USER", "ADMIN")
                     .antMatchers("/admin/organizations", "/admin/new-organization", "/admin/create-organization", "/admin/accounts").hasAnyRole("ADMIN")
                     .anyRequest().authenticated()

@@ -14,6 +14,8 @@ import com.reesedevelopment.greatneckzmanim.front.ZmanimHandler;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -109,11 +111,15 @@ public class ZmanimController {
             Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
             if (startDate != null && startDate.after(terminationDate)) {
                 String organizationName;
+                String organizationId;
                 Organization organization = minyan.getOrganization();
                 if (organization == null) {
-                    organizationName = organizationDAO.findById(minyan.getOrganizationId()).getName();
+                    Organization temp = organizationDAO.findById(minyan.getOrganizationId());
+                    organizationName = temp.getName();
+                    organizationId = temp.getId();
                 } else {
                     organizationName = organization.getName();
+                    organizationId = organization.getId();
                 }
 
                 String locationName = null;
@@ -129,9 +135,9 @@ public class ZmanimController {
 
                 String dynamicDisplayName = minyan.getMinyanTime().dynamicDisplayName();
                 if (dynamicDisplayName != null) {
-                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName,locationName, startDate, dynamicDisplayName, minyan.getNusach(), minyan.getNotes()));
+                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationId, locationName, startDate, dynamicDisplayName, minyan.getNusach(), minyan.getNotes()));
                 } else {
-                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, locationName, startDate, minyan.getNusach(), minyan.getNotes()));
+                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationId, locationName, startDate, minyan.getNusach(), minyan.getNotes()));
                 }
             }
         }
@@ -156,5 +162,92 @@ public class ZmanimController {
 
     public ModelAndView navigate(Date date) {
         return zmanim(date);
+    }
+
+    public ModelAndView org(String orgId, Date date) throws Exception {
+        ModelAndView mv = new ModelAndView();
+        mv.setViewName("front/org");
+
+        dateFormat.setTimeZone(timeZone);
+
+//        String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, java.util.Locale.US);
+        mv.getModel().put("date", dateFormat.format(date));
+        mv.getModel().put("onlyDate", onlyDateFormat.format(date));
+
+        Calendar c = Calendar.getInstance();
+
+        c.setTime(date);
+        c.add(Calendar.DATE, 1);
+        mv.getModel().put("tommorowOnlyDate", onlyDateFormat.format(c.getTime()));
+
+        c.setTime(date);
+        c.add(Calendar.DATE, -1);
+        mv.getModel().put("yesterdayOnlyDate", onlyDateFormat.format(c.getTime()));
+
+        Date today = new Date();
+        mv.getModel().put("isToday", onlyDateFormat.format(date).equals(onlyDateFormat.format(today)));
+
+        mv.getModel().put("dateString", date.toString());
+//        mv.getModel(),put("longdate", )
+
+//        add hebrew date
+        mv.getModel().put("hebrewDate", zmanimHandler.getHebrewDate(date));
+
+        try {
+            Organization org = organizationDAO.findById(orgId);
+            mv.addObject("org", org);
+        } catch (Exception e) {
+            e.printStackTrace();
+            throw new Exception("Sorry, there was an error finding the organization.");
+        }
+
+        List<Minyan> enabledMinyanim = minyanDAO.findEnabledMatching(orgId);
+        List<MinyanEvent> minyanEvents = new ArrayList<>();
+
+        for (Minyan minyan : enabledMinyanim) {
+            Date startDate = minyan.getStartDate(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1));
+            Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
+            if (startDate != null && startDate.after(terminationDate)) {
+                String organizationName;
+                String organizationId;
+                Organization organization = minyan.getOrganization();
+                if (organization == null) {
+                    Organization temp = organizationDAO.findById(minyan.getOrganizationId());
+                    organizationName = temp.getName();
+                    organizationId = temp.getId();
+                } else {
+                    organizationName = organization.getName();
+                    organizationId = organization.getId();
+                }
+
+                String locationName = null;
+                Location location = minyan.getLocation();
+                if (location == null) {
+                    location = locationDAO.findById(minyan.getLocationId());
+                    if (location != null) {
+                        locationName = location.getName();
+                    }
+                } else {
+                    locationName = location.getName();
+                }
+
+                String dynamicDisplayName = minyan.getMinyanTime().dynamicDisplayName();
+                if (dynamicDisplayName != null) {
+                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationId, locationName, startDate, dynamicDisplayName, minyan.getNusach(), minyan.getNotes()));
+                } else {
+                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationId, locationName, startDate, minyan.getNusach(), minyan.getNotes()));
+                }
+            }
+        }
+
+        minyanEvents.sort(Comparator.comparing(MinyanEvent::getStartTime));
+        mv.getModel().put("allminyanim", minyanEvents);
+
+        return mv;
+    }
+
+    @RequestMapping("/orgs/{orgId}")
+    public ModelAndView orgToday(@PathVariable String orgId) throws Exception {
+        return org(orgId, new Date());
     }
 }

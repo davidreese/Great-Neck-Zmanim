@@ -20,9 +20,9 @@
 <!--                    <p class="col-md-4 h3 mt-3 mobile-hide" th:text="${'Schedule | ' + onlyDate}"></p>-->
                     <p class="col-md-4 h3 mt-3 dontdesktop-hide" th:text="${onlyDate}"></p>
                     <div class="col-md-4 mt-2 btn-group mobile-hide" style="height: 50%; align-self: center;" role="group">
-                        <button type="button" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn" style="width: 40%;" th:text="${yesterdayOnlyDate}">‹</button>
+                        <button type="button" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn" style="width: 38%;" th:text="${yesterdayOnlyDate}">‹</button>
                         <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">Today</button>
-                        <button type="button" th:data-url="@{/zmanim/next(after=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn" style="width: 40%;" th:text="${tommorowOnlyDate}">›</button>
+                        <button type="button" th:data-url="@{/zmanim/next(after=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn" style="width: 38%;" th:text="${tommorowOnlyDate}">›</button>
                     </div>
                     <p class="h3 mt-3 ml-auto mobile-hide"  style="font-weight: 430;" th:text="${hebrewDate}"></p>
                 </div>
@@ -63,12 +63,12 @@
                                     <tbody>
                                     <tr th:each="minyan: ${allminyanim}">
                                         <th scope="row" class="middle" th:text="${minyan.getType().displayName()}"></th>
-                                        <td th:if="${minyan.getLocationName() != null}" class="middle">
-                                            <button type="button" class="btn btn-primary btn-sm" th:text="${minyan.getOrganizationName() + '- ' + minyan.getLocationName()}"></button>
-                                        </td>
+<!--                                        <td th:if="${minyan.getLocationName() != null}" class="middle">-->
+<!--                                            <button type="button" class="btn btn-primary btn-sm" th:text="${minyan.getOrganizationName() + '- ' + minyan.getLocationName()}"></button>-->
+<!--                                        </td>-->
                                         <td class="middle" th:text="${minyan.getFormattedStartTime()}"></td>
-                                        <td th:if="${minyan.getLocationName() == null}" class="middle">
-                                            <button type="button" class="btn btn-primary btn-sm" th:text="${minyan.getOrganizationName()}"></button>
+                                        <td class="middle">
+                                            <a role="button" class="btn btn-primary btn-sm" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
                                         </td>
 <!--                                        <td class="middle" th:text="${minyan.getNusach().displayName()}"></td>-->
 <!--                                        <td class="middle" th:text="${minyan.getNotes()}"></td>-->

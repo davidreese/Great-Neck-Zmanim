@@ -171,8 +171,22 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
         }
     }
 
-    public List<Minyan> findMatching(String organizationId ){
+    public List<Minyan> findMatching(String organizationId){
         String sql = MinyanMapper.BASE_SQL + " WHERE m.ORGANIZATION_ID = ? ";
+
+        Object[] params = new Object[] { organizationId };
+        MinyanMapper mapper = new MinyanMapper();
+
+        try {
+            List<Minyan> minyanInfo = this.getJdbcTemplate().query(sql, params, mapper);
+            return minyanInfo;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public List<Minyan> findEnabledMatching(String organizationId) {
+        String sql = MinyanMapper.BASE_SQL + " WHERE m.ORGANIZATION_ID = ? AND m.ENABLED = 1";
 
         Object[] params = new Object[] { organizationId };
         MinyanMapper mapper = new MinyanMapper();

@@ -18,6 +18,8 @@ public class MinyanEvent {
 
     private String organizationName;
 
+    private String organizationId;
+
     private String locationName;
 
     private Date startTime;
@@ -28,20 +30,22 @@ public class MinyanEvent {
 
     private String notes;
 
-    public MinyanEvent(String parentMinyanId, MinyanType type, String organizationName, String locationName, Date startTime, Nusach nusach, String notes) {
+    public MinyanEvent(String parentMinyanId, MinyanType type, String organizationName, String organizationId, String locationName, Date startTime, Nusach nusach, String notes) {
         this.parentMinyanId = parentMinyanId;
         this.type = type;
         this.organizationName = organizationName;
+        this.organizationId = organizationId;
         this.locationName = locationName;
         this.startTime = startTime;
         this.nusach = nusach;
         this.notes = notes;
     }
 
-    public MinyanEvent(String parentMinyanId, MinyanType type, String organizationName, String locationName, Date startTime, String dynamicTimeString, Nusach nusach, String notes) {
+    public MinyanEvent(String parentMinyanId, MinyanType type, String organizationName, String organizationId, String locationName, Date startTime, String dynamicTimeString, Nusach nusach, String notes) {
         this.parentMinyanId = parentMinyanId;
         this.type = type;
         this.organizationName = organizationName;
+        this.organizationId = organizationId;
         this.locationName = locationName;
         this.startTime = startTime;
         this.dynamicTimeString = dynamicTimeString;
@@ -56,6 +60,10 @@ public class MinyanEvent {
 //    add getters
     public String getOrganizationName() {
         return organizationName;
+    }
+
+    public String getOrganizationId() {
+        return organizationId;
     }
 
     public String getLocationName() {
