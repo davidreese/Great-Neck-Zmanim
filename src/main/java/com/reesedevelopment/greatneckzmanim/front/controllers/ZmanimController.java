@@ -150,19 +150,35 @@ public class ZmanimController {
     }
 
     @GetMapping("/zmanim/next")
-    public ModelAndView nextAfter(@RequestParam(value = "after", required = true) String dateString) {
+    public ModelAndView nextZmanimAfter(@RequestParam(value = "after", required = true) String dateString) {
         Date date = new Date(dateString);
-        return navigate(new Date(date.getYear(), date.getMonth(), date.getDate() + 1, date.getHours(), date.getMinutes(), date.getSeconds()));
+        return navigateZmanim(new Date(date.getYear(), date.getMonth(), date.getDate() + 1, date.getHours(), date.getMinutes(), date.getSeconds()));
     }
 
     @GetMapping("/zmanim/last")
-    public ModelAndView lastBefore(@RequestParam(value = "before", required = true) String dateString) {
+    public ModelAndView lastZmanimBefore(@RequestParam(value = "before", required = true) String dateString) {
         Date date = new Date(dateString);
-        return navigate(new Date(date.getYear(), date.getMonth(), date.getDate() - 1, date.getHours(), date.getMinutes(), date.getSeconds()));
+        return navigateZmanim(new Date(date.getYear(), date.getMonth(), date.getDate() - 1, date.getHours(), date.getMinutes(), date.getSeconds()));
     }
 
-    public ModelAndView navigate(Date date) {
+    @GetMapping("/orgs/{id}/next")
+    public ModelAndView nextOrgAfter(@PathVariable String id, @RequestParam(value = "after", required = true) String dateString) throws Exception {
+        Date date = new Date(dateString);
+        return navigateOrg(id, new Date(date.getYear(), date.getMonth(), date.getDate() + 1, date.getHours(), date.getMinutes(), date.getSeconds()));
+    }
+
+    @GetMapping("/orgs/{id}/last")
+    public ModelAndView lastOrgBefore(@PathVariable String id, @RequestParam(value = "before", required = true) String dateString) throws Exception {
+        Date date = new Date(dateString);
+        return navigateOrg(id, new Date(date.getYear(), date.getMonth(), date.getDate() - 1, date.getHours(), date.getMinutes(), date.getSeconds()));
+    }
+
+    public ModelAndView navigateZmanim(Date date) {
         return zmanim(date);
+    }
+
+    public ModelAndView navigateOrg(String orgId, Date date) throws Exception {
+        return org(orgId, date);
     }
 
     public ModelAndView org(String orgId, Date date) throws Exception {
