@@ -18,6 +18,8 @@ public class MinyanEvent {
 
     private String organizationName;
 
+    private Nusach organizationNusach;
+
     private String organizationId;
 
     private String locationName;
@@ -30,10 +32,11 @@ public class MinyanEvent {
 
     private String notes;
 
-    public MinyanEvent(String parentMinyanId, MinyanType type, String organizationName, String organizationId, String locationName, Date startTime, Nusach nusach, String notes) {
+    public MinyanEvent(String parentMinyanId, MinyanType type, String organizationName, Nusach organizationNusach, String organizationId, String locationName, Date startTime, Nusach nusach, String notes) {
         this.parentMinyanId = parentMinyanId;
         this.type = type;
         this.organizationName = organizationName;
+        this.organizationNusach = organizationNusach;
         this.organizationId = organizationId;
         this.locationName = locationName;
         this.startTime = startTime;
@@ -41,10 +44,11 @@ public class MinyanEvent {
         this.notes = notes;
     }
 
-    public MinyanEvent(String parentMinyanId, MinyanType type, String organizationName, String organizationId, String locationName, Date startTime, String dynamicTimeString, Nusach nusach, String notes) {
+    public MinyanEvent(String parentMinyanId, MinyanType type, String organizationName, Nusach organizationNusach, String organizationId, String locationName, Date startTime, String dynamicTimeString, Nusach nusach, String notes) {
         this.parentMinyanId = parentMinyanId;
         this.type = type;
         this.organizationName = organizationName;
+        this.organizationNusach = organizationNusach;
         this.organizationId = organizationId;
         this.locationName = locationName;
         this.startTime = startTime;
@@ -93,13 +97,15 @@ public class MinyanEvent {
 
     public String getInformation() {
         String result = "";
+        if (locationName != null) {
+            result += locationName;
 
-        if (!notes.isEmpty()) {
-
-        } else {
-
+            if (organizationNusach != nusach && nusach != Nusach.UNSPECIFIED) {
+                result += String.format(" (%s)", nusach.displayName());
+            }
+        } else if (organizationNusach != nusach && nusach != Nusach.UNSPECIFIED) {
+            result += nusach.displayName();
         }
-
 
         return result;
     }

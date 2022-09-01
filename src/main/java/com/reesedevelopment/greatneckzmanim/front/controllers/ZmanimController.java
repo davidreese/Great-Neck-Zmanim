@@ -112,14 +112,17 @@ public class ZmanimController {
             Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
             if (startDate != null && startDate.after(terminationDate)) {
                 String organizationName;
+                Nusach organizationNusach;
                 String organizationId;
                 Organization organization = minyan.getOrganization();
                 if (organization == null) {
                     Organization temp = organizationDAO.findById(minyan.getOrganizationId());
                     organizationName = temp.getName();
+                    organizationNusach = temp.getNusach();
                     organizationId = temp.getId();
                 } else {
                     organizationName = organization.getName();
+                    organizationNusach = organization.getNusach();
                     organizationId = organization.getId();
                 }
 
@@ -136,9 +139,9 @@ public class ZmanimController {
 
                 String dynamicDisplayName = minyan.getMinyanTime().dynamicDisplayName();
                 if (dynamicDisplayName != null) {
-                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationId, locationName, startDate, dynamicDisplayName, minyan.getNusach(), minyan.getNotes()));
+                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationNusach, organizationId, locationName, startDate, dynamicDisplayName, minyan.getNusach(), minyan.getNotes()));
                 } else {
-                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationId, locationName, startDate, minyan.getNusach(), minyan.getNotes()));
+                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationNusach, organizationId, locationName, startDate, minyan.getNusach(), minyan.getNotes()));
                 }
             }
         }
@@ -230,15 +233,18 @@ public class ZmanimController {
             Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
             if (startDate != null && startDate.after(terminationDate)) {
                 String organizationName;
+                Nusach organizationNusach;
                 String organizationId;
                 Organization organization = minyan.getOrganization();
                 if (organization == null) {
                     Organization temp = organizationDAO.findById(minyan.getOrganizationId());
                     organizationName = temp.getName();
                     organizationId = temp.getId();
+                    organizationNusach = temp.getNusach();
                 } else {
                     organizationName = organization.getName();
                     organizationId = organization.getId();
+                    organizationNusach = organization.getNusach();
                 }
 
                 String locationName = null;
@@ -254,9 +260,9 @@ public class ZmanimController {
 
                 String dynamicDisplayName = minyan.getMinyanTime().dynamicDisplayName();
                 if (dynamicDisplayName != null) {
-                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationId, locationName, startDate, dynamicDisplayName, minyan.getNusach(), minyan.getNotes()));
+                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationNusach, organizationId, locationName, startDate, dynamicDisplayName, minyan.getNusach(), minyan.getNotes()));
                 } else {
-                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationId, locationName, startDate, minyan.getNusach(), minyan.getNotes()));
+                    minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationNusach, organizationId, locationName, startDate, minyan.getNusach(), minyan.getNotes()));
                 }
             }
         }
