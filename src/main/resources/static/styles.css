@@ -135,3 +135,13 @@ vertical-align: middle;
     background-color: #033A62;
     border-color: #033A62;
 }
+
+@media screen and (max-width: 600px) {
+    .mpt0 {
+        padding-top: 0!important;
+    }
+
+    .mpb0 {
+    padding-bottom: 0!important;
+    }
+  }

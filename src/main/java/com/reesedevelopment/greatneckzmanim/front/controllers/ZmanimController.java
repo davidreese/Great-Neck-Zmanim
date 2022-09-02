@@ -37,6 +37,7 @@ public class ZmanimController {
     Calendar calendar = Calendar.getInstance();
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy | h:mm aa");
     SimpleDateFormat onlyDateFormat = new SimpleDateFormat("EEEE, MMMM d");
+    SimpleDateFormat strippedDayFormat = new SimpleDateFormat("MMMM d");
     SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm:ss aa");
 
     ZmanimHandler zmanimHandler = new ZmanimHandler(geoLocation);
@@ -76,10 +77,13 @@ public class ZmanimController {
         c.setTime(date);
         c.add(Calendar.DATE, 1);
         mv.getModel().put("tommorowOnlyDate", onlyDateFormat.format(c.getTime()));
+        mv.getModel().put("tommorowStrippedDay", strippedDayFormat.format(c.getTime()));
+
 
         c.setTime(date);
         c.add(Calendar.DATE, -1);
         mv.getModel().put("yesterdayOnlyDate", onlyDateFormat.format(c.getTime()));
+        mv.getModel().put("yesterdayStrippedDay", strippedDayFormat.format(c.getTime()));
 
         Date today = new Date();
         mv.getModel().put("isToday", onlyDateFormat.format(date).equals(onlyDateFormat.format(today)));
@@ -199,10 +203,12 @@ public class ZmanimController {
         c.setTime(date);
         c.add(Calendar.DATE, 1);
         mv.getModel().put("tommorowOnlyDate", onlyDateFormat.format(c.getTime()));
+        mv.getModel().put("tommorowStrippedDay", strippedDayFormat.format(c.getTime()));
 
         c.setTime(date);
         c.add(Calendar.DATE, -1);
         mv.getModel().put("yesterdayOnlyDate", onlyDateFormat.format(c.getTime()));
+        mv.getModel().put("yesterdayStrippedDay", strippedDayFormat.format(c.getTime()));
 
         Date today = new Date();
         mv.getModel().put("isToday", onlyDateFormat.format(date).equals(onlyDateFormat.format(today)));
