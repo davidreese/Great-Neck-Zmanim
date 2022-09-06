@@ -73,3 +73,7 @@
     max-width: 1100px;
     margin: auto;
 }
+
+.time-box {
+   min-width: 77px;
+   }

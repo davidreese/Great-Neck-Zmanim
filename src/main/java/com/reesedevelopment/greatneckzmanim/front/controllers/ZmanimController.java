@@ -38,7 +38,7 @@ public class ZmanimController {
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy | h:mm aa");
     SimpleDateFormat onlyDateFormat = new SimpleDateFormat("EEEE, MMMM d");
     SimpleDateFormat strippedDayFormat = new SimpleDateFormat("MMMM d");
-    SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm:ss aa");
+    SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
 
     ZmanimHandler zmanimHandler = new ZmanimHandler(geoLocation);
 
@@ -60,6 +60,13 @@ public class ZmanimController {
     @GetMapping("/zmanim")
     public ModelAndView todaysZmanim() {
         return zmanim(new Date());
+    }
+
+    private String timeFormatWithRoundingToMinute(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.SECOND, 30);
+        return timeFormat.format(calendar.getTime());
     }
 
     public ModelAndView zmanim(Date date) {
@@ -98,14 +105,14 @@ public class ZmanimController {
 
         Dictionary zmanim = zmanimHandler.getZmanim(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()));
 
-        mv.getModel().put("alotHashachar", timeFormat.format(zmanim.get(Zman.ALOT_HASHACHAR)));
-        mv.getModel().put("sunrise", timeFormat.format(zmanim.get(Zman.NETZ)));
-        mv.getModel().put("chatzot", timeFormat.format(zmanim.get(Zman.CHATZOT)));
-        mv.getModel().put("minchaGedola", timeFormat.format(zmanim.get(Zman.MINCHA_GEDOLA)));
-        mv.getModel().put("minchaKetana", timeFormat.format(zmanim.get(Zman.MINCHA_KETANA)));
-        mv.getModel().put("plagHamincha", timeFormat.format(zmanim.get(Zman.PLAG_HAMINCHA)));
-        mv.getModel().put("shekiya", timeFormat.format(zmanim.get(Zman.SHEKIYA)));
-        mv.getModel().put("tzet", timeFormat.format(zmanim.get(Zman.TZET)));
+        mv.getModel().put("alotHashachar", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
+        mv.getModel().put("sunrise", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.NETZ)));
+        mv.getModel().put("chatzot", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.CHATZOT)));
+        mv.getModel().put("minchaGedola", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.MINCHA_GEDOLA)));
+        mv.getModel().put("minchaKetana", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.MINCHA_KETANA)));
+        mv.getModel().put("plagHamincha", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.PLAG_HAMINCHA)));
+        mv.getModel().put("shekiya", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.SHEKIYA)));
+        mv.getModel().put("tzet", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.TZET)));
 
 //        get minyanim closest in time to now
         List<Minyan> enabledMinyanim = minyanDAO.getEnabled();
@@ -152,6 +159,22 @@ public class ZmanimController {
 
         minyanEvents.sort(Comparator.comparing(MinyanEvent::getStartTime));
         mv.getModel().put("allminyanim", minyanEvents);
+
+        List<MinyanEvent> shacharitMinyanim = new ArrayList<>();
+        List<MinyanEvent> minchaMinyanim = new ArrayList<>();
+        List<MinyanEvent> arvitMinyanim = new ArrayList<>();
+        for (MinyanEvent me : minyanEvents) {
+            if (me.getType().isShacharit()) {
+                shacharitMinyanim.add(me);
+            } else if (me.getType().isMincha()) {
+                minchaMinyanim.add(me);
+            } else if (me.getType().isArvit()) {
+                arvitMinyanim.add(me);
+            }
+        }
+        mv.getModel().put("shacharitMinyanim", shacharitMinyanim);
+        mv.getModel().put("minchaMinyanim", minchaMinyanim);
+        mv.getModel().put("arvitMinyanim", arvitMinyanim);
 
         return mv;
     }
@@ -275,6 +298,23 @@ public class ZmanimController {
 
         minyanEvents.sort(Comparator.comparing(MinyanEvent::getStartTime));
         mv.getModel().put("allminyanim", minyanEvents);
+
+        List<MinyanEvent> shacharitMinyanim = new ArrayList<>();
+        List<MinyanEvent> minchaMinyanim = new ArrayList<>();
+        List<MinyanEvent> arvitMinyanim = new ArrayList<>();
+        for (MinyanEvent me : minyanEvents) {
+            if (me.getType().isShacharit()) {
+                shacharitMinyanim.add(me);
+            } else if (me.getType().isMincha()) {
+                minchaMinyanim.add(me);
+            } else if (me.getType().isArvit()) {
+                arvitMinyanim.add(me);
+            }
+        }
+        mv.getModel().put("shacharitMinyanim", shacharitMinyanim);
+        mv.getModel().put("minchaMinyanim", minchaMinyanim);
+        mv.getModel().put("arvitMinyanim", arvitMinyanim);
+
 //        mv.getModel().put("usesLocations", minyanEvents.)
 
         return mv;

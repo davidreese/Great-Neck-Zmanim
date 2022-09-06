@@ -17,8 +17,8 @@
             <!--/col-->
             <main class="col main pt-5 mt-3 overflow-auto" style="flex-shrink: 3;">
                 <div class="d-flex">
-<!--                    <p class="col-md-4 h3 mt-3 mobile-hide" th:text="${'Schedule | ' + onlyDate}"></p>-->
-                    <p class="col-md-4 h3 mt-3 dontdesktop-hide" th:text="${onlyDate}"></p>
+                    <p class="col-md-4 h4 mt-3 desktop-hide" th:text="${onlyDate}"></p>
+                    <p class="col-md-4 h3 mt-3 mobile-hide" th:text="${onlyDate}"></p>
                     <div class="col-md-4 mt-2 btn-group mobile-hide" style="height: 50%; align-self: center;" role="group">
                         <button type="button" th:data-url="@{|/orgs/${org.getId()}/last|(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn" style="width: 40%;" th:text="${yesterdayOnlyDate}">‹</button>
                         <button type="button" th:if="${!isToday}" th:data-url="@{|/orgs/${org.getId()}|}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">Today</button>
@@ -33,8 +33,8 @@
                 </div>
                 <hr>
                 <div id="housing-housing">
-                    <div class="mpt0 mpb0" id="row-housing" style="padding: 1rem;">
-                <div class="row my-4">
+                    <div class="mpt0 pb0" id="row-housing" style="padding: 1rem;">
+                <div class="row my-4" style="margin-bottom: 40px!important;">
                     <div class="col-lg-3 col-md-4" id="org-box">
                         <div class="card" style="border: 0;">
                             <div class="card-body">
@@ -73,7 +73,7 @@
                                     </tbody>
                                 </table>
                                 <div class="jumbotron" th:if="${allminyanim.isEmpty()}">
-                                    <h4>Sorry, there aren't any minyanim scheduled for this day.</h4>
+                                    <h4>Sorry, there aren't any minyanim scheduled for this date.</h4>
                                 </div>
                 </div>
                 </div>
@@ -83,35 +83,6 @@
             <!--/main col-->
         </div>
     </div>
-    <!--/.container-->
-
-
-    <!-- Modal -->
-    <div class="modal fade" id="myModal" tabindex="-1" role="dialog">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h4 class="modal-title" id="myModalLabel">Modal</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">×</span>
-                        <span class="sr-only">Close</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <p>This is a dashboard layout for Bootstrap 4. This is an example of the Modal component which you can use to show content.
-                        Any content can be placed inside the modal and it can use the Bootstrap grid classes.</p>
-                    <p>
-                        <a href="https://www.codeply.com/go/KrUO8QpyXP" target="_ext">Grab the code at Codeply</a>
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary-outline" data-dismiss="modal">OK</button>
-                </div>
-            </div>
-        </div>
-    </div>
-    <!--    Welcome to the dashboard, [[${#httpServletRequest.remoteUser}]].-->
 
     <th:block th:include="/front/footer"></th:block>
 </div>

@@ -142,6 +142,11 @@ vertical-align: middle;
     }
 
     .mpb0 {
-    padding-bottom: 0!important;
-    }
-  }
+        padding-bottom: 0.5rem!important;
+     }
+}
+
+.pb0 {
+    padding-bottom: 0.5rem!important;
+}
+
