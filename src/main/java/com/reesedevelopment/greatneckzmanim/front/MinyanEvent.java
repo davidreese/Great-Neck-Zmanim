@@ -7,7 +7,7 @@ import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.MinyanType;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organization;
 import com.reesedevelopment.greatneckzmanim.global.Nusach;
 
-import javax.persistence.Id;
+//import javax.persistence.Id;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
