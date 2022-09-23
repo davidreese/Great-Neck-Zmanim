@@ -13,7 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 @Controller
-public class LoginController extends JdbcDaoSupport {
+public class LoginController {
     @GetMapping("/admin/login")
     public ModelAndView login(@RequestParam(value = "error",required = false) String error, @RequestParam(value = "logout",	required = false) boolean logout) {
         System.out.println("LoginController.login() called");
