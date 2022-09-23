@@ -79,12 +79,13 @@ public class MinyanEvent {
     }
 
     public String getFormattedStartTime() {
-        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
-        if (dynamicTimeString != null) {
-            return timeFormat.format(startTime) +  " (" + dynamicTimeString + ")";
-        } else {
-            return timeFormat.format(startTime);
-        }
+        return startTime.toString();
+//        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
+//        if (dynamicTimeString != null) {
+//            return timeFormat.format(startTime) +  " (" + dynamicTimeString + ")";
+//        } else {
+//            return timeFormat.format(startTime);
+//        }
     }
 
     public Nusach getNusach() {

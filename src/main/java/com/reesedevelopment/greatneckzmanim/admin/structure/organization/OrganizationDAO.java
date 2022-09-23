@@ -74,9 +74,9 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
     public boolean save(Organization organization) {
         String sql;
         if (organization.getWebsiteURI() != null) {
-            sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getWebsiteURI(), organization.getNusach().getText());
+            sql = String.format("INSERT INTO ORGANIZATION (ID, NAME, ADDRESS, SITE_URI, NUSACH) VALUES ('%s', '%s', '%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getWebsiteURI(), organization.getNusach().getText());
         } else {
-            sql = String.format("INSERT INTO ORGANIZATION VALUES ('%s', '%s', '%s', NULL, '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getNusach().getText());
+            sql = String.format("INSERT INTO ORGANIZATION (ID, NAME, ADDRESS, SITE_URI, NUSACH) VALUES ('%s', '%s', '%s', NULL, '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getNusach().getText());
         }
 
         try {

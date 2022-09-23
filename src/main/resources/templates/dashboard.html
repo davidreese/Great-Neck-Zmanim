@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
 <head>
     <meta charset="UTF-8">
     <title>Dashboard</title>
@@ -10,10 +10,10 @@
 </head>
 <body>
 <div class="horizontal-container d-flex" id="wrapper">
-    <th:block th:include="/admin/navbar"></th:block>
+    <th:block th:include="admin/navbar"></th:block>
     <div class="container-fluid" id="main">
         <div class="row row-offcanvas row-offcanvas-left vh-100">
-            <th:block th:include="/admin/sidebar"></th:block>
+            <th:block th:include="admin/sidebar"></th:block>
             <!--/col-->
             <main class="col main pt-5 mt-3 h-100 overflow-auto" >
                 <h1 class="display-4 d-none d-sm-block">
@@ -520,8 +520,5 @@
 <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
 <script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
 <script th:src="@{/webjars/bootstrap/4.6.1/js/bootstrap.min.js}"></script>
-<!--    <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>-->
-<!--    <script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>-->
-<!--    <script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>-->
 
 </html>

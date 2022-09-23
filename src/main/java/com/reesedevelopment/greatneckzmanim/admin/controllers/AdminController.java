@@ -80,7 +80,7 @@ public class AdminController {
     @GetMapping("/admin/dashboard")
     public ModelAndView dashbaord() {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("admin/dashboard");
+        mv.setViewName("dashboard");
 
         addStandardPageData(mv);
 
@@ -123,7 +123,7 @@ public class AdminController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/new-organization");
 
-        mv.getModel().put("successmessage", success);
+        mv.getModel().put("successmessage", success ? "The organization was successfully created." : null);
         mv.getModel().put("errormessage", error);
         mv.getModel().put("inputerrormessage", inputErrorMessage);
 
@@ -159,10 +159,10 @@ public class AdminController {
 
 //        check if username is valid
         String usernameRegex = "^[A-Za-z]\\w{5,29}$";
-        Pattern usernamePatter = Pattern.compile(usernameRegex);
-        Matcher m = usernamePatter.matcher(username);
+        Pattern usernamePattern = Pattern.compile(usernameRegex);
+        Matcher m = usernamePattern.matcher(username);
         if (!m.matches()) {
-            System.out.println("Sorry, this username is not valid.");
+            System.out.println("Sorry, this password is not valid.");
             return addOrganization(false, "The organization could not be created. The username must be 6-30 characters, only contain letters and numbers, and start with a letter.", "Sorry, the username must be 6-30 characters, only contain letters and numbers, and start with a letter.");
         }
 
@@ -530,7 +530,7 @@ public class AdminController {
         Matcher m = usernamePatter.matcher(username);
         if (!m.matches()) {
             System.out.println("Sorry, this username is not valid.");
-            return organization(organizationId, null, null, null,"Sorry, the username must be 6-30 characters, only contain letters and numbers, and start with a letter.");
+            return organization(organizationId, null, null, null,"Sorry, the password must be 6-30 characters, only contain letters and numbers, and start with a letter.");
         }
 
 //        check if username already exists
@@ -755,7 +755,7 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/{organizationId}/minyanim")
     public ModelAndView minyanim(@PathVariable String organizationId, String successMessage, String errorMessage) {
-        ModelAndView mv = new ModelAndView("/admin/minyan-schedule");
+        ModelAndView mv = new ModelAndView("minyanschedule");
 
         String oidToUse;
         if (isSuperAdmin()) {
@@ -994,7 +994,7 @@ public class AdminController {
 //        get and verify location
         Location location = locationDAO.findById(locationId);
         if (location != null) {
-            if (location.getOrganizationId() != organization.getId()) {
+            if (!location.getOrganizationId().equalsIgnoreCase(organization.getId())) {
                 throw new AccessDeniedException("You do not have permission to create a minyan using this location.");
             }
         }

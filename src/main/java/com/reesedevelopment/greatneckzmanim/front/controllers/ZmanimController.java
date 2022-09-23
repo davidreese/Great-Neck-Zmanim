@@ -71,7 +71,7 @@ public class ZmanimController {
 
     public ModelAndView zmanim(Date date) {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("front/home");
+        mv.setViewName("homepage");
 
         dateFormat.setTimeZone(timeZone);
 
@@ -213,7 +213,7 @@ public class ZmanimController {
 
     public ModelAndView org(String orgId, Date date) throws Exception {
         ModelAndView mv = new ModelAndView();
-        mv.setViewName("front/org");
+        mv.setViewName("org");
 
         dateFormat.setTimeZone(timeZone);
 
