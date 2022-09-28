@@ -59,6 +59,11 @@ public class ZmanimController {
 
     @GetMapping("/zmanim")
     public ModelAndView todaysZmanim() {
+        timeFormat.setTimeZone(timeZone);
+        dateFormat.setTimeZone(timeZone);
+        onlyDateFormat.setTimeZone(timeZone);
+        strippedDayFormat.setTimeZone(timeZone);
+
         return zmanim(new Date());
     }
 
@@ -72,8 +77,6 @@ public class ZmanimController {
     public ModelAndView zmanim(Date date) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("homepage");
-
-        dateFormat.setTimeZone(timeZone);
 
 //        String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, java.util.Locale.US);
         mv.getModel().put("date", dateFormat.format(date));

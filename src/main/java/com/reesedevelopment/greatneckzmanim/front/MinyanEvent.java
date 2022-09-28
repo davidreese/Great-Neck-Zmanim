@@ -10,8 +10,11 @@ import com.reesedevelopment.greatneckzmanim.global.Nusach;
 //import javax.persistence.Id;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.TimeZone;
 
 public class MinyanEvent {
+    TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
+
     private String parentMinyanId;
 
     private MinyanType type;
@@ -79,13 +82,14 @@ public class MinyanEvent {
     }
 
     public String getFormattedStartTime() {
-        return startTime.toString();
-//        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
-//        if (dynamicTimeString != null) {
-//            return timeFormat.format(startTime) +  " (" + dynamicTimeString + ")";
-//        } else {
-//            return timeFormat.format(startTime);
-//        }
+//        return startTime.toString();
+        SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
+        timeFormat.setTimeZone(timeZone);
+        if (dynamicTimeString != null) {
+            return timeFormat.format(startTime) +  " (" + dynamicTimeString + ")";
+        } else {
+            return timeFormat.format(startTime);
+        }
     }
 
     public Nusach getNusach() {
