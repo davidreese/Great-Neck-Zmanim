@@ -1167,7 +1167,7 @@ public class AdminController {
 //        get and verify location
         Location location = locationDAO.findById(locationId);
         if (location != null) {
-            if (location.getOrganizationId() != organization.getId()) {
+            if (!location.getOrganizationId().equals(organization.getId())) {
                 throw new AccessDeniedException("You do not have permission to create a minyan using this location.");
             }
         }
