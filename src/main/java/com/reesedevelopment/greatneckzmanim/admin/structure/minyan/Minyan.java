@@ -339,8 +339,7 @@ public class Minyan extends GNZObject implements IDGenerator {
     public Time getStartTime(LocalDate date) {
 //        need to check if that date is a special day
         MinyanTime mt = getMinyanTime(date);
-        Time t = mt.getTime(date);
-        return t;
+        return mt.getTime(date);
     }
 
     public MinyanTime getMinyanTime() {
@@ -362,24 +361,16 @@ public class Minyan extends GNZObject implements IDGenerator {
 //        } else if (jc.) {
 //            return schedule.getYomTov().getStartTime();
         } else {
-            switch (date.getDayOfWeek()) {
-                case SUNDAY:
-                    return schedule.getSunday();
-                case MONDAY:
-                    return schedule.getMonday();
-                case TUESDAY:
-                    return schedule.getTuesday();
-                case WEDNESDAY:
-                    return schedule.getWednesday();
-                case THURSDAY:
-                    return schedule.getThursday();
-                case FRIDAY:
-                    return schedule.getFriday();
-                case SATURDAY:
-                    return schedule.getShabbat();
-                default:
-                    return null;
-            }
+            return switch (date.getDayOfWeek()) {
+                case SUNDAY -> schedule.getSunday();
+                case MONDAY -> schedule.getMonday();
+                case TUESDAY -> schedule.getTuesday();
+                case WEDNESDAY -> schedule.getWednesday();
+                case THURSDAY -> schedule.getThursday();
+                case FRIDAY -> schedule.getFriday();
+                case SATURDAY -> schedule.getShabbat();
+                default -> null;
+            };
         }
     }
 }

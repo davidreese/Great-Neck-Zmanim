@@ -118,13 +118,17 @@ public class ZmanimController {
         mv.getModel().put("tzet", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.TZET)));
 
 //        get minyanim closest in time to now
+//        todo: only get items with non null time for date
         List<Minyan> enabledMinyanim = minyanDAO.getEnabled();
         List<MinyanEvent> minyanEvents = new ArrayList<>();
 
         for (Minyan minyan : enabledMinyanim) {
-            Date startDate = minyan.getStartDate(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1));
-            Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
-            if (startDate != null && startDate.after(terminationDate)) {
+            LocalDate ref = LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1);
+            Date startDate = minyan.getStartDate(ref);
+            System.out.printf("SD: %s%n", startDate);
+            Date now = new Date();
+            Date terminationDate = new Date(now.getTime() - (60000 * 20));
+            if (startDate != null && (startDate.after(terminationDate) || now.getDate() != startDate.getDate())) {
                 String organizationName;
                 Nusach organizationNusach;
                 String organizationId;
