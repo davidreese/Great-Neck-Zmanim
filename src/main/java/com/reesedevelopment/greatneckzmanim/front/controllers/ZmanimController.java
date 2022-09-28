@@ -125,7 +125,6 @@ public class ZmanimController {
         for (Minyan minyan : enabledMinyanim) {
             LocalDate ref = LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1);
             Date startDate = minyan.getStartDate(ref);
-            System.out.printf("SD: %s%n", startDate);
             Date now = new Date();
             Date terminationDate = new Date(now.getTime() - (60000 * 20));
             if (startDate != null && (startDate.after(terminationDate) || now.getDate() != startDate.getDate())) {

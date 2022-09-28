@@ -27,7 +27,7 @@ public class MinyanEvent {
 
     private String locationName;
 
-    private Date startTime;
+    final private Date startTime;
 
     private String dynamicTimeString;
 
@@ -84,10 +84,11 @@ public class MinyanEvent {
     public String getFormattedStartTime() {
 //        return startTime.toString();
         SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
-        timeFormat.setTimeZone(timeZone);
         if (dynamicTimeString != null) {
+            timeFormat.setTimeZone(timeZone);
             return timeFormat.format(startTime) +  " (" + dynamicTimeString + ")";
         } else {
+//            time zone already set in db
             return timeFormat.format(startTime);
         }
     }
