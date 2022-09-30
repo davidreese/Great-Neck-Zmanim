@@ -357,9 +357,8 @@ public class Minyan extends GNZObject implements IDGenerator {
             }
         } else if (jc.isChanukah()) {
             return schedule.getChanuka();
-//            TODO: DEAL WITH FAST DAY TIME
-//        } else if (jc.) {
-//            return schedule.getYomTov().getStartTime();
+        } else if (jc.isYomTov()) {
+            return schedule.getYomTov();
         } else {
             return switch (date.getDayOfWeek()) {
                 case SUNDAY -> schedule.getSunday();
@@ -369,7 +368,6 @@ public class Minyan extends GNZObject implements IDGenerator {
                 case THURSDAY -> schedule.getThursday();
                 case FRIDAY -> schedule.getFriday();
                 case SATURDAY -> schedule.getShabbat();
-                default -> null;
             };
         }
     }
