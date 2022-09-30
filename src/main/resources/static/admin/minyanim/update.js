@@ -1,18 +1,3 @@
-const queryString = window.location.search;
-const urlParams = new URLSearchParams(queryString);
-const start = urlParams.get('st');
-if (start == "sh") {
-    document.getElementById("type").value = "shacharit";
-} else if (start == "mi") {
-    document.getElementById("type").value = "mincha";
-} else if (start == "ar") {
-    document.getElementById("type").value = "arvit";
-} else if (start == "se") {
-    document.getElementById("type").value = "selichot";
-} else if (start == "mr") {
-    document.getElementById("type").value = "megilareading";
-}
-
 function update(name) {
 //    get currently selected mode
     var mode = document.getElementById(`${name}-time-type`).value;
@@ -52,6 +37,8 @@ function update(name) {
             dynamicBox.replaceWith(newBox);
         } else if (fixedBox) {
             fixedBox.replaceWith(newBox);
+        } else if (nmBox) {
+            nmBox.replaceWith(newBox);
         }
     } else if (mode == "fixed") {
 //        console.log("Removing dynamic box");
@@ -61,6 +48,8 @@ function update(name) {
             nmBox.replaceWith(newBox);
         } else if (dynamicBox) {
             dynamicBox.replaceWith(newBox);
+        } else if (fixedBox) {
+            fixedBox.replaceWith(newBox);
         }
     } else if (mode == "dynamic") {
 //        console.log("Removing static box");
@@ -70,6 +59,8 @@ function update(name) {
             nmBox.replaceWith(newBox);
         } else if (fixedBox) {
             fixedBox.replaceWith(newBox);
+        } else if (dynamicBox) {
+            dynamicBox.replaceWith(newBox);
         }
     } else {
         console.log("Update failed. Mode: " + mode);
@@ -91,11 +82,4 @@ function updateAll() {
     update("rcc")
 }
 
-//function validateData() {
-//// make sure a minyan type is selected
-//    var minyanType = document.getElementById("type").value;
-//    if (minyanType == "") {
-//        return false;
-//    } else {
-//    return true;
-//}
+//updateAll();

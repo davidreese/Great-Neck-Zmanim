@@ -6,10 +6,10 @@
 </head>
 <body>
 <div class="horizontal-container d-flex" id="wrapper">
-    <th:block th:include="/admin/navbar"></th:block>
+    <th:block th:include="admin/navbar"></th:block>
     <div class="container-fluid" id="main">
         <div class="row row-offcanvas row-offcanvas-left vh-100">
-            <th:block th:include="/admin/sidebar"></th:block>
+            <th:block th:include="admin/sidebar"></th:block>
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
                 <main class="col main pt-5 mt-3 overflow-auto">
@@ -69,7 +69,7 @@
                         </div>
                     </div>
                 </main>
-                <th:block th:include="/admin/footer"></th:block>
+                <th:block th:include="admin/footer"></th:block>
             </div>
 
             <!--/main col-->

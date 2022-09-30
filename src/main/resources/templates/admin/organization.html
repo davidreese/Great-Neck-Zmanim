@@ -6,16 +6,16 @@
 </head>
 <body>
 <div class="horizontal-container">
-    <th:block th:include="/admin/navbar"></th:block>
+    <th:block th:include="admin/navbar"></th:block>
     <div class="container-fluid" id="main">
         <div class="row row-offcanvas row-offcanvas-left vh-100">
-            <th:block th:include="/admin/sidebar"></th:block>
+            <th:block th:include="admin/sidebar"></th:block>
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
                 <main class="col main pt-5 mt-3 overflow-auto">
                     <div class="alert alert-success" role="alert" th:if="${mainSuccess}" th:text="${mainSuccess}"></div>
                     <h1 class="display-4 d-none d-sm-block" th:text="${organization.name}"></h1>
-                    <p class="lead d-none d-sm-block">Edit profile, attributes, and associated accounts.</p>
+                    <p class="lead">Edit profile, attributes, and associated accounts.</p>
 
                     <hr>
 
@@ -38,6 +38,15 @@
                                         <label for="site-url">Website</label>
                                         <input type="text" class="form-control" name="site-url" id="site-url" aria-describedby="site-url-help" th:value="${organization.websiteURI}">
                                         <small id="site-url-help" class="form-text text-muted">Optional: This website link will be displayed publically.</small>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="nusach">Nusach</label>
+                                        <select class="custom-select" name="nusach" id="nusach">
+                                            <option value="unspecified" th:selected="${organization.getNusach().isUnspecified()}">None specified</option>
+                                            <option value="edot_hamizrach" th:selected="${organization.getNusach().isEdotHamizrach()}">Edot HaMizrach</option>
+                                            <option value="sefard" th:selected="${organization.getNusach().isSefard()}">Sefard</option>
+                                            <option value="ashkenaz" th:selected="${organization.getNusach().isAshkenaz()}">Ashkenaz</option>
+                                        </select>
                                     </div>
                                     <div class="login-msg-box" th:if="${updateError}" style="padding-bottom: 8px">
                                         <div class="form-msg-fatal" th:text="${updateError}"></div>
@@ -115,7 +124,7 @@
                                 <div class="card-body">
                                     <h4 class="card-title">Minyan Schedule</h4>
                                     <p class="card-text" th:text="${'Change the schedule of routine and occasional minyanim for ' + organization.name + '.'}"></p>
-                                    <a href="/admin/minyanim" class="btn btn-primary">Go</a>
+                                    <a href="minyanim" class="btn btn-primary">Go</a>
                                 </div>
                             </div>
                             <div class="card card-inverse bg-inverse mt-3">
@@ -128,7 +137,7 @@
                         </div>
                     </div>
                 </main>
-                <th:block th:include="/admin/footer"></th:block>
+                <th:block th:include="admin/footer"></th:block>
             </div>
         </div>
 

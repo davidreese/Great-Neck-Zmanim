@@ -10,10 +10,10 @@
 </head>
 <body>
 <div class="horizontal-container d-flex" id="wrapper">
-    <th:block th:include="/admin/navbar"></th:block>
+    <th:block th:include="admin/navbar"></th:block>
     <div class="container-fluid" id="main">
         <div class="row row-offcanvas row-offcanvas-left vh-100">
-            <th:block th:include="/admin/sidebar"></th:block>
+            <th:block th:include="admin/sidebar"></th:block>
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
                 <main class="col main pt-5 mt-3 overflow-auto">
@@ -26,13 +26,15 @@
                 <h1 class="display-4 d-none d-sm-block">
                     Add an Organization
                 </h1>
-                <p class="lead d-none d-sm-block">Create an organization along with an account used for posting location details, minyan information, and more.</p>
+                <p class="lead">Create an organization along with an account used for posting location details, minyan information, and more.</p>
 
                 <hr>
-                <p class="lead">
+
+                <p class="lead d-none d-sm-block">
                     The organization created below will be created with a default account using the username and password you enter below.
-                    The account will be a member of the organization, not an admin on the Great Neck Zmanim site.
+                    The account will be a member of the organization, not an admin on the Great Neck Minyanim site.
                 </p>
+
                 <div class="row my-4 footer-pusher">
                     <div class="col-lg-9 col-md-8">
                         <div class="table-responsive">
@@ -48,9 +50,18 @@
                                     <small id="address-help" class="form-text text-muted">This is the publicly displayed address for the organization.</small>
                                 </div>
                                 <div class="form-group">
-                                    <label for="username">Username</label>
-                                    <input type="text" class="form-control" name="username" id="username" aria-describedby="username-help" required>
-                                    <small id="username-help" class="form-text text-muted">This is how the organization will log into the admin panel.</small>
+                                    <label for="site-url">Website</label>
+                                    <input type="text" class="form-control" name="site-url" id="site-url" aria-describedby="site-url-help">
+                                    <small id="site-url-help" class="form-text text-muted">Optional: This website link will be displayed publically.</small>
+                                </div>
+                                <div class="form-group">
+                                    <label for="nusach">Nusach</label>
+                                    <select class="custom-select" name="nusach" id="nusach">
+                                        <option value="unspecified" selected="">None specified</option>
+                                        <option value="edot_hamizrach">Edot HaMizrach</option>
+                                        <option value="sefard">Sefard</option>
+                                        <option value="ashkenaz">Ashkenaz</option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="email">Email address</label>
@@ -58,9 +69,9 @@
                                     <small id="email-help" class="form-text text-muted">This email will be used for password recovery.</small>
                                 </div>
                                 <div class="form-group">
-                                    <label for="site-url">Website</label>
-                                    <input type="text" class="form-control" name="site-url" id="site-url" aria-describedby="site-url-help">
-                                    <small id="site-url-help" class="form-text text-muted">Optional: This website link will be displayed publically.</small>
+                                    <label for="username">Username</label>
+                                    <input type="text" class="form-control" name="username" id="username" aria-describedby="username-help" required>
+                                    <small id="username-help" class="form-text text-muted">This is how the organization will log into the admin panel.</small>
                                 </div>
                                 <div class="form-group">
                                     <label for="password">Password</label>
@@ -90,7 +101,7 @@
                         <div class="card card-inverse bg-inverse mt-3">
                             <div class="card-body">
                                 <h4 class="card-title">Accounts</h4>
-                                <p class="card-text">Manage all accounts on the Great Neck Zmanim platform.</p>
+                                <p class="card-text">Manage all accounts on the Great Neck Minyanim platform.</p>
                                 <a href="/admin/accounts" class="btn btn-primary">Go</a>
                             </div>
                         </div>
@@ -98,7 +109,7 @@
                 </div>
                 <!--/row-->
             </main>
-            <th:block th:include="/admin/footer"></th:block>
+            <th:block th:include="admin/footer"></th:block>
             </div>
         </div>
 

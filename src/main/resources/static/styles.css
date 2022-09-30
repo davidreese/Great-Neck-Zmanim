@@ -1,6 +1,7 @@
 :root {
     --primary-color: #035174;
     --focus-color: #034262;
+    --secondary-color: #C4D5DD;
 }
 
 .center {
@@ -120,3 +121,32 @@ background-color: var(--focus-color);
     color: #FFF;
     background-color: var(--primary-color);
 }
+
+td.middle {
+vertical-align: middle;
+}
+
+.btn-primary {
+    background-color: #035174;
+    border-color: #035174;
+}
+
+.btn-primary:hover {
+    background-color: #033A62;
+    border-color: #033A62;
+}
+
+@media screen and (max-width: 600px) {
+    .mpt0 {
+        padding-top: 0!important;
+    }
+
+    .mpb0 {
+        padding-bottom: 0.5rem!important;
+     }
+}
+
+.pb0 {
+    padding-bottom: 0.5rem!important;
+}
+

@@ -58,6 +58,22 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
         return minyanim;
     }
 
+    public List<Minyan> getEnabled() {
+        String sql = "SELECT * FROM MINYAN WHERE ENABLED = 1";
+
+        MinyanMapper mapper = new MinyanMapper();
+
+        List<Map<String, Object>> minyanMaps = this.getJdbcTemplate().queryForList(sql);
+
+        List<Minyan> minyanim = new ArrayList<>();
+
+        for (Map<String, Object> minyanMap : minyanMaps) {
+            minyanim.add(mapper.mapRow(minyanMap));
+        }
+
+        return minyanim;
+    }
+
     @Override
     public boolean save(Minyan objectToSave) {
         String sql = String.format("INSERT INTO MINYAN " +
@@ -155,8 +171,22 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
         }
     }
 
-    public List<Minyan> findMatching(String organizationId ){
+    public List<Minyan> findMatching(String organizationId){
         String sql = MinyanMapper.BASE_SQL + " WHERE m.ORGANIZATION_ID = ? ";
+
+        Object[] params = new Object[] { organizationId };
+        MinyanMapper mapper = new MinyanMapper();
+
+        try {
+            List<Minyan> minyanInfo = this.getJdbcTemplate().query(sql, params, mapper);
+            return minyanInfo;
+        } catch (EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    public List<Minyan> findEnabledMatching(String organizationId) {
+        String sql = MinyanMapper.BASE_SQL + " WHERE m.ORGANIZATION_ID = ? AND m.ENABLED = 1";
 
         Object[] params = new Object[] { organizationId };
         MinyanMapper mapper = new MinyanMapper();

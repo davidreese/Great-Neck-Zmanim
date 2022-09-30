@@ -10,10 +10,10 @@
 </head>
 <body>
 <div class="horizontal-container d-flex" id="wrapper">
-    <th:block th:include="/admin/navbar"></th:block>
+    <th:block th:include="admin/navbar"></th:block>
     <div class="container-fluid" id="main">
         <div class="row row-offcanvas row-offcanvas-left vh-100">
-            <th:block th:include="/admin/sidebar"></th:block>
+            <th:block th:include="admin/sidebar"></th:block>
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
                 <main class="col main pt-5 mt-3 overflow-auto">
@@ -33,7 +33,7 @@
                     <hr class="">
 
                     <p class="lead d-none">
-                        The minyan defined below will be created with automatically be enabled and show on the public Great Neck Zmanim site.
+                        The minyan defined below will be created with automatically be enabled and show on the public Great Neck Minyanim site.
                     </p>
 
                     <div class="row my-4 footer-pusher">
@@ -205,10 +205,10 @@
                                         </div>
                                     </div>
                                     <div class="form-group">
-                                        <label for="type">Nusach</label>
+                                        <label for="nusach">Nusach</label>
                                         <select class="custom-select" name="nusach" id="nusach">
                                             <option value="unspecified" selected>None specified</option>
-                                            <option value="edothamizrach">Edot HaMizrach</option>
+                                            <option value="edot_hamizrach">Edot HaMizrach</option>
                                             <option value="sefard">Sefard</option>
                                             <option value="ashkenaz">Ashkenaz</option>
                                         </select>
@@ -235,20 +235,20 @@
                                 <div class="card-body">
                                     <h4 class="card-title">Minyanim</h4>
                                     <p class="card-text" th:text="${'View and manage all minyanim for ' + organization.name + '.'}"></p>
-                                    <a th:href="@{/admin/minyanim(oid=${organization.id})}" class="btn btn-primary">Go</a>
+                                    <a th:href="@{|/admin/${organization.id}/minyanim|}" class="btn btn-primary">Go</a>
                                 </div>
                             </div>
                             <div class="card card-inverse bg-inverse mt-3">
                                 <div class="card-body">
                                     <h4 class="card-title">Need help?</h4>
-                                    <p class="card-text">Click <a href="#" data-toggle="modal" data-target="#dynamic-time-help-modal">here</a> for an explanation of how to use the time settings.</p>
+                                    <p class="card-text">Click <a href="#" data-toggle="modal" data-target="#dynamic-time-help-modal">here</a> for an explanation of how to use the minyan time settings.</p>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <!--/row-->
                 </main>
-                <th:block th:include="/admin/footer"></th:block>
+                <th:block th:include="admin/footer"></th:block>
             </div>
         </div>
 
@@ -276,7 +276,7 @@
                     To specify when in prayers the minyan will officially begin, such as Yishtabach, add a note to the minyan.
                 </p>
                 <p>
-                    To indicate no minyan on a certain day, just leave the field blank.
+                    To indicate no minyan on a certain minyanDay, just leave the field blank.
                 </p>
             </div>
             <div class="modal-footer">

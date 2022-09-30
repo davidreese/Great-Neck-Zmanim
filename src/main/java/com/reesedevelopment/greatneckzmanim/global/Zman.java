@@ -1,12 +1,12 @@
 package com.reesedevelopment.greatneckzmanim.global;
 
 public enum Zman {
-    ALOT_HASHACHAR("ALOTHASHACHAR"),
+    ALOT_HASHACHAR("ALOT_HASHACHAR"),
     NETZ("NETZ"),
     CHATZOT("CHATZOT"),
-    MINCHA_GEDOLA("MINCHAGEDOLA"),
-    MINCHA_KETANA("MINCHAKETANA"),
-    PLAG_HAMINCHA("PLAGHAMINCHA"),
+    MINCHA_GEDOLA("MINCHA_GEDOLA"),
+    MINCHA_KETANA("MINCHA_KETANA"),
+    PLAG_HAMINCHA("PLAG_HAMINCHA"),
     SHEKIYA("SHEKIYA"),
     TZET("TZET");
 
@@ -32,10 +32,10 @@ public enum Zman {
 
     }
 
-    public String displayString() {
+    public String displayName() {
         switch (this) {
             case ALOT_HASHACHAR:
-                return "Alot Hashachar";
+                return "Alot HaShachar";
             case NETZ:
                 return "Sunrise";
             case CHATZOT:
@@ -45,7 +45,7 @@ public enum Zman {
             case MINCHA_KETANA:
                 return "Mincha Ketana";
             case PLAG_HAMINCHA:
-                return "Plag Hamincha";
+                return "Plag HaMincha";
             case SHEKIYA:
                 return "Shekiya";
             case TZET:

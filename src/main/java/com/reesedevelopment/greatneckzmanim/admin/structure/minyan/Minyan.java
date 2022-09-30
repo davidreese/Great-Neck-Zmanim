@@ -1,5 +1,7 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 
+import com.kosherjava.zmanim.hebrewcalendar.JewishCalendar;
+import com.kosherjava.zmanim.util.Time;
 import com.reesedevelopment.greatneckzmanim.admin.structure.GNZObject;
 import com.reesedevelopment.greatneckzmanim.admin.structure.IDGenerator;
 import com.reesedevelopment.greatneckzmanim.admin.structure.location.Location;
@@ -8,6 +10,8 @@ import com.reesedevelopment.greatneckzmanim.global.Nusach;
 
 import javax.persistence.Column;
 import javax.persistence.Table;
+import java.time.LocalDate;
+import java.util.Date;
 
 @Table(name = "MINYAN")
 public class Minyan extends GNZObject implements IDGenerator {
@@ -71,6 +75,9 @@ public class Minyan extends GNZObject implements IDGenerator {
     private String nusachString;
 
     private Nusach nusach;
+
+//    @Autowired
+//    private OrganizationDAO organizationDAO;
 
     public Minyan(String id,
                   String minyanTypeString,
@@ -182,6 +189,33 @@ public class Minyan extends GNZObject implements IDGenerator {
         this.nusachString = nusach.toString();
     }
 
+    public Minyan(String id, Organization organization, MinyanType type, Location location, Schedule schedule, String notes, Nusach nusach, boolean enabled) {
+        super.id = id;
+        this.minyanTypeString = type.toString();
+        this.minyanType = type;
+        if (location != null) {
+            this.locationId = location.getId();
+            this.location = location;
+        }
+        this.organizationId = organization.getId();
+        this.organization = organization;
+        this.startTime1 = schedule.getSunday().toString();
+        this.startTime2 = schedule.getMonday().toString();
+        this.startTime3 = schedule.getTuesday().toString();
+        this.startTime4 = schedule.getWednesday().toString();
+        this.startTime5 = schedule.getThursday().toString();
+        this.startTime6 = schedule.getFriday().toString();
+        this.startTime7 = schedule.getShabbat().toString();
+        this.startTimeYT = schedule.getYomTov().toString();
+        this.startTimeRC = schedule.getRoshChodesh().toString();
+        this.startTimeCH = schedule.getChanuka().toString();
+        this.startTimeCHRC = schedule.getRoshChodeshChanuka().toString();
+        this.schedule = schedule;
+        this.enabled = enabled;
+        this.notes = notes;
+        this.nusachString = nusach.toString();
+    }
+
     public String getMinyanTypeString() {
         return minyanTypeString;
     }
@@ -203,6 +237,9 @@ public class Minyan extends GNZObject implements IDGenerator {
     }
 
     public Organization getOrganization() {
+//        if (organization == null) {
+//            organization = organizationDAO.findById(organizationId);
+//        }
         return organization;
     }
 
@@ -272,5 +309,66 @@ public class Minyan extends GNZObject implements IDGenerator {
 
     public void setEnabled(boolean enabled) {
         this.enabled = enabled;
+    }
+
+    public void setOrganization(Organization organization) {
+        this.organization = organization;
+    }
+
+//    public [Date] getStartTimes(int next)
+
+    public Date getStartDateFromNow() {
+        return getStartDate(LocalDate.now());
+    }
+
+    public Date getStartDate(LocalDate date) {
+//        need to check if that date is a special day
+        MinyanTime mt = getMinyanTime(date);
+        Time t = mt.getTime(date);
+        if (t == null) {
+            return null;
+        }
+        LocalDate temp = date.minusMonths(1).minusYears(1900);
+        return new Date(temp.getYear(), temp.getMonthValue(), temp.getDayOfMonth(), t.getHours(), t.getMinutes(), t.getSeconds());
+    }
+
+    public Time getStartTime() {
+        return getStartTime(LocalDate.now());
+    }
+
+    public Time getStartTime(LocalDate date) {
+//        need to check if that date is a special day
+        MinyanTime mt = getMinyanTime(date);
+        return mt.getTime(date);
+    }
+
+    public MinyanTime getMinyanTime() {
+        return getMinyanTime(LocalDate.now());
+    }
+
+    public MinyanTime getMinyanTime(LocalDate date) {
+//        LocalDate temp = date.plusMonths(1);
+        JewishCalendar jc = new JewishCalendar(date);
+        if (jc.isRoshChodesh()) {
+            if (jc.isChanukah()) {
+                return schedule.getRoshChodeshChanuka();
+            } else {
+                return schedule.getRoshChodesh();
+            }
+        } else if (jc.isChanukah()) {
+            return schedule.getChanuka();
+        } else if (jc.isYomTov()) {
+            return schedule.getYomTov();
+        } else {
+            return switch (date.getDayOfWeek()) {
+                case SUNDAY -> schedule.getSunday();
+                case MONDAY -> schedule.getMonday();
+                case TUESDAY -> schedule.getTuesday();
+                case WEDNESDAY -> schedule.getWednesday();
+                case THURSDAY -> schedule.getThursday();
+                case FRIDAY -> schedule.getFriday();
+                case SATURDAY -> schedule.getShabbat();
+            };
+        }
     }
 }

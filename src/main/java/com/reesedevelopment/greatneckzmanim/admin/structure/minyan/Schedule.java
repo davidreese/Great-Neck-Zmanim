@@ -1,5 +1,7 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 
+import com.kosherjava.zmanim.util.Time;
+
 import java.util.HashMap;
 
 public class Schedule {
@@ -87,20 +89,36 @@ public class Schedule {
         return yomTov;
     }
 
-    public HashMap<Day, MinyanTime> getMappedSchedule() {
-        HashMap<Day, MinyanTime> schedule = new HashMap<>();
-        schedule.put(Day.SUNDAY, sunday);
-        schedule.put(Day.MONDAY, monday);
-        schedule.put(Day.TUESDAY, tuesday);
-        schedule.put(Day.WEDNESDAY, wednesday);
-        schedule.put(Day.THURSDAY, thursday);
-        schedule.put(Day.FRIDAY, friday);
-        schedule.put(Day.SHABBAT, shabbat);
-        schedule.put(Day.ROSH_CHODESH, roshChodesh);
-        schedule.put(Day.CHANUKA, chanuka);
-        schedule.put(Day.ROSH_CHODESH_CHANUKA, roshChodeshChanuka);
-        schedule.put(Day.YOM_TOV, yomTov);
+    public HashMap<MinyanDay, MinyanTime> getMappedSchedule() {
+        HashMap<MinyanDay, MinyanTime> schedule = new HashMap<>();
+        schedule.put(MinyanDay.SUNDAY, sunday);
+        schedule.put(MinyanDay.MONDAY, monday);
+        schedule.put(MinyanDay.TUESDAY, tuesday);
+        schedule.put(MinyanDay.WEDNESDAY, wednesday);
+        schedule.put(MinyanDay.THURSDAY, thursday);
+        schedule.put(MinyanDay.FRIDAY, friday);
+        schedule.put(MinyanDay.SHABBAT, shabbat);
+        schedule.put(MinyanDay.ROSH_CHODESH, roshChodesh);
+        schedule.put(MinyanDay.CHANUKA, chanuka);
+        schedule.put(MinyanDay.ROSH_CHODESH_CHANUKA, roshChodeshChanuka);
+        schedule.put(MinyanDay.YOM_TOV, yomTov);
 
         return schedule;
     }
+
+//    public MinyanTime nearestTimeToNow() {
+//        HashMap<MinyanDay, MinyanTime> schedule = getMappedSchedule();
+//        for (MinyanDay minyanDay : schedule.keySet()) {
+//            MinyanTime time = schedule.get(minyanDay);
+//
+//            minyanDay
+//
+//            if (time.isFixed()) {
+//                Time fixedTime = time.getTime();
+//
+//
+////                Date nextDate = new Date(""
+//            }
+//        }
+//    }
 }

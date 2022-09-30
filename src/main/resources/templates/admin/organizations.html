@@ -6,10 +6,10 @@
 </head>
 <body>
 <div class="horizontal-container d-flex" id="wrapper">
-    <th:block th:include="/admin/navbar"></th:block>
+    <th:block th:include="admin/navbar"></th:block>
     <div class="container-fluid" id="main">
         <div class="row row-offcanvas row-offcanvas-left vh-100">
-            <th:block th:include="/admin/sidebar"></th:block>
+            <th:block th:include="admin/sidebar"></th:block>
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
             <main class="col main pt-5 mt-3 overflow-auto" >
@@ -22,9 +22,9 @@
                 <h1 class="display-4 d-none d-sm-block">
                     Organizations
                 </h1>
-                <p class="lead d-none d-sm-block">Manage the data and accounts for all organizations on the Great Neck Zmanim platform.</p>
+                <p class="lead">Manage the data and accounts for all organizations on the Great Neck Minyanim platform.</p>
 
-                <hr>
+<!--                <hr>-->
 
                 <div class="row my-4 footer-pusher">
                     <div class="col-lg-9 col-md-8">
@@ -47,7 +47,7 @@
                                         <a th:if="${organization.websiteURI}" th:href="@{'https://' + ${organization.websiteURI}}" th:text="${organization.websiteURI}"></a>
                                     </td>
                                     <td>
-                                        <a role="button" class="btn btn-primary btn-sm" th:href="@{/admin/minyanim(oid=${organization.id})}">Manage</a>
+                                        <a role="button" class="btn btn-primary btn-sm" th:href="@{|/admin/${organization.id}/minyanim|}">Manage</a>
                                     </td>
                                     <td>
                                         <a role="button" class="btn btn-dark btn-sm" th:href="@{/admin/organization(id=${organization.id})}">Manage</a>
@@ -70,9 +70,9 @@
                 </div>
                 <!--/row-->
 
-<!--                <th:block th:include="/admin/footer"></th:block>-->
+<!--                <th:block th:include="admin/footer"></th:block>-->
             </main>
-                                <th:block th:include="/admin/footer"></th:block>
+                                <th:block th:include="admin/footer"></th:block>
             </div>
 
             <!--/main col-->

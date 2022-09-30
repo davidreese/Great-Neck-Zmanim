@@ -13,9 +13,9 @@
 <div class="border-end bg-white sidebar" id="sidebar-wrapper">
     <div class="sidebar-heading border-bottom bg-light">Start Bootstrap </div>
     <div class="list-group list-group-flush">
-        <a class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" href="/admin/dashboard">Dashboard</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" href="/dashboard">Dashboard</a>
         <a class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" href="/admin/locations" th:if="${!user.isSuperAdmin()}">Locations</a>
-        <a class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" href="/admin/minyanim" th:if="${!user.isSuperAdmin()}">Minyan Schedule</a>
+        <a class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" th:href="@{|/admin/${user.getOrganizationId()}/minyanim|}" th:if="${!user.isSuperAdmin()}">Minyan Schedule</a>
         <a  class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" href="/admin/organizations" th:if="${user.isSuperAdmin()}" sec:authorize="hasRole('ROLE_ADMIN')">Organizations</a>
         <a  class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" th:href="@{/admin/organization?id=} + ${user.getOrganizationId()}" th:if="${!user.isSuperAdmin()}">My Organization</a>
         <a class="list-group-item list-group-item-action list-group-item-light p-3 sidebar-slip" href="/admin/new-organization" th:if="${user.isSuperAdmin()}" sec:authorize="hasRole('ROLE_ADMIN')">Create an Organization</a>
