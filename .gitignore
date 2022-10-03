@@ -34,3 +34,5 @@ build/
 
 # Added
 .properties
+src/.DS_Store
+.DS_Store
