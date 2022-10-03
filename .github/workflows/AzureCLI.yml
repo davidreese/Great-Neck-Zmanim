@@ -1,0 +1,22 @@
+on: [push]
+
+name: AzureCLI
+
+jobs:
+
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+
+    - name: Azure Login
+      uses: azure/login@v1
+      with:
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+
+    - name: Azure CLI script
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.30.0
+        inlineScript: apt-get install autossh && yes yes|autossh -L 4002:localhost:3306 -N -L 10000:localhost:10000 -i /home/.ssh/id_rsa gnminain@nextgenanz04.eastus.cloudapp.azure.com -4 && yes
+          az account show
+          az storage -h
