@@ -12,6 +12,7 @@ name: Build and deploy JAR app to Azure Web App
 env:
   AZURE_WEBAPP_NAME: GnMinyans   # set this to your application's name
   JAVA_VERSION: '17'                  # set this to the Java version to use
+  distribution: microsoft
 
 on:
   push:
