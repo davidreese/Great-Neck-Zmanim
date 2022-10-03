@@ -11,12 +11,12 @@ jobs:
     - name: Azure Login
       uses: azure/login@v1
       with:
-        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        creds: ${{ secrets.AZURE_WEBAPP_PUBLISH_PROFILE }}
 
     - name: Azure CLI script
       uses: azure/CLI@v1
       with:
         azcliversion: 2.30.0
-        inlineScript: apt-get install autossh && yes yes|autossh -L 4002:localhost:3306 -N -L 10000:localhost:10000 -i /home/.ssh/id_rsa gnminain@nextgenanz04.eastus.cloudapp.azure.com -4 && yes
+        inlineScript: echo "STARTUP TUNNEL" && apt-get install autossh && autossh -L 4002:localhost:3306 -N -i /home/.ssh/id_rsa gnminadmin@nextgenanz04.eastus2.cloudapp.azure.com -4 -o "StrictHostKeyChecking no" -M
           az account show
           az storage -h
