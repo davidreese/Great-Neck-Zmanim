@@ -1,6 +1,6 @@
 on: [push]
 
-name: AzureCLI
+name: Azure CLI start autossh - after build and delpoy
 
 jobs:
 
