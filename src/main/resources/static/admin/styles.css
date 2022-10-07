@@ -12,11 +12,7 @@
 
 html,
 body {
-    margin:0;
-    padding:0;
-    min-height: 675px;
-    margin-bottom: 100px;
-    clear: both;
+
 }
 #container {
     min-height:100%;
@@ -28,7 +24,12 @@ body {
 }
 #body {
     padding:10px;
-    padding-bottom:60px;   /* Height of the footer */
+   /* padding-bottom:60px;    Height of the footer */
+    margin: 0 auto 60px auto;
+    padding:0;
+    min-height: 675px;
+    clear: both;
+    overflow: auto;
 }
 #footer {
     position:fixed;
