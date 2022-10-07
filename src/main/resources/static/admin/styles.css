@@ -27,7 +27,7 @@ body {
    /* padding-bottom:60px;    Height of the footer */
     margin: 0 auto 60px auto;
     padding:0;
-    min-height: 675px;
+    min-height: 100%;
     clear: both;
     overflow: auto;
 }
