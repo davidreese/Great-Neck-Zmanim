@@ -10,13 +10,10 @@
     color: green;
 }
 
-html,
-body {
-
-}
 #container {
     min-height:100%;
     position:relative;
+    margin: 0 auto 60px auto;
 }
 #header {
     background:#ff0;
@@ -25,12 +22,11 @@ body {
 #body {
     padding:10px;
    /* padding-bottom:60px;    Height of the footer */
-    margin: 0 auto 60px auto;
+    margin: 0;
     padding:0;
-    min-height: 100%;
     clear: both;
-    overflow: auto;
 }
+
 #footer {
     position:fixed;
     bottom:0;
