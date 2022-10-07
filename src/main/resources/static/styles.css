@@ -150,3 +150,6 @@ vertical-align: middle;
     padding-bottom: 0.5rem!important;
 }
 
+.table td, .table th {
+    vertical-align: middle;
+}
