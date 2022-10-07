@@ -1,5 +1,8 @@
-on: [push]
-
+on:
+  push:
+    branches:
+      - main
+      
 name: Azure CLI start autossh - after build and delpoy
 
 jobs:
