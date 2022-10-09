@@ -76,4 +76,5 @@
 
 .time-box {
    min-width: 77px;
-   }
+   display: inline-block;
+}
