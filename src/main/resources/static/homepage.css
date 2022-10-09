@@ -30,9 +30,9 @@
 
 .switcher-btn {
     font-size: 13px;
-    background: var(--secondary-color);
-    border-color: var(--secondary-color);
-    color: gray;
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: aliceblue;
     box-shadow: 1px 1px 5px -2px #888888;
 }
 
