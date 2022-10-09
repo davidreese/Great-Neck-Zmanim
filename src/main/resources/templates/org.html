@@ -2,11 +2,18 @@
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
     <title th:text="${org.getName()}"></title>
-
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.1/css/bootstrap.min.css} "/>
     <link th:rel="stylesheet" th:href="@{/styles.css}">
     <link th:rel="stylesheet" th:href="@{/org.css}">
+    <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.6.1/js/bootstrap.min.js}"></script>
+    <!--    <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>-->
+    <!--    <script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>-->
+    <!--    <script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>-->
+    <!--<script th:src="@{org.js}"></script>-->
 </head>
 <body>
 <div class="horizontal-container d-flex" id="wrapper">
@@ -15,7 +22,7 @@
         <div class="row row-offcanvas row-offcanvas-left vh-100" style="flex-direction: column;">
 <!--            <th:block th:include="admin/sidebar"></th:block>-->
             <!--/col-->
-            <main class="col main pt-5 mt-3 overflow-auto" style="flex-shrink: 3;">
+            <main class="col main pt-5 mt-3 overflow-auto" style="flex-shrink: 3; padding-bottom: 65px!important;">
                 <div class="d-flex">
                     <p class="col-md-4 h4 mt-3 desktop-hide" th:text="${onlyDate}"></p>
                     <p class="col-md-4 h3 mt-3 mobile-hide" th:text="${onlyDate}"></p>
@@ -73,7 +80,7 @@
                                     </tbody>
                                 </table>
                                 <div class="jumbotron" th:if="${allminyanim.isEmpty()}">
-                                    <h4>Sorry, there aren't any minyanim scheduled for this date.</h4>
+                                    <h4>Sorry, there aren't any minyanim scheduled.</h4>
                                 </div>
                 </div>
                 </div>
@@ -87,13 +94,4 @@
     <th:block th:include="footer"></th:block>
 </div>
 </body>
-
-<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/4.6.1/js/bootstrap.min.js}"></script>
-<!--    <script th:src="@{/webjars/jquery/3.6.0/jquery.min.js}"></script>-->
-<!--    <script th:src="@{/webjars/popper.js/2.9.3/umd/popper.min.js}"></script>-->
-<!--    <script th:src="@{/webjars/bootstrap/5.1.3/js/bootstrap.min.js}"></script>-->
-<!--<script th:src="@{org.js}"></script>-->
-
 </html>
