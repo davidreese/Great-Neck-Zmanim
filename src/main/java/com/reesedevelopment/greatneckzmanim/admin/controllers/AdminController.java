@@ -92,7 +92,16 @@ public class AdminController {
     @GetMapping("/admin")
     public ModelAndView admin(@RequestParam(value = "error", required = false) String error,
                               @RequestParam(value = "logout", required = false) boolean logout) {
-        return dashbaord();
+        if (isSuperAdmin()) {
+            return organizations(null, null);
+        } else if (isUser()) {
+            return minyanim(getCurrentUser().getOrganizationId(), null, null);
+        } else {
+            ModelAndView mv = new ModelAndView();
+            mv.setViewName("admin/login");
+            return mv;
+//            throw new AccessDeniedException("You don't have permission to view this page.");
+        }
     }
 
     @GetMapping("/admin/logout")
@@ -271,10 +280,9 @@ public class AdminController {
                                 String successMessage,
                                 String errorMessage) {
         ModelAndView mv = new ModelAndView();
-
+        mv.setViewName("account");
 //        TODO: ENSURE SECURITY
         if (isSuperAdmin()) {
-            mv.setViewName("admin/account");
 
             GNZUser queriedUser = this.gnzUserDAO.findById(id);
             System.out.println("Queried user: " + queriedUser);
@@ -289,7 +297,6 @@ public class AdminController {
             System.out.println("Queried user: " + queriedUser);
 
             if (user != null && user.getOrganizationId().equals(queriedUser.getOrganizationId())) {
-                mv.setViewName("admin/account");
 
                 mv.addObject("queriedaccount", queriedUser);
 
@@ -310,7 +317,7 @@ public class AdminController {
             System.out.println("Queried user: " + queriedUser);
 
             if (user.getOrganizationId().equals(queriedUser.getOrganizationId())) {
-                mv.setViewName("admin/account");
+                mv.setViewName("account");
 
                 mv.addObject("queriedaccount", queriedUser);
 
@@ -458,7 +465,7 @@ public class AdminController {
 
     @RequestMapping(value = "/admin/delete-organization")
     public ModelAndView deleteOrganization(@RequestParam(value = "id", required = true) String id) throws Exception {
-        if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(ADMIN.getName()))) {
+        if (isSuperAdmin()) {
 //            get organization and check if it exists
             Organization organization = this.organizationDAO.findById(id);
             if (organization != null) {
@@ -473,7 +480,7 @@ public class AdminController {
                 System.out.println("Organization does not exist. Failed to delete.");
                 return organizations(null, "Sorry, the organization could not be deleted.");
             }
-        } else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()))) {
+        } /*else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()))) {
             String username = SecurityContextHolder.getContext().getAuthentication().getName();
             GNZUser user = this.gnzUserDAO.findByName(username);
             String associatedOrganizationId = user.getOrganizationId();
@@ -496,8 +503,50 @@ public class AdminController {
                     return organizations(null, "Sorry, the organization could not be deleted.");
                 }
             }
+        }*/ else {
+            throw new AccessDeniedException("You do not have permission to delete an organization.");
+        }
+    }
+
+    @RequestMapping(value = "/admin/delete-account")
+    public ModelAndView deleteAccount(@RequestParam(value = "id", required = true) String id) throws Exception {
+        if (isSuperAdmin()) {
+//            get organization and check if it exists
+            GNZUser account = this.gnzUserDAO.findById(id);
+            if (account != null) {
+                if (this.gnzUserDAO.delete(account)) {
+                    System.out.println("Account deleted successfully.");
+                    return accounts("Successfully deleted the account.", null);
+                } else {
+                    System.out.println("Account delete failed.");
+                    return accounts(null, "Sorry, the account could not be deleted.");
+                }
+            } else {
+                System.out.println("Account does not exist. Failed to delete.");
+                return accounts(null, "Sorry, the account could not be deleted.");
+            }
+        } else if (isAdmin()) {
+            GNZUser account = this.gnzUserDAO.findById(id);
+            if (!getCurrentUser().getOrganizationId().equals(account.getOrganizationId())) {
+                System.out.println("You do not have permission to view this organization.");
+                throw new AccessDeniedException("You do not have permission to view this organization.");
+            } else {
+//                get organization and check if it exists
+                if (account != null) {
+                    if (this.gnzUserDAO.delete(account)) {
+                        System.out.println("Account deleted successfully.");
+                        return accounts("Successfully deleted the account.", null);
+                    } else {
+                        System.out.println("Account delete failed.");
+                        return accounts(null, "Sorry, the account could not be deleted.");
+                    }
+                } else {
+                    System.out.println("Organization does not exist. Failed to delete.");
+                    return accounts(null, "Sorry, the account could not be deleted.");
+                }
+            }
         } else {
-            throw new AccessDeniedException("You do not have permission to view this organization.");
+            throw new AccessDeniedException("You do not have permission to delete this account.");
         }
     }
 

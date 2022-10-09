@@ -23,14 +23,14 @@
                     <div th:if="${errormessage}">
                         <div class="alert alert-danger" role="alert" th:text="${errormessage}"></div>
                     </div>
-                    <h1 class="display-4 d-sm-block">
+                    <h1 class="display-4 d-sm-block mobile-hide">
                         New Minyan
                     </h1>
 
                     <p th:if="${user.isSuperAdmin()}" sec:authorize="hasRole('ROLE_ADMIN')" class="lead d-none d-sm-block" th:text="${'Add a new minyan for ' + organization.name + ' with a set location, times for every occasion, and other important information.'}"></p>
                     <p th:if="${!user.isSuperAdmin()}" class="lead d-none d-sm-block">Add a new minyan with a set location, times for every occasion, and other important information.</p>
 
-                    <hr class="">
+                    <hr class="mobile-hide">
 
                     <p class="lead d-none">
                         The minyan defined below will be created with automatically be enabled and show on the public Great Neck Minyanim site.
@@ -276,7 +276,7 @@
                     To specify when in prayers the minyan will officially begin, such as Yishtabach, add a note to the minyan.
                 </p>
                 <p>
-                    To indicate no minyan on a certain minyanDay, just leave the field blank.
+                    To indicate no minyan on a certain day, just leave the field blank.
                 </p>
             </div>
             <div class="modal-footer">

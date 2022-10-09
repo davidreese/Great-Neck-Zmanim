@@ -1,4 +1,4 @@
-on: [push]
+on: workflow_dispatch
 
 name: Azure CLI start autossh - after build and delpoy
 

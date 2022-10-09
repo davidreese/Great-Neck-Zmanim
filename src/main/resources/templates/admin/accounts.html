@@ -13,11 +13,11 @@
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
                 <main class="col main pt-5 mt-3 overflow-auto" >
-                    <div th:if="${success}">
-                        <div class="alert alert-success" role="alert" th:text="${success}"> </div>
+                    <div th:if="${successmessage}">
+                        <div class="alert alert-success" role="alert" th:text="${successmessage}"> </div>
                     </div>
-                    <div th:if="${error}">
-                        <div class="alert alert-danger" role="alert" th:text="${error}"></div>
+                    <div th:if="${errormessage}">
+                        <div class="alert alert-danger" role="alert" th:text="${errormessage}"></div>
                     </div>
                     <h1 class="display-4 d-none d-sm-block">
                         Accounts
@@ -30,7 +30,7 @@
                     <div class="row my-4 footer-pusher">
                         <div class="col-lg-9 col-md-8">
                             <div class="table-responsive">
-                                <table class="table table-striped">
+                                <table class="table">
                                     <thead class="thead-inverse">
                                     <tr>
                                         <th>ID</th>
@@ -67,18 +67,11 @@
                             </div>
                         </div>
                     </div>
-                    <!--/row-->
-
-                    <!--                <th:block th:include="admin/footer"></th:block>-->
                 </main>
                 <th:block th:include="admin/footer"></th:block>
             </div>
-
-            <!--/main col-->
         </div>
-
     </div>
-    <!--/.container-->
 </div>
 </body>
 </html>
