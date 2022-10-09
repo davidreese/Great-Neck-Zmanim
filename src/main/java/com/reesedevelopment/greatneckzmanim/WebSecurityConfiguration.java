@@ -41,14 +41,13 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers("/", "/zmanim/**", "/orgs/**", "/admin/login", "/admin/logout", "/webjars/**", "/**/*.css", "/**/*.js", "/static/**", "/db/**").permitAll()
-                    .antMatchers("/admin/update-location").hasAnyRole("USER", "ADMIN")
-                    .antMatchers("/admin/**", "/admin/organizations", "/admin/new-organization", "/admin/create-organization", "/admin/accounts").hasAnyRole("ADMIN")
-                    .anyRequest().authenticated()
+                    .antMatchers("/admin", "/admin/dashboard", "/admin/organization", "/admin/account", "/admin/update-organization", "/admin/update-account", "/admin/locations", "/admin/create-location", "/admin/update-location", "/admin/delete-location", "/admin/**/minyanim/**").hasAnyRole("USER", "ADMIN")
+                    .antMatchers("/admin/**").hasAnyRole("ADMIN")
                     .and()
                 .formLogin()//
                     .loginProcessingUrl("/j_spring_security_check")
                     .loginPage("/admin/login")
-                    .defaultSuccessUrl("/admin/dashboard")
+                    .defaultSuccessUrl("/admin")
                     .failureUrl("/admin/login?error=true")
                     .usernameParameter("username")
                     .passwordParameter("password")
