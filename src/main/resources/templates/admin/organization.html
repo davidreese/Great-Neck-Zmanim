@@ -86,13 +86,9 @@
                                         <td th:text="${user.email}"></td>
                                         <td th:text="${user.getRoleDisplayName()}"></td>
                                         <td>
-                                            <div class="row">
-                                                <div class="col">
+                                            <div class="btn-group">
                                                     <button type="button" class="btn btn-outline-warning btn-sm" th:disabled="${associatedusers.size() <= 1}" data-toggle="modal" th:data-target="${'#disable-account-modal-' + user.id}">Disable</button>
-                                                </div>
-                                                <div class="col">
-                                                    <a class="btn btn-dark" role="button btn-sm" th:href="@{/admin/account(id=${user.id})}">Manage</a>
-                                                </div>
+                                                    <a class="btn btn-dark btn-sm" role="button" th:href="@{/admin/account(id=${user.id})}">Manage</a>
                                             </div>
                                         </td>
                                     </tr>
