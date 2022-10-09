@@ -90,7 +90,13 @@ public class AdminController {
     @GetMapping("/admin")
     public ModelAndView admin(@RequestParam(value = "error", required = false) String error,
                               @RequestParam(value = "logout", required = false) boolean logout) {
-        return dashbaord();
+        if (isSuperAdmin()) {
+            return organizations(null, null);
+        } else if (isUser()) {
+            return minyanim(getCurrentUser().getOrganizationId(), null, null);
+        } else {
+            throw new AccessDeniedException("You don't have permission to view this page.");
+        }
     }
 
     @GetMapping("/admin/logout")
