@@ -95,7 +95,10 @@ public class AdminController {
         } else if (isUser()) {
             return minyanim(getCurrentUser().getOrganizationId(), null, null);
         } else {
-            throw new AccessDeniedException("You don't have permission to view this page.");
+            ModelAndView mv = new ModelAndView();
+            mv.setViewName("admin/login");
+            return mv;
+//            throw new AccessDeniedException("You don't have permission to view this page.");
         }
     }
 
@@ -275,10 +278,9 @@ public class AdminController {
                                 String successMessage,
                                 String errorMessage) {
         ModelAndView mv = new ModelAndView();
-
+        mv.setViewName("account");
 //        TODO: ENSURE SECURITY
         if (isSuperAdmin()) {
-            mv.setViewName("account");
 
             GNZUser queriedUser = this.gnzUserDAO.findById(id);
             System.out.println("Queried user: " + queriedUser);
@@ -293,7 +295,6 @@ public class AdminController {
             System.out.println("Queried user: " + queriedUser);
 
             if (user != null && user.getOrganizationId().equals(queriedUser.getOrganizationId())) {
-                mv.setViewName("account");
 
                 mv.addObject("queriedaccount", queriedUser);
 
