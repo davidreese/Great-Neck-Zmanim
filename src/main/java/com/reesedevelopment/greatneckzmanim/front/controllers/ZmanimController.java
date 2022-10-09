@@ -160,7 +160,13 @@ public class ZmanimController {
                 } else {
                     minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationNusach, organizationId, locationName, startDate, minyan.getNusach(), minyan.getNotes()));
                 }
-            }
+            } /*else {
+                if (startDate != null) {
+                    System.out.println("Skipping minyan with start date: " + startDate.toString());
+                } else {
+                    System.out.println("Skipping minyan with null start date.");
+                }
+            }*/
         }
 
         minyanEvents.sort(Comparator.comparing(MinyanEvent::getStartTime));

@@ -357,7 +357,7 @@ public class Minyan extends GNZObject implements IDGenerator {
             }
         } else if (jc.isChanukah()) {
             return schedule.getChanuka();
-        } else if (jc.isYomTov()) {
+        } else if (jc.isYomTovAssurBemelacha()) {
             return schedule.getYomTov();
         } else {
             return switch (date.getDayOfWeek()) {
