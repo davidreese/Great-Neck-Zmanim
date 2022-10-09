@@ -43,6 +43,7 @@ public class AdminController {
     private MinyanDAO minyanDAO;
 
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy | hh:mm aa");
+    TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
 
     private boolean isAdmin() {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(ADMIN.getName()));
@@ -74,6 +75,7 @@ public class AdminController {
         mv.addObject("user", getCurrentUser());
 
         Date today = new Date();
+        dateFormat.setTimeZone(timeZone);
         mv.getModel().put("date", dateFormat.format(today));
     }
 
