@@ -69,31 +69,33 @@
                                         </button>
                                     </div>
                                 </div>
-                                <table class="table">
-                                    <thead>
-                                    <tr>
-                                        <th scope="col">ID</th>
-                                        <th scope="col">Username</th>
-                                        <th scope="col">Email</th>
-                                        <th scope="col">Role</th>
-                                        <th scope="col">Options</th>
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    <tr th:each="user: ${associatedusers}">
-                                        <th scope="row" th:text="${user.id}"></th>
-                                        <td th:text="${user.username}"></td>
-                                        <td th:text="${user.email}"></td>
-                                        <td th:text="${user.getRoleDisplayName()}"></td>
-                                        <td>
-                                            <div class="btn-group">
+                                <div style="overflow-x: auto">
+                                    <table class="table">
+                                        <thead>
+                                        <tr>
+                                            <th scope="col">ID</th>
+                                            <th scope="col">Username</th>
+                                            <th scope="col">Email</th>
+                                            <th scope="col">Role</th>
+                                            <th scope="col">Options</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr th:each="user: ${associatedusers}">
+                                            <th scope="row" th:text="${user.id}"></th>
+                                            <td th:text="${user.username}"></td>
+                                            <td th:text="${user.email}"></td>
+                                            <td th:text="${user.getRoleDisplayName()}"></td>
+                                            <td>
+                                                <div class="btn-group">
                                                     <button type="button" class="btn btn-outline-warning btn-sm" th:disabled="${associatedusers.size() <= 1}" data-toggle="modal" th:data-target="${'#disable-account-modal-' + user.id}">Disable</button>
                                                     <a class="btn btn-dark btn-sm" role="button" th:href="@{/admin/account(id=${user.id})}">Manage</a>
-                                            </div>
-                                        </td>
-                                    </tr>
-                                    </tbody>
-                                </table>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
 
                                 <hr>
 
