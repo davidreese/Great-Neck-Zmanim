@@ -272,7 +272,7 @@ public class AdminController {
 
 //        TODO: ENSURE SECURITY
         if (isSuperAdmin()) {
-            mv.setViewName("admin/account");
+            mv.setViewName("account");
 
             GNZUser queriedUser = this.gnzUserDAO.findById(id);
             System.out.println("Queried user: " + queriedUser);
@@ -287,7 +287,7 @@ public class AdminController {
             System.out.println("Queried user: " + queriedUser);
 
             if (user != null && user.getOrganizationId().equals(queriedUser.getOrganizationId())) {
-                mv.setViewName("admin/account");
+                mv.setViewName("account");
 
                 mv.addObject("queriedaccount", queriedUser);
 
@@ -308,7 +308,7 @@ public class AdminController {
             System.out.println("Queried user: " + queriedUser);
 
             if (user.getOrganizationId().equals(queriedUser.getOrganizationId())) {
-                mv.setViewName("admin/account");
+                mv.setViewName("account");
 
                 mv.addObject("queriedaccount", queriedUser);
 
