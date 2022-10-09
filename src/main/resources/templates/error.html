@@ -4,20 +4,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta charset="UTF-8">
     <title>Error</title>
-
+    <script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
+    <script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
+    <script th:src="@{/webjars/bootstrap/4.6.1/js/bootstrap.min.js}"></script>
+    <script th:src="@{/homepage.js}"></script>
     <link th:rel="stylesheet" th:href="@{/webjars/bootstrap/4.6.1/css/bootstrap.min.css} "/>
     <link th:rel="stylesheet" th:href="@{/styles.css}">
-    <link th:rel="stylesheet" th:href="@{/homepage.css}">
 </head>
 <body>
-    <h1>Something went wrong! </h1>
-    <h2>Our Engineers are on it</h2>
-    <a href="/">Go Home</a>
+    <section class="py-4 py-xl-5">
+        <div class="container h-100">
+            <div class="row h-100">
+                <div class="col-md-10 col-xl-8 text-center d-flex d-sm-flex d-md-flex justify-content-center align-items-center mx-auto justify-content-md-start align-items-md-center justify-content-xl-center">
+                    <div>
+                        <h1 class="text-uppercase font-weight-bold mb-3">Something went wrong</h1>
+                        <p class="mb-4" style="font-size: 25px;">Our engineers are on it<br /></p><a class="btn btn-primary btn-lg mr-2 py-2 px-4" role="button" href="/">Go Home</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
 </body>
-
-<script th:src="@{/webjars/jquery/3.5.1/jquery.min.js}"></script>
-<script th:src="@{/webjars/popper.js/1.16.0/umd/popper.min.js}"></script>
-<script th:src="@{/webjars/bootstrap/4.6.1/js/bootstrap.min.js}"></script>
-<script th:src="@{/homepage.js}"></script>
-
 </html>
