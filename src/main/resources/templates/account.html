@@ -13,7 +13,7 @@
             <!--/col-->
             <div class="col-housing main h-100 overflow-auto">
                 <main class="col main pt-5 mt-3 overflow-auto">
-                    <div class="alert alert-success" role="alert" th:if="${mainSuccess}" th:text="${mainSuccess}"></div>
+                    <div class="alert alert-success" role="alert" th:if="${successMessage}" th:text="${successMessage}"></div>
                     <h1 class="display-4 d-none d-sm-block" th:text="${queriedaccount.username}"></h1>
                     <p class="lead= d-sm-block">Edit account profile and settings.</p>
 
@@ -210,8 +210,8 @@
                         <input type="password" class="form-control" name="cpassword" id="new-cpassword" required="">
                     </div>
 
-                    <div class="login-msg-box" th:if="${addAccountError}" style="padding-bottom: 8px">
-                        <div class="form-msg-fatal" th:text="${addAccountError}"></div>
+                    <div class="login-msg-box" th:if="${changePasswordError}" style="padding-bottom: 8px">
+                        <div class="form-msg-fatal" th:text="${changePasswordError}"></div>
                     </div>
 
                     <hr>
@@ -224,7 +224,7 @@
 
 </body>
 
-<script th:src="@{admin/account.js}"></script>
+<script th:src="@{/account.js}"></script>
 <script th:if="${changePasswordError}" th:inline="javascript">
     showChangePasswordModal();
 </script>

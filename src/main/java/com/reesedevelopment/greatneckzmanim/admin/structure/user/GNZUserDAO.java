@@ -126,7 +126,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
     @Override
     public boolean update(GNZUser objectToUpdate) {
         try {
-            String sql = "UPDATE ACCOUNT SET USERNAME='%s', EMAIL='%s', ENCRYPTED_PASSWORD='%s' ORGANIZATION_ID='%s', ROLE_ID=%d WHERE ID='%s'";
+            String sql = "UPDATE ACCOUNT SET USERNAME='%s', EMAIL='%s', ENCRYPTED_PASSWORD='%s', ORGANIZATION_ID='%s', ROLE_ID=%d WHERE ID='%s'";
 
 //            String sql = "UPDATE ACCOUNT SET USERNAME=?, EMAIL=?, ORGANIZATION_ID=?, ROLE_ID=? WHERE ID=?;";
 //            getJdbcTemplate().query(sql, new PreparedStatementSetter() {

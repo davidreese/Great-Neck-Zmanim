@@ -337,6 +337,8 @@ public class AdminController {
         addStandardPageData(mv);
 
         mv.addObject("changePasswordError", changePasswordError);
+        mv.addObject("successMessage", successMessage);
+        mv.addObject("mainErrorMessage", errorMessage);
 
         return mv;
     }
