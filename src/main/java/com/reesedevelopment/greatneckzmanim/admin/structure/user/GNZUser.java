@@ -34,7 +34,8 @@ public class GNZUser extends GNZObject implements IDGenerator {
         this.username = username;
         this.email = email;
         this.encryptedPassword = encryptedPassword;
-        this.organizationId = organizationId;
+        if (organizationId != null && !organizationId.equals("null"))
+            this.organizationId = organizationId;
         this.roleId = role;
     }
 
@@ -43,7 +44,8 @@ public class GNZUser extends GNZObject implements IDGenerator {
         this.username = username;
         this.email = email;
         this.encryptedPassword = encryptedPassword;
-        this.organizationId = organizationId;
+        if (organizationId != null && !organizationId.equals("null"))
+            this.organizationId = organizationId;
         this.roleId = role;
     }
 
@@ -52,7 +54,8 @@ public class GNZUser extends GNZObject implements IDGenerator {
         this.username = username;
         this.email = email;
         this.encryptedPassword = encryptedPassword;
-        this.organizationId = organizationId;
+        if (organizationId != null && !organizationId.equals("null"))
+            this.organizationId = organizationId;
         this.roleId = role.getId();
     }
 
@@ -61,7 +64,8 @@ public class GNZUser extends GNZObject implements IDGenerator {
         this.username = username;
         this.email = email;
         this.encryptedPassword = encryptedPassword;
-        this.organizationId = organizationId;
+        if (organizationId != null && !organizationId.equals("null"))
+            this.organizationId = organizationId;
         this.roleId = role.getId();
     }
 

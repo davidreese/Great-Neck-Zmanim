@@ -278,15 +278,18 @@ public class AdminController {
     @GetMapping("/admin/account")
     public ModelAndView account(@RequestParam(value = "id", required = true) String id,
                                 String successMessage,
-                                String errorMessage) {
+                                String errorMessage, String changePasswordError) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("account");
 //        TODO: ENSURE SECURITY
         if (isSuperAdmin()) {
-
             GNZUser queriedUser = this.gnzUserDAO.findById(id);
             System.out.println("Queried user: " + queriedUser);
             mv.addObject("queriedaccount", queriedUser);
+
+            if (queriedUser.isSuperAdmin() && !queriedUser.getId().equals(getCurrentUser().getId())) {
+                throw new AccessDeniedException("You are not authorized to view this account.");
+            }
 
             Organization associatedOrganization = this.organizationDAO.findById(queriedUser.getOrganizationId());
             System.out.println("Associated organization: " + associatedOrganization);
@@ -296,7 +299,7 @@ public class AdminController {
             GNZUser queriedUser = this.gnzUserDAO.findById(id);
             System.out.println("Queried user: " + queriedUser);
 
-            if (user != null && user.getOrganizationId().equals(queriedUser.getOrganizationId())) {
+            if (user != null && user.getOrganizationId().equals(queriedUser.getOrganizationId()) && !(queriedUser.isAdmin() && !queriedUser.getId().equals(user.getId()))) {
 
                 mv.addObject("queriedaccount", queriedUser);
 
@@ -316,7 +319,7 @@ public class AdminController {
             GNZUser queriedUser = this.gnzUserDAO.findById(id);
             System.out.println("Queried user: " + queriedUser);
 
-            if (user.getOrganizationId().equals(queriedUser.getOrganizationId())) {
+            if (user.getId().equals(queriedUser.getId())) {
                 mv.setViewName("account");
 
                 mv.addObject("queriedaccount", queriedUser);
@@ -333,7 +336,50 @@ public class AdminController {
 
         addStandardPageData(mv);
 
+        mv.addObject("changePasswordError", changePasswordError);
+
         return mv;
+    }
+
+    @PostMapping("/admin/accounts/{accountId}/changepassword")
+    public ModelAndView changeAccountPassword(@PathVariable String accountId, @RequestParam(value = "password", required = true) String password, @RequestParam(value = "cpassword", required = true) String cpassword) {
+        if (!password.equals(cpassword)) {
+            return account(accountId, null, null, "Sorry, the passwords don't match.");
+        }
+
+        GNZUser targetUser = gnzUserDAO.findById(accountId);
+        if (targetUser == null) {
+            return account(accountId, null, null, "Sorry, we ran into an unexpected error.");
+        }
+
+        if (!getCurrentUser().isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(targetUser.getOrganizationId())) {
+            throw new AccessDeniedException("You don't have permission to interact with this account.");
+        }
+
+        if (!getCurrentUser().isSuperAdmin() && !getCurrentUser().isAdmin() && !getCurrentUser().getId().equals(targetUser.getId())) {
+            throw new AccessDeniedException("You don't have permission to interact with this account.");
+        }
+
+        if (targetUser.isSuperAdmin() && !getCurrentUser().getId().equals(targetUser.getId())) {
+            throw new AccessDeniedException("You don't have permission to interact with this account.");
+        }
+
+        //        check if password is valid
+        String passwordRegex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
+        Pattern passwordPattern = Pattern.compile(passwordRegex);
+        Matcher m3 = passwordPattern.matcher(password);
+        if (!m3.matches()) {
+            System.out.println("Sorry, this password is not valid.");
+            return account(accountId, null, null, "Sorry, the password must be at least 8 characters, contain at least one letter and one number.");
+        }
+
+        try {
+            gnzUserDAO.update(new GNZUser(targetUser.getId(), targetUser.getUsername(), targetUser.getEmail(), Encrypter.encrytedPassword(password), targetUser.getOrganizationId(), targetUser.role()));
+
+            return account(accountId, "Successfully updated the account password.", null, null);
+        } catch (Exception e) {
+            return account(accountId, null, null, "Sorry, we ran into an unexpected error.");
+        }
     }
 
     @GetMapping("/admin/organization")
@@ -556,7 +602,7 @@ public class AdminController {
             @RequestParam(value = "email", required = true) String email,
             @RequestParam(value = "password", required = true) String password,
             @RequestParam(value = "cpassword") String cpassword,
-            @RequestParam(value = "oid", required = false) String organizationId,
+            @RequestParam(value = "oid", required = true) String organizationId,
             @RequestParam(value = "r", required = false) String roleInital
     ) throws Exception {
         if (!isSuperAdmin()) {
@@ -581,7 +627,7 @@ public class AdminController {
         Matcher m = usernamePatter.matcher(username);
         if (!m.matches()) {
             System.out.println("Sorry, this username is not valid.");
-            return organization(organizationId, null, null, null,"Sorry, the password must be 6-30 characters, only contain letters and numbers, and start with a letter.");
+            return organization(organizationId, null, null, null,"Sorry, the username must be 6-30 characters, only contain letters and numbers, and start with a letter.");
         }
 
 //        check if username already exists
@@ -686,12 +732,21 @@ public class AdminController {
             @RequestParam(value = "email", required = true) String newEmail,
             @RequestParam(value = "privileges", required = false) int roleId
     ) {
+        System.out.println("IM IN THE FUNCTION");
         GNZUser userToUpdate = gnzUserDAO.findById(id);
         GNZUser currentUser = getCurrentUser();
 
-        if (!isSuperAdmin() && !(isAdmin() && currentUser.getOrganizationId().equals(userToUpdate.getOrganizationId())) && !(currentUser.getId().equals(userToUpdate.getId()))) {
-            throw new AccessDeniedException("You do not have permission to update this account.");
+
+        if (!currentUser.isSuperAdmin()) {
+            if (!currentUser.getOrganizationId().equals(userToUpdate.getOrganizationId())) {
+                System.out.println("Exiting at break 1");
+                throw new AccessDeniedException("You do not have permission to update this account.");
+            }
         }
+
+//        if (!isSuperAdmin() && !(isAdmin() && currentUser.getOrganizationId().equals(userToUpdate.getOrganizationId())) && !(currentUser.getId().equals(userToUpdate.getId()))) {
+//            throw new AccessDeniedException("You do not have permission to update this account.");
+//        }
 
         Role newRole;
         if (roleId == 1) {
@@ -703,24 +758,36 @@ public class AdminController {
         }
 
         if (!isAdmin() && !newRole.equals(userToUpdate.role())) {
+            System.out.println("Exiting at break 2");
             throw new AccessDeniedException("You do not have permission to update this information.");
         }
 
+        System.out.printf("IDS: %s %s " + userToUpdate.getId().equals(currentUser.getId()), currentUser.getId(), userToUpdate.getId());
+
 //        TODO: DECIDE ABOUT CONTROL OF SUPER ADMIN STATUSES
-        if (isAdmin() && !userToUpdate.isSuperAdmin()) {
+        if (isSuperAdmin() && (!userToUpdate.isSuperAdmin() || userToUpdate.getId().equals(currentUser.getId()))) {
             GNZUser updatedUser = new GNZUser(id, newUsername.toLowerCase(), newEmail.toLowerCase(), userToUpdate.getEncryptedPassword(), userToUpdate.getOrganizationId(), newRole);
             if (gnzUserDAO.update(updatedUser)) {
-                return account(id,"Successfully updated account with username '" + updatedUser.getUsername() + "'.", null);
+                return account(id,"Successfully updated account with username '" + updatedUser.getUsername() + "'.", null, null);
             } else {
-                return account(id,null, "Sorry, an error occurred. The account could not be updated.");
+                return account(id,null, "Sorry, an error occurred. The account could not be updated.", null);
             }
-        } else {
+        } else if (isAdmin() && !userToUpdate.isSuperAdmin()) {
+            GNZUser updatedUser = new GNZUser(id, newUsername.toLowerCase(), newEmail.toLowerCase(), userToUpdate.getEncryptedPassword(), userToUpdate.getOrganizationId(), newRole);
+            if (gnzUserDAO.update(updatedUser)) {
+                return account(id,"Successfully updated account with username '" + updatedUser.getUsername() + "'.", null, null);
+            } else {
+                return account(id,null, "Sorry, an error occurred. The account could not be updated.", null);
+            }
+        } else if (!isAdmin() && userToUpdate.getId().equals(getCurrentUser().getId())) {
             GNZUser updatedUser = new GNZUser(id, newUsername.toLowerCase(), newEmail.toLowerCase(), userToUpdate.getEncryptedPassword(), userToUpdate.getOrganizationId(), userToUpdate.role());
             if (gnzUserDAO.update(updatedUser)) {
-                return account(id,"Successfully updated account with username '" + updatedUser.getUsername() + "'.", null);
+                return account(id,"Successfully updated account with username '" + updatedUser.getUsername() + "'.", null, null);
             } else {
-                return account(id,null, "Sorry, an error occurred. The account could not be updated.");
+                return account(id,null, "Sorry, an error occurred. The account could not be updated.", null);
             }
+        } else {
+            throw new AccessDeniedException("You do not have permission to update this information.");
         }
     }
 

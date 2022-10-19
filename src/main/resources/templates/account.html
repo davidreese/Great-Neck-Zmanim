@@ -34,6 +34,12 @@
                                         <input type="text" class="form-control" name="email" id="email" aria-describedby="email-help" th:value="${queriedaccount.email}" required>
                                         <small id="email-help" class="form-text text-muted">This email will be used for password recovery.</small>
                                     </div>
+                                    <div class="form-group">
+                                        <label for="change-password-btn">Password</label>
+                                        <div>
+                                            <button type="button" class="btn btn-secondary form-control" id="change-password-btn" name="change-password-btn" data-toggle="modal" data-target="#change-password-modal" style="max-width: 175px;">Change Password</button>
+                                        </div>
+                                    </div>
                                     <div class="form-group" th:if="${user.isAdmin() && !queriedaccount.isSuperAdmin()}">
                                         <label for="privileges">Privileges</label>
                                         <div>
@@ -51,6 +57,24 @@
 <!--                                        <input type="text" class="form-control" name="email" id="email" aria-describedby="email-help" th:value="${queriedaccount.email}">-->
 <!--                                        <small id="email-help" class="form-text text-muted">This email will be used for password recovery.</small>-->
                                     </div>
+                                    <div class="form-group" hidden th:if="${!(user.isAdmin() && !queriedaccount.isSuperAdmin())}">
+                                        <label for="privileges">Privileges</label>
+                                        <div>
+                                            <div class="btn-group btn-group-toggle" id="privileges" data-toggle="buttons" aria-describedby="privileges-help">
+                                                <label th:class="${'btn btn-secondary' + ((queriedaccount.isAdmin()) ? ' active' : '')}">
+                                                    <input type="radio" name="privileges" id="admin" value="1" th:checked="${(queriedaccount.isAdmin())}"> Manager
+                                                </label>
+                                                <label th:class="${'btn btn-secondary' + ((queriedaccount.isUser() && !queriedaccount.isAdmin()) ? ' active' : '')}">
+                                                    <input type="radio" name="privileges" id="user" value="2" th:checked="${(queriedaccount.isUser() && !queriedaccount.isAdmin())}"> User
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <small id="privileges-help" class="form-text text-muted">Manager permissions allow the user to add and edit other accounts. To change this user's privileges, toggle the switch and click the update button.</small>
+                                        <!--                                        <label for="privileges">Privileges</label>-->
+                                        <!--                                        <input type="text" class="form-control" name="email" id="email" aria-describedby="email-help" th:value="${queriedaccount.email}">-->
+                                        <!--                                        <small id="email-help" class="form-text text-muted">This email will be used for password recovery.</small>-->
+                                    </div>
+                                    <hr>
                                     <!--                                    <div class="form-group">-->
                                     <!--                                        <label for="site-url">Website</label>-->
                                     <!--                                        <input type="text" class="form-control" name="site-url" id="site-url" aria-describedby="site-url" th:value="${organization.websiteURI}">-->
@@ -166,11 +190,43 @@
         </div>
     </div>
 
+<div class="modal fade" id="change-password-modal" tabindex="-1" aria-labelledby="change-password-modal-label" style="" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title h4" id="change-password-modal-label">Change Password</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">×</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <form method="post" th:action="${'/admin/accounts/' + queriedaccount.id + '/changepassword'}">
+                    <div class="form-group">
+                        <label for="new-password">Password</label>
+                        <input type="password" class="form-control" name="password" id="new-password" required="">
+                    </div>
+                    <div class="form-group">
+                        <label for="new-cpassword">Confirm Password</label>
+                        <input type="password" class="form-control" name="cpassword" id="new-cpassword" required="">
+                    </div>
+
+                    <div class="login-msg-box" th:if="${addAccountError}" style="padding-bottom: 8px">
+                        <div class="form-msg-fatal" th:text="${addAccountError}"></div>
+                    </div>
+
+                    <hr>
+                    <button type="submit" class="btn btn-primary">Update</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
 </body>
 
-<script th:src="@{/admin/organization.js}"></script>
-<script th:if="${addAccountError}" th:inline="javascript">
-    showAddAccountModal();
+<script th:src="@{admin/account.js}"></script>
+<script th:if="${changePasswordError}" th:inline="javascript">
+    showChangePasswordModal();
 </script>
 
 </html>

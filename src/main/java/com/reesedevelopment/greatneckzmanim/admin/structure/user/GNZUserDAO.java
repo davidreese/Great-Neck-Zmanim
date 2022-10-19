@@ -3,11 +3,14 @@ package com.reesedevelopment.greatneckzmanim.admin.structure.user;
 import com.reesedevelopment.greatneckzmanim.admin.structure.GNZSaveable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.*;
 
 @Repository
@@ -99,7 +102,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         String sql = String.format("INSERT INTO ACCOUNT VALUES ('%s', '%s', '%s', '%s', '%s', '%d')", user.getId(), user.getUsername(), user.getEmail(), user.getEncryptedPassword(), user.getOrganizationId(), user.getRoleId());
 
         try {
-            this.getConnection().createStatement().execute(sql);
+            this.getConnection().createStatement().executeUpdate(sql);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -112,7 +115,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         String sql = String.format("DELETE FROM ACCOUNT WHERE ID='%s'", objectToDelete.getId());
 
         try {
-            this.getConnection().createStatement().execute(sql);
+            this.getConnection().createStatement().executeUpdate(sql);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -122,10 +125,33 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
 
     @Override
     public boolean update(GNZUser objectToUpdate) {
-        String sql = String.format("UPDATE ACCOUNT SET USERNAME='%s', EMAIL='%s', ORGANIZATION_ID='%s', ROLE_ID='%s' WHERE ID='%s'", objectToUpdate.getUsername(), objectToUpdate.getEmail(), objectToUpdate.getOrganizationId(), objectToUpdate.getRoleId(), objectToUpdate.getId());
-
         try {
-            this.getConnection().createStatement().execute(sql);
+            String sql = "UPDATE ACCOUNT SET USERNAME='%s', EMAIL='%s', ENCRYPTED_PASSWORD='%s' ORGANIZATION_ID='%s', ROLE_ID=%d WHERE ID='%s'";
+
+//            String sql = "UPDATE ACCOUNT SET USERNAME=?, EMAIL=?, ORGANIZATION_ID=?, ROLE_ID=? WHERE ID=?;";
+//            getJdbcTemplate().query(sql, new PreparedStatementSetter() {
+//                        public void setValues(PreparedStatement preparedStatement) throws SQLException {
+//                            preparedStatement.setString(0, objectToUpdate.getUsername());
+//                            preparedStatement.setString(1, objectToUpdate.getEmail());
+//                            preparedStatement.setString(2, objectToUpdate.getOrganizationId());
+//                            preparedStatement.setInt(3, objectToUpdate.getRoleId().intValue());
+//                            preparedStatement.setString(4, objectToUpdate.getId());
+//                        }
+//                    }, new GNZUserMapper());
+
+
+            getConnection().createStatement().executeUpdate(String.format(sql, objectToUpdate.getUsername(), objectToUpdate.getEmail(), objectToUpdate.getEncryptedPassword(), objectToUpdate.getOrganizationId(), objectToUpdate.getRoleId(), objectToUpdate.getId()));
+
+//            String sql = "UPDATE ACCOUNT SET USERNAME=?, EMAIL=?, ORGANIZATION_ID=?, ROLE_ID=? WHERE ID=?;";
+//            PreparedStatement stmt = this.getConnection().prepareStatement(sql);
+//            stmt.setString(0, objectToUpdate.getUsername());
+//            stmt.setString(1, objectToUpdate.getEmail());
+//            stmt.setString(2, objectToUpdate.getOrganizationId());
+//            stmt.setInt(3, objectToUpdate.getRoleId().intValue());
+//            stmt.setString(4, objectToUpdate.getId());
+//            stmt.executeUpdate();
+//            getConnection().commit();
+//            System.out.println("Successfully updated GNZUser");
             return true;
         } catch (Exception e) {
             e.printStackTrace();
