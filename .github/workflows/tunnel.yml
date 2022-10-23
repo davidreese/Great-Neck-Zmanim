@@ -17,6 +17,4 @@ jobs:
       uses: azure/CLI@v1
       with:
         azcliversion: 2.30.0
-        inlineScript: ls /home/.ssh
-          az account show
-          az storage -h
+        inlineScript: ls -a
