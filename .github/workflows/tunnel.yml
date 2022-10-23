@@ -17,6 +17,6 @@ jobs:
       uses: azure/CLI@v1
       with:
         azcliversion: 2.30.0
-        inlineScript: echo "STARTUP TUNNEL" && apt-get install autossh && autossh -L 4002:localhost:3306 -N -i /home/.ssh/id_rsa gnminadmin@nextgenanz04.eastus2.cloudapp.azure.com -4 -o "StrictHostKeyChecking no" -M
+        inlineScript: echo "STARTUP TUNNEL" && autossh -L 4002:localhost:3306 -N -i /home/.ssh/id_rsa gnminadmin@nextgenanz04.eastus2.cloudapp.azure.com -4 -o "StrictHostKeyChecking no" -M
           az account show
           az storage -h
