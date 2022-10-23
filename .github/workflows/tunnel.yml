@@ -1,6 +1,6 @@
 on: workflow_dispatch
 
-name: Azure CLI start autossh - after build and delpoy
+name: Azure CLI start ssh tunnel - after build and delpoy
 
 jobs:
 
