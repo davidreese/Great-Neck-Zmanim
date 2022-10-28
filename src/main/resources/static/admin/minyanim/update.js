@@ -83,3 +83,40 @@ function updateAll() {
 }
 
 //updateAll();
+
+function applyMondayThroughFriday() {
+    var mondayMode = document.getElementById(`monday-time-type`).value;
+
+    const needToMatch =  ["tuesday", "wednesday", "thursday", "friday"];
+
+    needToMatch.forEach(setMatching);
+
+    function setMatching(name) {
+        updateMode(name, mondayMode);
+        if (mondayMode == "nm") {
+
+        } else if (mondayMode == "dynamic") {
+            var mondayZman = document.getElementById(`monday-zman`).value;
+            var mondayOffset = document.getElementById(`monday-zman-offset`).value;
+            updateDynamicTime(name, mondayZman, mondayOffset);
+        } else if (mondayMode == "fixed") {
+            var mondayTime = document.getElementById(`monday-fixed-time`).value;
+            updateFixedTime(name, mondayTime);
+        }
+    }
+
+}
+
+function updateMode(name, mode) {
+    document.getElementById(`${name}-time-type`).value = mode;
+    update(name);
+}
+
+function updateDynamicTime(name, zman, offset) {
+    document.getElementById(`${name}-zman`).value = zman;
+    document.getElementById(`${name}-zman-offset`).value = offset;
+}
+
+function updateFixedTime(name, time) {
+    document.getElementById(`${name}-fixed-time`).value = time;
+}
