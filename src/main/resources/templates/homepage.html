@@ -57,7 +57,7 @@
                                     </ul>
                                     <div class="tab-content" id="pills-tabContent">
                                         <div class="tab-pane fade active show" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
-                                            <table class="table table-hover" th:if="${!allminyanim.isEmpty()}">
+                                            <table class="table" th:if="${!allminyanim.isEmpty()}">
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">Type</th>
@@ -87,7 +87,7 @@
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="pills-shacharit" role="tabpanel" aria-labelledby="pills-shacharit-tab">
-                                            <table class="table table-hover" th:if="${!shacharitMinyanim.isEmpty()}">
+                                            <table class="table" th:if="${!shacharitMinyanim.isEmpty()}">
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">Time</th>
@@ -110,7 +110,7 @@
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="pills-mincha" role="tabpanel" aria-labelledby="pills-mincha-tab">
-                                            <table class="table table-hover" th:if="${!minchaMinyanim.isEmpty()}">
+                                            <table class="table" th:if="${!minchaMinyanim.isEmpty()}">
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">Time</th>
@@ -134,7 +134,7 @@
                                         </div>
 
                                         <div class="tab-pane fade" id="pills-arvit" role="tabpanel" aria-labelledby="pills-arvit-tab">
-                                            <table class="table table-hover" th:if="${!arvitMinyanim.isEmpty()}">
+                                            <table class="table" th:if="${!arvitMinyanim.isEmpty()}">
                                                 <thead>
                                                 <tr>
                                                     <th scope="col">Time</th>
