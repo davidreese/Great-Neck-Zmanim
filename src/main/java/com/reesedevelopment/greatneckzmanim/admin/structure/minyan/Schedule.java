@@ -121,4 +121,18 @@ public class Schedule {
 //            }
 //        }
 //    }
+
+    public void printTimes() {
+        System.out.println("Sunday minyan time: " + sunday);
+        System.out.println("Monday minyan time: " + monday);
+        System.out.println("Tuesday minyan time: " + tuesday);
+        System.out.println("Wednesday minyan time: " + wednesday);
+        System.out.println("Thursday minyan time: " + thursday);
+        System.out.println("Friday minyan time: " + friday);
+        System.out.println("Shabbat minyan time: " + shabbat);
+        System.out.println("Yom Tov minyan time: " + yomTov);
+        System.out.println("Rosh Chodesh minyan time: " + roshChodesh);
+        System.out.println("Chanuka minyan time: " + chanuka);
+        System.out.println("RCC minyan time: " + roshChodeshChanuka);
+    }
 }

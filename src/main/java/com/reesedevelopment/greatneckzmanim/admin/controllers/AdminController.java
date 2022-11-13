@@ -79,6 +79,51 @@ public class AdminController {
         mv.getModel().put("date", dateFormat.format(today));
     }
 
+    /**
+     * Verifies that the current user has access to the organization in question and returns it
+     */
+    private Organization getOrganization(String orgId) throws AccessDeniedException {
+        Organization org = organizationDAO.findById(orgId);
+        if (org == null) {
+            return null;
+        } else {
+//            verify user has user permissions for this organization
+            if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(org.getId())) {
+                throw new AccessDeniedException("You do not have permission to access this organization.");
+            } else {
+                return org;
+            }
+        }
+    }
+
+    private Location getLocation(String locId) throws AccessDeniedException {
+        Location location = locationDAO.findById(locId);
+        if (location == null) {
+            return null;
+        } else {
+//            verify user has user permissions for this organization
+            if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(location.getOrganizationId())) {
+                throw new AccessDeniedException("You do not have permission to access this location.");
+            } else {
+                return location;
+            }
+        }
+    }
+
+    private boolean hasUserPermissions(String orgId) throws Exception {
+        Organization org = organizationDAO.findById(orgId);
+        if (org == null) {
+            throw new Exception("Organization not found.");
+        } else {
+//            verify user has user permissions for this organization
+            if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(org.getId())) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+    }
+
     @GetMapping("/admin/dashboard")
     public ModelAndView dashbaord() {
         ModelAndView mv = new ModelAndView();
@@ -1012,23 +1057,15 @@ public class AdminController {
     }
 
     @RequestMapping(value="/admin/{orgId}/minyanim/new")
-    public ModelAndView newMinyan(@PathVariable String orgId) {
-//        check security
-        if (isUser() && !isSuperAdmin()) {
-//            check for organization match
-            if (!getCurrentUser().getOrganizationId().equals(orgId)) {
-                throw new AccessDeniedException("You do not have permission to create a minyan for this organization.");
-            }
-        } else if (!isUser()) {
-            throw new AccessDeniedException("You do not have permission to create a minyan.");
-        }
+    public ModelAndView newMinyan(@PathVariable String orgId) throws AccessDeniedException {
+        Organization org = this.getOrganization(orgId);
 
         ModelAndView mv = new ModelAndView();
         mv.setViewName("admin/minyanim/new");
 
 //        add locations to mv
         mv.addObject("locations", locationDAO.findMatching(orgId));
-        mv.addObject("organization", organizationDAO.findById(orgId));
+        mv.addObject("organization", org);
         addStandardPageData(mv);
 
         return mv;
@@ -1084,40 +1121,25 @@ public class AdminController {
                                      @RequestParam(value = "rcc-zman-offset", required = false) Integer rccZmanOffset,
                                      @RequestParam(value = "nusach", required = false) String nusachString,
                                      @RequestParam(value = "notes", required = false) String notes,
-                                     @RequestParam(value = "enabled", required = false) String enabledString) throws Exception {
+                                     @RequestParam(value = "enabled", required = false) String enabledString,
+                                     @RequestParam(value = "return", required = false) boolean returnAndRefill) throws Exception {
 
-        //        print data
-        System.out.println("Creating minyan...");
+//        get and verify organization
+        Organization organization = getOrganization(orgId);
 
-        ModelAndView nm = newMinyan(orgId);
-
-//        verify organization
-        Organization organization = organizationDAO.findById(orgId);
-        if (organization == null) {
-            throw new Exception("Organization not found.");
-        } else {
-//            verify user has permission to create minyan for this organization
-            if (!isSuperAdmin() && !getCurrentUser().getOrganizationId().equals(organization.getId())) {
-                throw new AccessDeniedException("You do not have permission to create a minyan for this organization.");
-            }
-        }
+        ModelAndView mv = newMinyan(orgId);
 
 //        verify minyan type
         MinyanType minyanType = MinyanType.fromString(type);
         if (minyanType == null) {
-            nm.addObject("errormessage", "Sorry, there was an error creating the minyan. Please try again. (M01)");
-            return nm;
+            mv.addObject("errormessage", "Sorry, there was an error creating the minyan. Please try again. (M01)");
+            return mv;
         }
 
-        System.out.println("Minyan type: " + minyanType);
+//        System.out.println("Minyan type: " + minyanType);
 
 //        get and verify location
-        Location location = locationDAO.findById(locationId);
-        if (location != null) {
-            if (!location.getOrganizationId().equalsIgnoreCase(organization.getId())) {
-                throw new AccessDeniedException("You do not have permission to create a minyan using this location.");
-            }
-        }
+        Location location = getLocation(locationId);
 
 //        create minyan times
         MinyanTime sundayTime = MinyanTime.fromFormData(sundayTimeType, sundayTimeString, sundayZman, sundayZmanOffset);
@@ -1132,28 +1154,16 @@ public class AdminController {
         MinyanTime chanukaTime = MinyanTime.fromFormData(chanukaTimeType, chanukaTimeString, chanukaZman, chanukaZmanOffset);
         MinyanTime rccTime = MinyanTime.fromFormData(rccTimeType, rccTimeString, rccZman, rccZmanOffset);
 
-        System.out.println("Sunday minyan time: " + sundayTime);
-        System.out.println("Monday minyan time: " + mondayTime);
-        System.out.println("Tuesday minyan time: " + tuesdayTime);
-        System.out.println("Wednesday minyan time: " + wednesdayTime);
-        System.out.println("Thursday minyan time: " + thursdayTime);
-        System.out.println("Friday minyan time: " + fridayTime);
-        System.out.println("Shabbat minyan time: " + shabbatTime);
-        System.out.println("Yom Tov minyan time: " + ytTime);
-        System.out.println("Rosh Chodesh minyan time: " + rcTime);
-        System.out.println("Chanuka minyan time: " + chanukaTime);
-        System.out.println("RCC minyan time: " + rccTime);
+        Schedule schedule = new Schedule(sundayTime, mondayTime, tuesdayTime, wednesdayTime, thursdayTime, fridayTime, shabbatTime, ytTime, rcTime, chanukaTime, rccTime);
 
 //        validate nusach
         Nusach nusach = Nusach.fromString(nusachString);
         if (nusach == null) {
-            nm.addObject("errormessage", "Sorry, there was an error updating the minyan. Please try again. (M02)");
-            return nm;
+            mv.addObject("errormessage", "Sorry, there was an error updating the minyan. Please try again. (M02)");
+            return mv;
         }
 
-        System.out.println("Notes: " + notes);
-
-        Schedule schedule = new Schedule(sundayTime, mondayTime, tuesdayTime, wednesdayTime, thursdayTime, fridayTime, shabbatTime, ytTime, rcTime, chanukaTime, rccTime);
+//        System.out.println("Notes: " + notes);
 
         boolean enabled;
         if (enabledString != null && !enabledString.isEmpty()) {
@@ -1165,20 +1175,23 @@ public class AdminController {
         } else {
             enabled = false;
         }
-        System.out.println("Enabled: " + enabled);
+//        System.out.println("Enabled: " + enabled);
 
         Minyan minyan = new Minyan(organization, minyanType, location, schedule, notes, nusach, enabled);
 
         try {
             minyanDAO.save(minyan);
 
-            nm.addObject("successmessage", "You successfully created a minyan. Click <a href='/admin/" + orgId + "/minyanim/'>here</a> to return to the minyan schedule.");
-            return nm;
+            mv.addObject("successmessage", "You successfully created a minyan. Click <a href='/admin/" + orgId + "/minyanim/'>here</a> to return to the minyan schedule. Click <button onclick='branch()'>here</a> to create a minyan similar to the last.");
+
+            mv.addObject("branchMinyan", minyan);
+
+            return mv;
         } catch (Exception e) {
             e.printStackTrace();
 
-            nm.addObject("errormessage", "Sorry, there was an error saving the minyan. (M03)");
-            return nm;
+            mv.addObject("errormessage", "Sorry, there was an error saving the minyan. (M03)");
+            return mv;
         }
     }
 
