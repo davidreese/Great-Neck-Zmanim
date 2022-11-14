@@ -59,7 +59,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .logoutSuccessUrl("/admin/login?logout=true")
                     .and()
                 .rememberMe()
-                    .key("uniqueAndSecret");
+                    .key("uniqueAndSecret").tokenValiditySeconds(604800);
                 
 
         // For ADMIN only.
