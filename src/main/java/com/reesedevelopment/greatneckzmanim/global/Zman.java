@@ -3,8 +3,8 @@ package com.reesedevelopment.greatneckzmanim.global;
 public enum Zman {
     ALOT_HASHACHAR("ALOT_HASHACHAR"),
     NETZ("NETZ"),
-    //SZKS(s: "SZKS"),
-    //SZT("SZT"),
+    SZKS("SZKS"),
+    SZT("SZT"),
     CHATZOT("CHATZOT"),
     MINCHA_GEDOLA("MINCHA_GEDOLA"),
     MINCHA_KETANA("MINCHA_KETANA"),
