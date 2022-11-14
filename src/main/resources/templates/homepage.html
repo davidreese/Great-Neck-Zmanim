@@ -43,16 +43,7 @@
                                 <div class="col-lg-9 col-md-8" id="minyanim-box">
                                     <ul class="nav nav-tabs mb-3" id="pills-tab" role="tablist">
                                         <li class="nav-item" role="presentation">
-                                            <a class="nav-link active" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-all" aria-selected="true">All Minyanim</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" id="pills-shacharit-tab" data-toggle="pill" href="#pills-shacharit" role="tab" aria-controls="pills-shacharit" aria-selected="false">Shacharit</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" id="pills-mincha-tab" data-toggle="pill" href="#pills-mincha" role="tab" aria-controls="pills-mincha" aria-selected="false">Mincha</a>
-                                        </li>
-                                        <li class="nav-item" role="presentation">
-                                            <a class="nav-link" id="pills-arvit-tab" data-toggle="pill" href="#pills-arvit" role="tab" aria-controls="pills-arvit" aria-selected="false">Arvit</a>
+                                            <a class="nav-link active" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-all" aria-selected="true">Upcoming Minyanim</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="pills-tabContent">
@@ -68,7 +59,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr th:each="minyan: ${allminyanim}">
+                                                <tr th:each="minyan: ${shacharitMinyanim}">
                                                     <th scope="row" class="middle" th:text="${minyan.getType().displayName()}"></th>
                                                     <!--                                        <td th:if="${minyan.getLocationName() != null}" class="middle">-->
                                                     <!--                                            <button type="button" class="btn btn-primary btn-sm" th:text="${minyan.getOrganizationName() + '- ' + minyan.getLocationName()}"></button>-->
@@ -83,7 +74,7 @@
                                                 </tbody>
                                             </table>
                                             <div class="jumbotron" th:if="${allminyanim.isEmpty()}">
-                                                <h4>Sorry, there aren't any minyanim scheduled.</h4>
+                                                <h4>Sorry, there aren't any upcoming minyanim.</h4>
                                             </div>
                                         </div>
                                         <div class="tab-pane fade" id="pills-shacharit" role="tabpanel" aria-labelledby="pills-shacharit-tab">
