@@ -1,6 +1,7 @@
 package com.reesedevelopment.greatneckzmanim.global;
 
 public enum Zman {
+    Shaah_Zmanis("Shaah_Zmanis"),
     ALOT_HASHACHAR("ALOT_HASHACHAR"),
     NETZ("NETZ"),
     SZKS("SZKS"),
@@ -36,6 +37,8 @@ public enum Zman {
 
     public String displayName() {
         switch (this) {
+            case Shaah_Zmanis:
+                return "Shaah Zmanis";
             case ALOT_HASHACHAR:
                 return "Alos HaShachar";
             case NETZ:

@@ -44,6 +44,7 @@ public class ZmanimHandler {
         complexZmanimCalendar.getCalendar().set(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
 //        complexZmanimCalendar.getCalendar().
 
+        dictionary.put(Zman.ShaahZmanis, complexZmanimCalendar.getShaahZmanisGra());
         dictionary.put(Zman.ALOT_HASHACHAR, complexZmanimCalendar.getAlosHashachar());
         dictionary.put(Zman.NETZ, complexZmanimCalendar.getSunrise());
         dictionary.put(Zman.SZKS, complexZmanimCalendar.getSofZmanShmaGRA());

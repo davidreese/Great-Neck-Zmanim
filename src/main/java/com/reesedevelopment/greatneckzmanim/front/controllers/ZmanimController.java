@@ -107,11 +107,12 @@ public class ZmanimController {
         timeFormat.setTimeZone(timeZone);
 
         Dictionary zmanim = zmanimHandler.getZmanim(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()));
-
+        
+        mv.getModel().put("ShaahZmanis", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SHAAHZMANIS)));
         mv.getModel().put("alotHashachar", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
         mv.getModel().put("sunrise", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.NETZ)));
-        mv.getModel().put("SZKS", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZKS)));
-        mv.getModel().put("SZT", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZT)));
+        mv.getModel().put("szks", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZKS)));
+        mv.getModel().put("szt", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZT)));
         mv.getModel().put("chatzot", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.CHATZOT)));
         mv.getModel().put("minchaGedola", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_GEDOLA)));
         mv.getModel().put("minchaKetana", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_KETANA)));
