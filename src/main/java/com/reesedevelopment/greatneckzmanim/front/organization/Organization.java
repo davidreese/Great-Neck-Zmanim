@@ -1,4 +1,4 @@
-package com.reesedevelopment.greatneckzmanim.front.controllers;
+package com.reesedevelopment.greatneckzmanim.front.organization;
 
 import com.reesedevelopment.greatneckzmanim.admin.structure.GNZObject;
 import com.reesedevelopment.greatneckzmanim.admin.structure.IDGenerator;

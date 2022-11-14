@@ -1,7 +1,6 @@
-package com.reesedevelopment.greatneckzmanim.front.controllers;
+package com.reesedevelopment.greatneckzmanim.front.organization;
 
 import com.reesedevelopment.greatneckzmanim.global.Nusach;
-import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organization;
 import org.springframework.jdbc.core.RowMapper;
 
 import java.io.Serializable;
