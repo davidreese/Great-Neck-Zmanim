@@ -59,7 +59,7 @@
                                                 <option th:value="${location.id}" th:text="${location.name}"></option>
                                             </div>
                                         </select>
-                                        <small id="location-help" class="form-text text-muted">Choose the place inside the shul that the minyan will take place. To add more options, jump to <a th:href="@{/admin/locations(oid=${organization.id})}">manage locations</a>.</small>
+                                        <small id="location-help" class="form-text text-muted">Choose the place inside the shul that the minyan will take place. To add more options, jump to <a th:href="@{|/admin/${organization.id}/locations|}">manage locations</a>.</small>
                                     </div>
                                     <div class="form-group">
                                         <label for="sunday-box">Sunday</label>

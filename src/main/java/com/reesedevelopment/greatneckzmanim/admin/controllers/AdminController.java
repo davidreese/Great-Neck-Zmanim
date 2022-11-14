@@ -838,8 +838,8 @@ public class AdminController {
         }
     }
 
-    @RequestMapping(value = "/admin/locations", method = RequestMethod.GET)
-    public ModelAndView locations(@RequestParam(value = "oid", required = false) String oid, String successMessage, String errorMessage) {
+    @RequestMapping(value = "/admin/{oid}/locations", method = RequestMethod.GET)
+    public ModelAndView locations(@PathVariable(value = "oid") String oid, String successMessage, String errorMessage) {
         String oidToUse;
         if (isSuperAdmin()) {
             oidToUse = oid;
