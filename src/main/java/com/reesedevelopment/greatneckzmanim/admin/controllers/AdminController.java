@@ -914,7 +914,7 @@ public class AdminController {
             minchaTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
         }
 
-        List<Minyan> arvitMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.ARVIT)).collect(Collectors.toList());
+        List<Minyan> arvitMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.MAARIV)).collect(Collectors.toList());
         mv.addObject("arvitminyanim", arvitMinyanim);
         Map<String, HashMap<MinyanDay, MinyanTime>> arvitTimes = new HashMap<>();
         for (Minyan m : arvitMinyanim) {
