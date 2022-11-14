@@ -408,6 +408,11 @@
                   <h2>Shuls</h2>
                 </div>
                 <table class="table">
+                  <thead class="thead-inverse">
+                    <tr>
+                        <th>Shul</th>
+                    </tr>
+                    </thead>
                   <tbody>
                     <tr th:each="organization: ${organizations}">
                       <td th:text="${organization.id}" />
