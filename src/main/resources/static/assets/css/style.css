@@ -84,15 +84,6 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-table-home tr {
-	vertical-align: middle;
-}
-table-home td {
-	vertical-align: middle;
-}
-table-home th {
-	vertical-align: middle;
-}
 
 /* --- Common Styles ---*/
 
