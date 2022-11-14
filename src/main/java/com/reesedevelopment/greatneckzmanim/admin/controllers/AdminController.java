@@ -1182,7 +1182,7 @@ public class AdminController {
         try {
             minyanDAO.save(minyan);
 
-            mv.addObject("successmessage", "You successfully created a minyan. Click <a href='/admin/" + orgId + "/minyanim/'>here</a> to return to the minyan schedule. Click <button onclick='branch()'>here</a> to create a minyan similar to the last.");
+            mv.addObject("successmessage", "You successfully created a minyan. Click <a href='/admin/" + orgId + "/minyanim/'>here</a> to return to the minyan schedule. Click <a href=\"#\" onclick='branch()'>here</a> to fill in the fields like the last minyan.");
 
             mv.addObject("branchMinyan", minyan);
 
