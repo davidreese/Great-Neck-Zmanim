@@ -409,6 +409,15 @@
                 </div>
               </div>
               <div class="col-md-6 col-lg-4">
+                <table>
+                <tbody>
+                  <tr th:each="minyan: ${orgnames}">
+                    <td class="align-middle">
+                      <a role="button" class="btn-action js-scroll-trigger" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
+                    </td>  
+                    </tr>
+                    </tbody>
+                  </table>
                 <div class="feature-list">
                   <div class="card-icon">
                     <div class="card-img">
