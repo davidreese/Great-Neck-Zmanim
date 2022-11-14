@@ -18,6 +18,28 @@
    v2.0 | 20110126
    License: none (public domain)
 */
+/* Mobile carried over from Great Neck */
+@media screen and (max-width: 600px) {
+	.mobile-hide {
+	  visibility: hidden;
+	  clear: both;
+	  float: left;
+	  margin: 10px auto 5px 20px;
+	  width: 28%;
+	  display: none;
+	}
+  }
+  
+  @media screen and (min-width: 601px) {
+	.desktop-hide {
+	  visibility: hidden;
+	  clear: both;
+	  float: left;
+	  margin: 10px auto 5px 20px;
+	  width: 28%;
+	  display: none;
+	}
+  }
 
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
@@ -36,7 +58,7 @@ time, mark, audio, video {
 	padding: 0;
 	border: 0;
 	font-size: 100%;
-	font: inherit;
+	/* font: inherit; */
 	vertical-align: baseline;
 }
 /* HTML5 display-role reset for older browsers */
@@ -1738,4 +1760,5 @@ body {
 	  margin-left: 0;
 	}
 
+}
 }
