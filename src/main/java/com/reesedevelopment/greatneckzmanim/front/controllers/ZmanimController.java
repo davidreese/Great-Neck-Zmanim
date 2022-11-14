@@ -67,7 +67,7 @@ public class ZmanimController {
         return zmanim(new Date());
     }
 
-    private String timeFormatWithRoundingToMinute(Date date) {
+    private String timeFormatWithRoundingToSecond(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.SECOND, 30);
@@ -108,14 +108,14 @@ public class ZmanimController {
 
         Dictionary zmanim = zmanimHandler.getZmanim(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()));
 
-        mv.getModel().put("alotHashachar", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
-        mv.getModel().put("sunrise", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.NETZ)));
-        mv.getModel().put("chatzot", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.CHATZOT)));
-        mv.getModel().put("minchaGedola", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.MINCHA_GEDOLA)));
-        mv.getModel().put("minchaKetana", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.MINCHA_KETANA)));
-        mv.getModel().put("plagHamincha", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.PLAG_HAMINCHA)));
-        mv.getModel().put("shekiya", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.SHEKIYA)));
-        mv.getModel().put("tzet", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.TZET)));
+        mv.getModel().put("alotHashachar", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
+        mv.getModel().put("sunrise", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.NETZ)));
+        mv.getModel().put("chatzot", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.CHATZOT)));
+        mv.getModel().put("minchaGedola", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_GEDOLA)));
+        mv.getModel().put("minchaKetana", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_KETANA)));
+        mv.getModel().put("plagHamincha", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.PLAG_HAMINCHA)));
+        mv.getModel().put("shekiya", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SHEKIYA)));
+        mv.getModel().put("tzet", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.TZET)));
 
 //        get minyanim closest in time to now
 //        todo: only get items with non null time for date
