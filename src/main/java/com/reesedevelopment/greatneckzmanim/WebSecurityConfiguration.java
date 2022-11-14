@@ -43,8 +43,8 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
         http
                 .authorizeRequests()
                     .antMatchers("/", "/zmanim/**", "/orgs/**", "/admin/login", "/admin/logout", "/webjars/**", "/**/*.css", "/**/*.js", "/static/**", "/db/**").permitAll()
-                    .antMatchers("/admin", "/admin/dashboard", "/admin/organization", "/admin/account", "/admin/update-organization", "/admin/update-account", "/admin/locations", "/admin/create-location", "/admin/update-location", "/admin/delete-location", "/admin/**/minyanim/**").hasAnyRole("USER", "ADMIN")
-                    .antMatchers("/admin/**").hasAnyRole("ADMIN")
+                    .antMatchers("/admin", "/admin/dashboard", "/admin/organization", "/admin/account", "/admin/update-organization", "/admin/update-account", "/admin/locations", "/admin/create-location", "/admin/update-location", "/admin/delete-location", "/admin/**/minyanim/**").permitAll()
+                    .antMatchers("/admin/**").permitAll()
                     .and()
                 .formLogin()//
                     .loginProcessingUrl("/j_spring_security_check")
@@ -52,7 +52,7 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .defaultSuccessUrl("/admin")
                     .failureUrl("/admin/login?error=true")
                     .usernameParameter("username")
-                    //.passwordParameter("password")
+                    .passwordParameter("password")
                     .and()
                 .logout()
                     .logoutUrl("/admin/logout")
