@@ -185,7 +185,7 @@ public class ZmanimController {
                 shacharitMinyanim.add(me);
             } else if (me.getType().isMincha()) {
                 minchaMinyanim.add(me);
-            } else if (me.getType().isArvit()) {
+            } else if (me.getType().isMaariv()) {
                 arvitMinyanim.add(me);
             }
         }
@@ -325,7 +325,7 @@ public class ZmanimController {
                 shacharitMinyanim.add(me);
             } else if (me.getType().isMincha()) {
                 minchaMinyanim.add(me);
-            } else if (me.getType().isArvit()) {
+            } else if (me.getType().isMaariv()) {
                 arvitMinyanim.add(me);
             }
         }
