@@ -69,7 +69,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr style="vertical-align: middle;" th:each="minyan: ${allminyanim}">
+                                                <tr class="table" style="vertical-align: middle;" th:each="minyan: ${allminyanim}">
                                                     <th class="table" scope="row" th:text="${minyan.getType().displayName()}"></th>
                                                         <!-- <td th:if="${minyan.getLocationName() != null}" class="middle">
                                                             <button type="button" class="btn btn-primary btn-sm" th:text="${minyan.getOrganizationName() + '- ' + minyan.getLocationName()}"></button>
