@@ -56,8 +56,11 @@ public class WebSecurityConfiguration extends WebSecurityConfigurerAdapter {
                     .and()
                 .logout()
                     .logoutUrl("/admin/logout")
-                    .logoutSuccessUrl("/admin/login?logout=true");
-
+                    .logoutSuccessUrl("/admin/login?logout=true")
+                    .and()
+                .rememberMe()
+                    .key("uniqueAndSecret");
+                
 
         // For ADMIN only.
 //        http.authorizeRequests().antMatchers("/admin").access("hasRole('ROLE_ADMIN')");
