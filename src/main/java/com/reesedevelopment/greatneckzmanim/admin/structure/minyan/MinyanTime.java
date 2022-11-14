@@ -76,13 +76,6 @@ public class MinyanTime {
         return type() == TimeType.NONE;
     }
 
-    /**
-     * @return Expression of the fixed time, if there is one, in 24 hours:60 minutes format
-     */
-    public String fixedTimeString() {
-        return String.format("%d:%d", time.getHours(), time.getMinutes());
-    }
-
     enum TimeType {
         NONE,
         FIXED,
@@ -210,6 +203,9 @@ public class MinyanTime {
         }
     }
 
+    /**
+     * @return Expression of the fixed time, if there is one, in 24 hours:60 minutes format
+     */
     public String getFixedTimeShort() {
         if (type() == TimeType.FIXED) {
 //            get 24 hour time
