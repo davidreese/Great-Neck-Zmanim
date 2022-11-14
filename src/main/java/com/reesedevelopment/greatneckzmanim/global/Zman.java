@@ -1,7 +1,6 @@
 package com.reesedevelopment.greatneckzmanim.global;
 
 public enum Zman {
-    SHAAH_ZMANIS("SHAAH_ZMANIS"),
     ALOT_HASHACHAR("ALOT_HASHACHAR"),
     NETZ("NETZ"),
     SZKS("SZKS"),
@@ -11,6 +10,7 @@ public enum Zman {
     MINCHA_KETANA("MINCHA_KETANA"),
     PLAG_HAMINCHA("PLAG_HAMINCHA"),
     SHEKIYA("SHEKIYA"),
+    EARLIEST_SHEMA("EARLIEST_SHEMA"),
     TZET("TZET");
 
     private String text;
@@ -37,8 +37,6 @@ public enum Zman {
 
     public String displayName() {
         switch (this) {
-            case SHAAH_ZMANIS:
-                return "Shaah Zmanis";
             case ALOT_HASHACHAR:
                 return "Alos HaShachar";
             case NETZ:
@@ -57,6 +55,8 @@ public enum Zman {
                 return "Plag HaMincha";
             case SHEKIYA:
                 return "Shekiya";
+            case EARLIEST_SHEMA:
+                return "Earliest Shema";
             case TZET:
                 return "Tzes";
             default:

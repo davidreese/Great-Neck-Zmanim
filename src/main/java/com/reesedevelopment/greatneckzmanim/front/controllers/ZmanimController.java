@@ -108,7 +108,6 @@ public class ZmanimController {
 
         Dictionary zmanim = zmanimHandler.getZmanim(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()));
         
-        mv.getModel().put("shaahzmanis", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SHAAHZMANIS)));
         mv.getModel().put("alotHashachar", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
         mv.getModel().put("sunrise", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.NETZ)));
         mv.getModel().put("szks", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZKS)));
@@ -118,6 +117,7 @@ public class ZmanimController {
         mv.getModel().put("minchaKetana", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_KETANA)));
         mv.getModel().put("plagHamincha", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.PLAG_HAMINCHA)));
         mv.getModel().put("shekiya", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SHEKIYA)));
+        mv.getModel().put("earliestShema", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.EARLIEST_SHEMA)));
         mv.getModel().put("tzet", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.TZET)));
 
 //        get minyanim closest in time to now
