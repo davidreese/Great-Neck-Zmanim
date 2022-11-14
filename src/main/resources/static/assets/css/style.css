@@ -84,7 +84,10 @@ table {
 	border-collapse: collapse;
 	border-spacing: 0;
 }
-table-home tr, table-home th {
+table-home tr {
+	vertical-align: middle;
+}
+table-home th {
 	vertical-align: middle;
 }
 
