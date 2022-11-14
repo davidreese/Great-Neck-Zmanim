@@ -126,10 +126,11 @@ public class ZmanimController {
             LocalDate ref = LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1);
             Date startDate = minyan.getStartDate(ref);
             Date now = new Date();
-            Date terminationDate = new Date(now.getTime() - (6 * 8));
+            //Date terminationDate = new Date(now.getTime() - (60000 * 8));
             System.out.println("SD: " + startDate);
             System.out.println("TD: " + terminationDate);
-            if (startDate != null && (startDate.after(terminationDate) || now.getDate() != startDate.getDate())) {
+            //if (startDate != null && (startDate.after(terminationDate) || now.getDate() != startDate.getDate())) {
+            if (startDate != null || now.getDate() != startDate.getDate())) {    
                 String organizationName;
                 Nusach organizationNusach;
                 String organizationId;
@@ -273,8 +274,9 @@ public class ZmanimController {
 
         for (Minyan minyan : enabledMinyanim) {
             Date startDate = minyan.getStartDate(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1));
-            Date terminationDate = new Date((new Date()).getTime() - (6 * 20));
-            if (startDate != null && startDate.after(terminationDate)) {
+            //Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
+            //if (startDate != null && startDate.after(terminationDate)) {
+            if (startDate != null) {    
                 String organizationName;
                 Nusach organizationNusach;
                 String organizationId;
