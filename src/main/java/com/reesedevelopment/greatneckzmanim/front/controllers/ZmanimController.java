@@ -108,7 +108,7 @@ public class ZmanimController {
 
         Dictionary zmanim = zmanimHandler.getZmanim(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()));
         
-        mv.getModel().put("ShaahZmanis", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SHAAHZMANIS)));
+        mv.getModel().put("shaahzmanis", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SHAAHZMANIS)));
         mv.getModel().put("alotHashachar", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
         mv.getModel().put("sunrise", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.NETZ)));
         mv.getModel().put("szks", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZKS)));
