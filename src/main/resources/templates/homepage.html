@@ -69,16 +69,16 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr class="table" th:each="minyan: ${allminyanim}">
-                                                    <th class="table" scope="row" th:text="${minyan.getType().displayName()}"></th>
+                                                <tr th:each="minyan: ${allminyanim}">
+                                                    <th scope="row" class="middle" th:text="${minyan.getType().displayName()}"></th>
                                                         <!-- <td th:if="${minyan.getLocationName() != null}" class="middle">
                                                             <button type="button" class="btn btn-primary btn-sm" th:text="${minyan.getOrganizationName() + '- ' + minyan.getLocationName()}"></button>
                                                         </td> -->
-                                                        <td class="table" th:text="${minyan.getFormattedStartTime()}"></td>
-                                                        <td class="table">
+                                                        <td class="middle" th:text="${minyan.getFormattedStartTime()}"></td>
+                                                        <td class="middle">
                                                         <a role="button" class="btn-action js-scroll-trigger" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
                                                         </td>
-                                                        <td class="table" th:text="${minyan.getLocationName()}"></td>
+                                                        <td class="middle" th:text="${minyan.getLocationName()}"></td>
                                                         <!--                                        <td class="middle" th:text="${minyan.getNusach().displayName()}"></td>-->
                                                     <!--                                        <td class="middle" th:text="${minyan.getNotes()}"></td>-->
                                                 </tr>
