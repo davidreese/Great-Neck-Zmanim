@@ -45,7 +45,7 @@
                     <div class="col-lg-3 col-md-4" id="org-box">
                         <div class="card" style="border: 0;">
                             <div class="card-body">
-                                <h5 class="card-title" th:text="${organization.getName()}"></h5>
+                                <h5 class="card-title" th:text="${org.getName()}"></h5>
                                 <h6 class="card-subtitle mb-2 text-muted" th:text="${org.getNusach().displayName()}"></h6>
                                 <a class="card-text" th:text="${org.getAddress()}" th:href="@{|https://www.google.com/maps/search/?api=1&query=${org.getAddress()}|}" th:target="_blank"></a> 
                                 <a th:if="${org.getWebsiteURI() != null}" th:href="@{|https://${org.getWebsiteURI()}|}" class="card-link">Visit the website</a>
