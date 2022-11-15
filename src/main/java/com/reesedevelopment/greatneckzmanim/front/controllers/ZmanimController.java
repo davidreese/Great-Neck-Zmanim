@@ -67,16 +67,10 @@ public class ZmanimController {
         return zmanim(new Date());
     }
 
-    private String timeFormatWithRoundingToMinute(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        calendar.add(Calendar.SECOND, 30);
-        return timeFormat.format(calendar.getTime());
-    }
     private String timeFormatWithRoundingToSecond(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        // calendar.add(Calendar.SECOND, 30);
+        calendar.add(Calendar.SECOND, 30);
         return timeFormat.format(calendar.getTime());
     }
 
