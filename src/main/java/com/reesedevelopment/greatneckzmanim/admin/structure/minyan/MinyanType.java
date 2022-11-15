@@ -54,7 +54,7 @@ public enum MinyanType {
             case MINCHA:
                 return "Mincha";
             case MAARIV:
-                return "Maariv";
+                return "MAARIV";
             case SELICHOT:
                 return "Selichot";
             case MEGILA_READING:
