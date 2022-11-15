@@ -6,7 +6,7 @@ if (start == "sh") {
 } else if (start == "mi") {
     document.getElementById("type").value = "mincha";
 } else if (start == "ar") {
-    document.getElementById("type").value = "arvit";
+    document.getElementById("type").value = "maariv";
 } else if (start == "se") {
     document.getElementById("type").value = "selichot";
 } else if (start == "mr") {
