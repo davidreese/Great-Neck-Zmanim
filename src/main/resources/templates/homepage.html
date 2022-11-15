@@ -283,7 +283,7 @@
               <div class="col-md-12">
                 <div class="features-intro">
                   <h2>Shuls</h2>
-                  <a role="button" class="btn-action js-scroll-trigger mx-2 my-2" th:each="${shulnames}" th:href="@{|/orgs/${shulnames.getOrganizationId()}|}" th:text="${shulnames.getOrganizationName()}"></a>
+                  <a role="button" class="btn-action js-scroll-trigger mx-2 my-2" th:each="minyan: ${allminyanim}" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
                 </div>
               </div>
               <div class="col-md-6 col-lg-4">
