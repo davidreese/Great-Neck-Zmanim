@@ -10,10 +10,10 @@
     <!-- lookup parent from repository --> 
   </parent>  
   <groupId>com.reesedevelopment</groupId>  
-  <artifactId>Teaneck-Minyanim</artifactId>  
+  <artifactId>Great-Neck-Zmanim</artifactId>  
   <version>0.0.1-SNAPSHOT</version>  
-  <name>Teaneck-Minyanim</name>  
-  <description>Teaneck-Minyanim</description>  
+  <name>Great-Neck-Zmanim</name>  
+  <description>Great-Neck-Zmanim</description>  
   <properties> 
     <java.version>17</java.version>  
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
