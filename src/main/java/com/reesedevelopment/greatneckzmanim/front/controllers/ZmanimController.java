@@ -28,9 +28,9 @@ import java.util.*;
 public class ZmanimController {
     TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
 
-    String locationName = "Great Neck, NY";
-    double latitude = 40.8007;
-    double longitude = -73.7285;
+    String locationName = "Teaneck, NJ";
+    double latitude = 40.906871;
+    double longitude = -74.020924;
     double elevation = 0;
     GeoLocation geoLocation = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
 
@@ -38,6 +38,7 @@ public class ZmanimController {
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy | h:mm aa");
     SimpleDateFormat onlyDateFormat = new SimpleDateFormat("EEEE, MMMM d");
     SimpleDateFormat strippedDayFormat = new SimpleDateFormat("MMMM d");
+    SimpleDateFormat timeFormatSec = new SimpleDateFormat("h:mm:ss aa");
     SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
 
     ZmanimHandler zmanimHandler = new ZmanimHandler(geoLocation);
@@ -73,6 +74,11 @@ public class ZmanimController {
         calendar.add(Calendar.SECOND, 30);
         return timeFormat.format(calendar.getTime());
     }
+    private String timeFormatWithRoundingToSecond(Date date) {
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        return timeFormatSec.format(calendar.getTime());
+    }
 
     public ModelAndView zmanim(Date date) {
         ModelAndView mv = new ModelAndView();
@@ -107,15 +113,18 @@ public class ZmanimController {
         timeFormat.setTimeZone(timeZone);
 
         Dictionary zmanim = zmanimHandler.getZmanim(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()));
-
-        mv.getModel().put("alotHashachar", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
-        mv.getModel().put("sunrise", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.NETZ)));
-        mv.getModel().put("chatzot", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.CHATZOT)));
-        mv.getModel().put("minchaGedola", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.MINCHA_GEDOLA)));
-        mv.getModel().put("minchaKetana", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.MINCHA_KETANA)));
-        mv.getModel().put("plagHamincha", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.PLAG_HAMINCHA)));
-        mv.getModel().put("shekiya", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.SHEKIYA)));
-        mv.getModel().put("tzet", timeFormatWithRoundingToMinute((Date) zmanim.get(Zman.TZET)));
+        
+        mv.getModel().put("alotHashachar", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
+        mv.getModel().put("sunrise", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.NETZ)));
+        mv.getModel().put("szks", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZKS)));
+        mv.getModel().put("szt", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZT)));
+        mv.getModel().put("chatzot", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.CHATZOT)));
+        mv.getModel().put("minchaGedola", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_GEDOLA)));
+        mv.getModel().put("minchaKetana", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_KETANA)));
+        mv.getModel().put("plagHamincha", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.PLAG_HAMINCHA)));
+        mv.getModel().put("shekiya", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SHEKIYA)));
+        mv.getModel().put("earliestShema", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.EARLIEST_SHEMA)));
+        mv.getModel().put("tzet", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.TZET)));
 
 //        get minyanim closest in time to now
 //        todo: only get items with non null time for date
@@ -129,7 +138,7 @@ public class ZmanimController {
             Date terminationDate = new Date(now.getTime() - (60000 * 8));
             System.out.println("SD: " + startDate);
             System.out.println("TD: " + terminationDate);
-            if (startDate != null && (startDate.after(terminationDate) || now.getDate() != startDate.getDate())) {
+            if (startDate != null && (startDate.after(terminationDate) || now.getDate() != startDate.getDate())) {  
                 String organizationName;
                 Nusach organizationNusach;
                 String organizationId;
@@ -182,7 +191,7 @@ public class ZmanimController {
                 shacharitMinyanim.add(me);
             } else if (me.getType().isMincha()) {
                 minchaMinyanim.add(me);
-            } else if (me.getType().isArvit()) {
+            } else if (me.getType().isMaariv()) {
                 arvitMinyanim.add(me);
             }
         }
@@ -273,8 +282,9 @@ public class ZmanimController {
 
         for (Minyan minyan : enabledMinyanim) {
             Date startDate = minyan.getStartDate(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1));
-            Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
-            if (startDate != null && startDate.after(terminationDate)) {
+            //Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
+            //if (startDate != null && startDate.after(terminationDate)) {
+            if (startDate != null) {    
                 String organizationName;
                 Nusach organizationNusach;
                 String organizationId;
@@ -321,7 +331,7 @@ public class ZmanimController {
                 shacharitMinyanim.add(me);
             } else if (me.getType().isMincha()) {
                 minchaMinyanim.add(me);
-            } else if (me.getType().isArvit()) {
+            } else if (me.getType().isMaariv()) {
                 arvitMinyanim.add(me);
             }
         }

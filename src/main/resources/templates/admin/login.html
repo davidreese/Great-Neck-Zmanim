@@ -22,6 +22,9 @@
                     <label for="password-field">Password</label>
                     <input type="password" class="form-control" name="password" id="password-field" placeholder="Password">
                 </div>
+                <p>
+                    <input type="checkbox" name="remember-me" />&nbsp;Remember Me
+                </p>
                 <button type="submit" class="btn btn-primary">Sign in</button>
                 <div class="login-msg-box" style="padding-top: 7px">
                     <div class="form-msg-fatal" th:if="${param.error}">
