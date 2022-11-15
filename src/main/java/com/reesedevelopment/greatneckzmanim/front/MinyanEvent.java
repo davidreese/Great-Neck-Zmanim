@@ -116,7 +116,7 @@ public class MinyanEvent {
         return result;
     }
     private Organization organization;
-    public Organization getOrganization() {
+    public Organization getName() {
         //        if (organization == null) {
         //            organization = organizationDAO.findById(organizationId);
         //        }
