@@ -76,7 +76,7 @@ public class ZmanimController {
     private String timeFormatWithRoundingToSecond(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
-        calendar.add(Calendar.SECOND, 30);
+        // calendar.add(Calendar.SECOND, 30);
         return timeFormat.format(calendar.getTime());
     }
 
@@ -114,7 +114,7 @@ public class ZmanimController {
 
         Dictionary zmanim = zmanimHandler.getZmanim(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()));
         
-        mv.getModel().put("alotHashachar", ((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
+        mv.getModel().put("alotHashachar", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
         mv.getModel().put("sunrise", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.NETZ)));
         mv.getModel().put("szks", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZKS)));
         mv.getModel().put("szt", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZT)));
