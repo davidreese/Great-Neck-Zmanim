@@ -83,7 +83,7 @@
                                                 </tbody>
                                             </table>
                                             <div class="jumbotron" th:if="${allminyanim.isEmpty()}">
-                                                <h4>Sorry, there aren't any upcoming minyanim.</h4>
+                                                <h4>Sorry, there aren't any upcoming minyanim today.</h4>
                                             </div>
                                         </div>
                                         <!-- <div class="tab-pane fade" id="pills-shacharit" role="tabpanel" aria-labelledby="pills-shacharit-tab">
@@ -414,8 +414,8 @@
                     </tr>
                     </thead>
                   <tbody>
-                    <tr th:each="organization: ${organization}">
-                      <td th:text="${organization.getName}" />
+                    <tr th:each="organization: ${org}">
+                      <td th:text="${org.getName()}" />
                       </tr>
                     <!-- <tr th:each="organization: ${organizations}">
                       <td class="align-middle">
