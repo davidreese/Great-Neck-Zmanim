@@ -25,9 +25,9 @@ public class ZmanimHandler {
     public ZmanimHandler() {
         TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
 
-        String locationName = "Great Neck, NY";
-        double latitude = 40.8007;
-        double longitude = -73.7285;
+        String locationName = "Teaneck, NJ";
+        double latitude = 40.906871;
+        double longitude = -74.020924;
         double elevation = 0;
         GeoLocation geoLocation = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
         this.geoLocation = geoLocation;
@@ -46,13 +46,15 @@ public class ZmanimHandler {
 
         dictionary.put(Zman.ALOT_HASHACHAR, complexZmanimCalendar.getAlosHashachar());
         dictionary.put(Zman.NETZ, complexZmanimCalendar.getSunrise());
+        dictionary.put(Zman.SZKS, complexZmanimCalendar.getSofZmanShmaGRA());
+        dictionary.put(Zman.SZT, complexZmanimCalendar.getSofZmanTfilaGRA());
         dictionary.put(Zman.CHATZOT, complexZmanimCalendar.getChatzos());
         dictionary.put(Zman.MINCHA_GEDOLA, complexZmanimCalendar.getMinchaGedola());
         dictionary.put(Zman.MINCHA_KETANA, complexZmanimCalendar.getMinchaKetana());
         dictionary.put(Zman.PLAG_HAMINCHA, complexZmanimCalendar.getPlagHamincha());
         dictionary.put(Zman.SHEKIYA, complexZmanimCalendar.getSunset());
+        dictionary.put(Zman.EARLIEST_SHEMA, complexZmanimCalendar.getTzaisGeonim5Point88Degrees());
         dictionary.put(Zman.TZET, complexZmanimCalendar.getTzais());
-//        dictionary.put(Zman.L, complexZmanimCalendar.getsoshmfzmank());
 
         return dictionary;
     }

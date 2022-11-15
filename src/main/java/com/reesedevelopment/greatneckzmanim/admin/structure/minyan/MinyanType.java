@@ -3,7 +3,7 @@ package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 public enum MinyanType {
     SHACHARIT("SHACHARIT"),
     MINCHA("MINCHA"),
-    ARVIT("ARVIT"),
+    MAARIV("ARVIT"),
     SELICHOT("SELICHOT"),
     MEGILA_READING("MEGILAREADING");
 
@@ -36,8 +36,8 @@ public enum MinyanType {
                 return "SHACHARIT";
             case MINCHA:
                 return "MINCHA";
-            case ARVIT:
-                return "ARVIT";
+            case MAARIV:
+                return "MAARIV";
             case SELICHOT:
                 return "SELICHOT";
             case MEGILA_READING:
@@ -53,8 +53,8 @@ public enum MinyanType {
                 return "Shacharit";
             case MINCHA:
                 return "Mincha";
-            case ARVIT:
-                return "Arvit";
+            case MAARIV:
+                return "Maariv";
             case SELICHOT:
                 return "Selichot";
             case MEGILA_READING:
@@ -72,8 +72,8 @@ public enum MinyanType {
         return this == MINCHA;
     }
 
-    public boolean isArvit() {
-        return this == ARVIT;
+    public boolean isMaariv() {
+        return this == MAARIV;
     }
 
     public boolean isSelichot() {
