@@ -556,9 +556,9 @@
                </div>
                <div class="col-sm-4">
                  <div class="counter-up">
-                    <h3><span class="counter">47</span>%</h3>
+                    <h3 th:each="minyan, iStat: ${enabledminyanim}" th:text="${iStat.size()}" class="counter"/>
                    <div class="counter-text">
-                     <h2>Lesser backlogs</h2>
+                     <h2>Minyanim</h2>
                    </div>
                  </div>
                </div>
