@@ -414,8 +414,8 @@
                     </tr>
                     </thead>
                   <tbody>
-                    <tr th:each="MinyanEvent: ${MinyanEvent}">
-                      <td th:text="${MinyanEvent.getOrganizationName()}" />
+                    <tr th:each="Organization: ${organization}">
+                      <td th:text="${organization.getOrganizationName()}" />
                       </tr>
                     <!-- <tr th:each="organization: ${organizations}">
                       <td class="align-middle">
