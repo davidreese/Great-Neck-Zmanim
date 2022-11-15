@@ -9,6 +9,7 @@ import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.MinyanDAO;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organization;
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.OrganizationDAO;
 import com.reesedevelopment.greatneckzmanim.front.MinyanEvent;
+import com.reesedevelopment.greatneckzmanim.front.KolhaMinyanim;
 import com.reesedevelopment.greatneckzmanim.global.Nusach;
 import com.reesedevelopment.greatneckzmanim.global.Zman;
 import com.reesedevelopment.greatneckzmanim.front.ZmanimHandler;
@@ -320,7 +321,53 @@ public class ZmanimController {
                 }
             }
         }
+        // KolhaMinyanim insertion
+        List<Minyan> enabledMinyanim = minyanDAO.findEnabledMatching(orgId);
+        List<KolhaMinyanim> kolhaMinyanims = new ArrayList<>();
+//        boolean usesLocations;
+//        boolean nusachChanges;
+//        Nusach lastNusach;
+//        boolean usesNotes;
 
+        for (Minyan minyan : enabledMinyanim) {
+            Date startDate = minyan.getStartDate(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1));
+            //Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
+            //if (startDate != null && startDate.after(terminationDate)) {
+            if (startDate != null) {    
+                String organizationName;
+                Nusach organizationNusach;
+                String organizationId;
+                Organization organization = minyan.getOrganization();
+                if (organization == null) {
+                    Organization temp = organizationDAO.findById(minyan.getOrganizationId());
+                    organizationName = temp.getName();
+                    organizationId = temp.getId();
+                    organizationNusach = temp.getNusach();
+                } else {
+                    organizationName = organization.getName();
+                    organizationId = organization.getId();
+                    organizationNusach = organization.getNusach();
+                }
+
+                String locationName = null;
+                Location location = minyan.getLocation();
+                if (location == null) {
+                    location = locationDAO.findById(minyan.getLocationId());
+                    if (location != null) {
+                        locationName = location.getName();
+                    }
+                } else {
+                    locationName = location.getName();
+                }
+
+                String dynamicDisplayName = minyan.getMinyanTime().dynamicDisplayName();
+                if (dynamicDisplayName != null) {
+                    kolhaMinyanims.add(new KolhaMinyanim(minyan.getId(), minyan.getType(), organizationName, organizationNusach, organizationId, locationName, startDate, dynamicDisplayName, minyan.getNusach(), minyan.getNotes()));
+                } else {
+                    kolhaMinyanims.add(new KolhaMinyanim(minyan.getId(), minyan.getType(), organizationName, organizationNusach, organizationId, locationName, startDate, minyan.getNusach(), minyan.getNotes()));
+                }
+            }
+        }
         minyanEvents.sort(Comparator.comparing(MinyanEvent::getStartTime));
         mv.getModel().put("allminyanim", minyanEvents);
 
