@@ -383,9 +383,9 @@
                     </tr>
                     </thead>
                   <tbody>
-                    <tr th:each="minyan: ${allminyanim}">
-                      <td th:text="${minyan.getOrganizationName()}" />
-                      </tr>
+                    <th:each="minyan: ${allminyanim}">
+                      <a role="button" class="btn-action js-scroll-trigger" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
+                      </th>
                     <!-- <tr th:each="organization: ${organizations}">
                       <td class="align-middle">
                         <a role="button" class="btn-action js-scroll-trigger" th:href="@{|/orgs/${organization.id}|}" th:text="${organization.name}"></a>
