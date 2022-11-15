@@ -3,7 +3,7 @@ package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
 public enum MinyanType {
     SHACHARIT("SHACHARIT"),
     MINCHA("MINCHA"),
-    MAARIV("ARVIT"),
+    MAARIV("MAARIV"),
     SELICHOT("SELICHOT"),
     MEGILA_READING("MEGILAREADING");
 
