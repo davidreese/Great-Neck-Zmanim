@@ -32,8 +32,8 @@ if (start == "sh") {
 } else if (start == "ar") {
     Array.prototype.forEach.call(document.getElementsByClassName("nav-link"), e => e.classList.remove("active"));
     Array.prototype.forEach.call(document.getElementsByClassName("tab-pane"), e => e.classList.remove("active","show"));
-    document.getElementById("pills-arvit-tab").classList.add("active");
-    document.getElementById("pills-arvit").classList.add("active", "show");
+    document.getElementById("pills-maariv-tab").classList.add("active");
+    document.getElementById("pills-maariv").classList.add("active", "show");
 } else if (start == "se") {
     Array.prototype.forEach.call(document.getElementsByClassName("nav-link"), e => e.classList.remove("active"));
     Array.prototype.forEach.call(document.getElementsByClassName("tab-pane"), e => e.classList.remove("active","show"));

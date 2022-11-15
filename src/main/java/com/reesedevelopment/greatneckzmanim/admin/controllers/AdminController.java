@@ -914,11 +914,11 @@ public class AdminController {
             minchaTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
         }
 
-        List<Minyan> arvitMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.MAARIV)).collect(Collectors.toList());
-        mv.addObject("arvitminyanim", arvitMinyanim);
-        Map<String, HashMap<MinyanDay, MinyanTime>> arvitTimes = new HashMap<>();
-        for (Minyan m : arvitMinyanim) {
-            arvitTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
+        List<Minyan> maarivMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.MAARIV)).collect(Collectors.toList());
+        mv.addObject("maarivminyanim", maarivMinyanim);
+        Map<String, HashMap<MinyanDay, MinyanTime>> maarivTimes = new HashMap<>();
+        for (Minyan m : maarivMinyanim) {
+            maarivTimes.put(m.getId(), m.getSchedule().getMappedSchedule());
         }
 
         List<Minyan> selichotMinyanim = minyanim.stream().filter(m -> m.getType().equals(MinyanType.SELICHOT)).collect(Collectors.toList());
@@ -937,7 +937,7 @@ public class AdminController {
 
         mv.addObject("shacharittimes", shacharitTimes);
         mv.addObject("minchatimes", minchaTimes);
-        mv.addObject("arvittimes", arvitTimes);
+        mv.addObject("maarivtimes", maarivTimes);
         mv.addObject("selichottimes", selichotTimes);
         mv.addObject("megilatimes", megilaTimes);
 

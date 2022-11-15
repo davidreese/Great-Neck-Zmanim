@@ -186,19 +186,19 @@ public class ZmanimController {
 
         List<MinyanEvent> shacharitMinyanim = new ArrayList<>();
         List<MinyanEvent> minchaMinyanim = new ArrayList<>();
-        List<MinyanEvent> arvitMinyanim = new ArrayList<>();
+        List<MinyanEvent> maarivMinyanim = new ArrayList<>();
         for (MinyanEvent me : minyanEvents) {
             if (me.getType().isShacharit()) {
                 shacharitMinyanim.add(me);
             } else if (me.getType().isMincha()) {
                 minchaMinyanim.add(me);
             } else if (me.getType().isMaariv()) {
-                arvitMinyanim.add(me);
+                maarivMinyanim.add(me);
             }
         }
         mv.getModel().put("shacharitMinyanim", shacharitMinyanim);
         mv.getModel().put("minchaMinyanim", minchaMinyanim);
-        mv.getModel().put("arvitMinyanim", arvitMinyanim);
+        mv.getModel().put("maarivMinyanim", maarivMinyanim);
 
         return mv;
     }
@@ -326,19 +326,19 @@ public class ZmanimController {
 
         List<MinyanEvent> shacharitMinyanim = new ArrayList<>();
         List<MinyanEvent> minchaMinyanim = new ArrayList<>();
-        List<MinyanEvent> arvitMinyanim = new ArrayList<>();
+        List<MinyanEvent> maarivMinyanim = new ArrayList<>();
         for (MinyanEvent me : minyanEvents) {
             if (me.getType().isShacharit()) {
                 shacharitMinyanim.add(me);
             } else if (me.getType().isMincha()) {
                 minchaMinyanim.add(me);
             } else if (me.getType().isMaariv()) {
-                arvitMinyanim.add(me);
+                maarivMinyanim.add(me);
             }
         }
         mv.getModel().put("shacharitMinyanim", shacharitMinyanim);
         mv.getModel().put("minchaMinyanim", minchaMinyanim);
-        mv.getModel().put("arvitMinyanim", arvitMinyanim);
+        mv.getModel().put("maarivMinyanim", maarivMinyanim);
 
 //        mv.getModel().put("usesLocations", minyanEvents.)
 
