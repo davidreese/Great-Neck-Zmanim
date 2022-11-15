@@ -284,24 +284,20 @@
                 <div class="features-intro">
                   <h2>Shuls</h2>
                 </div>
-                <table class="table">
+                <table class="table table-borderless">
                   <thead class="thead-inverse">
                     <tr>
                         <th>Shul</th>
                     </tr>
                     </thead>
-                  <tbody>
-                    <tr th:each="minyan: ${allminyanim}">
-                      <td class="align-middle">
-                      <a role="button" class="btn-action js-scroll-trigger" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a></td>
+                    <tbody>
+                      <tr th:each="minyan: ${allminyanim}">
+                        <td class="align-middle">
+                          <a role="button" class="btn-action js-scroll-trigger" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
+                        </td>
                       </tr>
-                    <!-- <tr th:each="organization: ${organizations}">
-                      <td class="align-middle">
-                        <a role="button" class="btn-action js-scroll-trigger" th:href="@{|/orgs/${organization.id}|}" th:text="${organization.name}"></a>
-                      </td>  
-                      </tr> -->
-                      </tbody>
-                    </table>
+                    </tbody>
+                </table>
               </div>
               <div class="col-md-6 col-lg-4">
                 <div class="feature-list">
