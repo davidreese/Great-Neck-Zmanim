@@ -139,7 +139,7 @@ public class ZmanimController {
             System.out.println("SD: " + startDate);
             System.out.println("TD: " + terminationDate);
             // if (startDate != null && (startDate.after(terminationDate) || now.getDate() != startDate.getDate())) {  
-            if (startDate != null && (startDate.before(terminationDate))) {      
+            if (startDate != null && (startDate.after(terminationDate))) {      
                 String organizationName;
                 Nusach organizationNusach;
                 String organizationId;
