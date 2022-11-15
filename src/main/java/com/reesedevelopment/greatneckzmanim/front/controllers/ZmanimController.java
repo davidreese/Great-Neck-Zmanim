@@ -77,6 +77,7 @@ public class ZmanimController {
     private String timeFormatWithRoundingToSecond(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
+        calendar.add(Calendar.SECOND, 30);
         return timeFormatSec.format(calendar.getTime());
     }
 
