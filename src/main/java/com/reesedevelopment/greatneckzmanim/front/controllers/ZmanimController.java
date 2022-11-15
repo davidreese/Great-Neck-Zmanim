@@ -236,7 +236,10 @@ for (Minyan minyan : enabledMinyanim) {
 kolhaMinyanims.sort(Comparator.comparing(KolhaMinyanim::getStartTime));
 mv.getModel().put("kolminyanim", kolhaMinyanims);
 //end kol
-
+//orgs
+List<Organization> shulNames = new ArrayList<>();
+mv.getModel().put("shulnames", shulNames);
+//end orgs
         minyanEvents.sort(Comparator.comparing(MinyanEvent::getStartTime));
         mv.getModel().put("allminyanim", minyanEvents);
 
