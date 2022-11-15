@@ -75,7 +75,7 @@
                                                         <!-- <td th:if="${minyan.getLocationName() != null}" class="middle">
                                                             <button type="button" class="btn btn-primary btn-sm" th:text="${minyan.getOrganizationName() + '- ' + minyan.getLocationName()}"></button>
                                                         </td> -->
-                                                  <td class="align-middle" th:text="${minyan.getFormattedStartTime()}"></td>
+                                                        <td class="align-middle" th:text="${minyan.getFormattedStartTime()}"></td>
                                                         <td class="align-middle" th:text="${minyan.getLocationName()}"></td>
                                                         <!--                                        <td class="middle" th:text="${minyan.getNusach().displayName()}"></td>-->
                                                     <!--                                        <td class="middle" th:text="${minyan.getNotes()}"></td>-->
@@ -414,8 +414,8 @@
                     </tr>
                     </thead>
                   <tbody>
-                    <tr th:each="Organization: ${organization}">
-                      <td th:text="${organization()}" />
+                    <tr th:each="minyan: ${allminyanim}">
+                      <td th:text="${minyan.getOrganizationName()}" />
                       </tr>
                     <!-- <tr th:each="organization: ${organizations}">
                       <td class="align-middle">
