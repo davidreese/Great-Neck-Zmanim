@@ -138,7 +138,8 @@ public class ZmanimController {
             Date terminationDate = new Date(now.getTime() - (60000 * 8));
             System.out.println("SD: " + startDate);
             System.out.println("TD: " + terminationDate);
-            if (startDate != null && (startDate.before(terminationDate) || now.getDate() != startDate.getDate())) {  
+            // if (startDate != null && (startDate.after(terminationDate) || now.getDate() != startDate.getDate())) {  
+            if (startDate != null && (startDate.after(terminationDate))) {      
                 String organizationName;
                 Nusach organizationNusach;
                 String organizationId;
