@@ -110,8 +110,6 @@ public class ZmanimController {
         
         mv.getModel().put("alotHashachar", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
         mv.getModel().put("sunrise", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.NETZ)));
-        mv.getModel().put("szks", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZKS)));
-        mv.getModel().put("szt", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZT)));
         mv.getModel().put("chatzot", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.CHATZOT)));
         mv.getModel().put("minchaGedola", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_GEDOLA)));
         mv.getModel().put("minchaKetana", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_KETANA)));
