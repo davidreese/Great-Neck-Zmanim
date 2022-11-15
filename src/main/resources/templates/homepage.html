@@ -414,8 +414,8 @@
                     </tr>
                     </thead>
                   <tbody>
-                    <tr th:each="organization: ${organization}">
-                      <td th:text="${organization.getName}" />
+                    <tr th:each="organization: ${organizations}">
+                      <td th:text="${organization.name}" />
                       </tr>
                     <!-- <tr th:each="organization: ${organizations}">
                       <td class="align-middle">
