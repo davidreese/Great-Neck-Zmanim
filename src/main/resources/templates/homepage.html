@@ -30,7 +30,7 @@
               <main class="col main pt-5 mt-3 overflow-auto" style="flex-shrink: 3">
                 <div class="d-flex justify-content-between">
                   <!-- <p class="col-md-4 h3 mt-3 mobile-hide" th:text="${'Schedule | ' + onlyDate}"></p> -->
-                  <h4 class="col-md-4 h3 mt-3" th:text="${onlyDate}"></h4>
+                  <h4 class="col-md-4 mt-3" th:text="${onlyDate}"></h4>
                   <div class="col-md-4 btn-toolbar d-flex justify-content-center p-2" role="toolbar" aria-label="Toolbar with button groups">
                     <div class="btn-group  me-2" style="align-self: center;" role="group">
                     <!-- REMOVING IF TODAY LOGIC <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">Today</button> -->
@@ -46,7 +46,7 @@
                     <button type="button" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn" style="width: 38%;" th:text="${yesterdayStrippedDay}">‹</button>
                     <button type="button" th:data-url="@{/zmanim/next(after=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn" style="width: 38%;" th:text="${tommorowStrippedDay}">›</button>
                   </div> -->
-                    <p class="col-md-4 h3 mt-3 mobile-hide"  style="text-align: right; font-weight: 430;" th:text="${hebrewDate}"></p>
+                    <h4 class="col-md-4 mt-3 mobile-hide"  style="text-align: right; font-weight: 430;" th:text="${hebrewDate}"></h4>
                 </div>
                 <hr>
                 <div id="housing-housing">
