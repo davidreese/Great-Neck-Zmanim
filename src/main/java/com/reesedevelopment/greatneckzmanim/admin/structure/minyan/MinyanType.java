@@ -73,7 +73,7 @@ public enum MinyanType {
     }
 
     public boolean isMaariv() {
-        return this == Maariv;
+        return this == MAARIV;
     }
 
     public boolean isSelichot() {
