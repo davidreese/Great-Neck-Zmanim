@@ -43,7 +43,16 @@
                                 <div class="col-lg-9 col-md-8" id="minyanim-box">
                                     <ul class="nav nav-tabs mb-3" id="pills-tab" role="tablist">
                                         <li class="nav-item" role="presentation">
-                                            <a class="nav-link active" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-all" aria-selected="true">Upcoming Minyanim</a>
+                                            <a class="nav-link active" id="pills-all-tab" data-toggle="pill" href="#pills-all" role="tab" aria-controls="pills-all" aria-selected="true">All Minyanim</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" id="pills-shacharit-tab" data-toggle="pill" href="#pills-shacharit" role="tab" aria-controls="pills-shacharit" aria-selected="false">Shacharit</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" id="pills-mincha-tab" data-toggle="pill" href="#pills-mincha" role="tab" aria-controls="pills-mincha" aria-selected="false">Mincha</a>
+                                        </li>
+                                        <li class="nav-item" role="presentation">
+                                            <a class="nav-link" id="pills-arvit-tab" data-toggle="pill" href="#pills-arvit" role="tab" aria-controls="pills-arvit" aria-selected="false">Arvit</a>
                                         </li>
                                     </ul>
                                     <div class="tab-content" id="pills-tabContent">
@@ -61,23 +70,23 @@
                                                 <tbody>
                                                 <tr th:each="minyan: ${allminyanim}">
                                                     <th scope="row" class="middle" th:text="${minyan.getType().displayName()}"></th>
-                                                        <!-- <td th:if="${minyan.getLocationName() != null}" class="middle">
-                                                            <button type="button" class="btn btn-primary btn-sm" th:text="${minyan.getOrganizationName() + '- ' + minyan.getLocationName()}"></button>
-                                                        </td> -->
-                                                        <td class="middle" th:text="${minyan.getFormattedStartTime()}"></td>
-                                                        <td class="middle">
-                                                            <a role="button" class="btn btn-primary btn-sm" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
-                                                        </td>
+                                                    <!--                                        <td th:if="${minyan.getLocationName() != null}" class="middle">-->
+                                                    <!--                                            <button type="button" class="btn btn-primary btn-sm" th:text="${minyan.getOrganizationName() + '- ' + minyan.getLocationName()}"></button>-->
+                                                    <!--                                        </td>-->
+                                                    <td class="middle" th:text="${minyan.getFormattedStartTime()}"></td>
+                                                    <td class="middle">
+                                                        <a role="button" class="btn btn-primary btn-sm" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
+                                                    </td>
                                                     <!--                                        <td class="middle" th:text="${minyan.getNusach().displayName()}"></td>-->
                                                     <!--                                        <td class="middle" th:text="${minyan.getNotes()}"></td>-->
                                                 </tr>
                                                 </tbody>
                                             </table>
                                             <div class="jumbotron" th:if="${allminyanim.isEmpty()}">
-                                                <h4>Sorry, there aren't any upcoming minyanim.</h4>
+                                                <h4>Sorry, there aren't any minyanim scheduled.</h4>
                                             </div>
                                         </div>
-                                        <!-- <div class="tab-pane fade" id="pills-shacharit" role="tabpanel" aria-labelledby="pills-shacharit-tab">
+                                        <div class="tab-pane fade" id="pills-shacharit" role="tabpanel" aria-labelledby="pills-shacharit-tab">
                                             <table class="table" th:if="${!shacharitMinyanim.isEmpty()}">
                                                 <thead>
                                                 <tr>
@@ -143,10 +152,10 @@
                                                 </tr>
                                                 </tbody>
                                             </table>
-                                                <div class="jumbotron" th:if="${arvitMinyanim.isEmpty()}">
+                                            <div class="jumbotron" th:if="${arvitMinyanim.isEmpty()}">
                                                 <h4>Sorry, there aren't any arvit minyanim scheduled.</h4>
                                             </div>
-                                        </div> -->
+                                        </div>
                                     </div>
                                     <!--                        <ul class="nav nav-tabs">-->
                                     <!--                            <li class="nav-item">-->
@@ -163,7 +172,7 @@
                                     <!--                            </li>-->
                                     <!--                        </ul>-->
                                     <!--                        <div class="table-responsive">-->
-                                    <!--                            <table class="table table-striped">-->
+                                    <!--                            <table class="table">-->
                                     <!--                                <thead class="thead-inverse">-->
                                     <!--                                <tr>-->
                                     <!--                                    <th>#</th>-->
@@ -257,7 +266,7 @@
                                                             <b class="time-box" th:text="${alotHashachar}"></b>
                                                             &nbsp;
                                                             <span>
-                                                                <span>Alos HaShachar</span>
+                                                                <span>Alot HaShachar</span>
                                                             </span>
                                                         </div>
                                                             <hr>
@@ -274,29 +283,9 @@
                                                     </div>
                                                     <div class="col-12">
                                                         <div>
-                                                            <b class="time-box" th:text="${szks}"></b>
-                                                            &nbsp;
-                                                            <span>
-                                                                <span>Sof Zman Krias Shema</span>
-                                                            </span>
-                                                        </div>
-                                                        <hr>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div>
-                                                            <b class="time-box" th:text="${szt}"></b>
-                                                            &nbsp;
-                                                            <span>
-                                                                <span>Sof Zman Tefilla</span>
-                                                            </span>
-                                                        </div>
-                                                        <hr>
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <div>
                                                             <b class="time-box" th:text="${chatzot}"></b>
                                                             &nbsp;
-                                                            <span><span>Chatzos</span></span>
+                                                            <span><span>Chatzot</span></span>
                                                         </div>
                                                         <hr>
                                                     </div>
@@ -332,12 +321,11 @@
                                                         </div>
                                                         <hr>
                                                     </div>
-                                                        <hr>
                                                     <div class="col-12">
                                                         <div>
                                                             <b class="time-box" th:text="${tzet}"></b>
                                                                 &nbsp;
-                                                                <span><span>Tzes HaKochavim</span></span>
+                                                                <span><span>Tzet HaKochavim</span></span>
                                                         </div>
                                                         <!--                                            <hr></div>-->
                                                         <!--                                        <div class="col-12"><div><b th:text="${latestShema}"></b>-->

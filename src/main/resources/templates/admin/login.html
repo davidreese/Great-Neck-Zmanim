@@ -11,7 +11,7 @@
 <body>
 
 <div id="container">
-    <div class="center-container" id="body">
+    <div class="center-container" id="body" style="padding: 30px;">
         <div class="dropdown-menu center" style="position: relative; display: block;">
             <form class="px-4 py-3" onsubmit="lowercase()" th:action="@{/j_spring_security_check}" method="post">
                 <div class="form-group">
@@ -22,9 +22,9 @@
                     <label for="password-field">Password</label>
                     <input type="password" class="form-control" name="password" id="password-field" placeholder="Password">
                 </div>
-                <p>
-                    <input type="checkbox" name="remember-me" />&nbsp;Remember Me
-                </p>
+<!--                <p>-->
+<!--                    <input type="checkbox" name="remember-me" />&nbsp;Remember Me-->
+<!--                </p>-->
                 <button type="submit" class="btn btn-primary">Sign in</button>
                 <div class="login-msg-box" style="padding-top: 7px">
                     <div class="form-msg-fatal" th:if="${param.error}">
