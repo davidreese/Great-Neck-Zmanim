@@ -235,6 +235,7 @@ mv.getModel().put("kolminyanim", kolhaMinyanims);
 //end kol
 //orgs
 List<Organization> shulNames = new ArrayList<>();
+for (Organization organization : shulNames)
 mv.getModel().put("shuls", shulNames);
 //end orgs
         minyanEvents.sort(Comparator.comparing(MinyanEvent::getStartTime));
