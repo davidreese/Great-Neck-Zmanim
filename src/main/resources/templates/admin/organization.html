@@ -135,7 +135,7 @@
                                 <div class="card-body">
                                     <h4 class="card-title">Locations</h4>
                                     <p class="card-text" th:text="${'Manage the locations of minyanim for ' + organization.name + '.'}"></p>
-                                    <a th:href="@{/admin/locations(oid=${organization.id})}" class="btn btn-primary">Go</a>
+                                    <a th:href="@{|/admin/${organization.id}/locations|}" class="btn btn-primary">Go</a>
                                 </div>
                             </div>
                         </div>

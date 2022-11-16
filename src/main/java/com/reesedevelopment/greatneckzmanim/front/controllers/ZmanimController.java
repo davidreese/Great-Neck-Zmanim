@@ -29,9 +29,9 @@ import java.util.*;
 public class ZmanimController {
     TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
 
-    String locationName = "Teaneck, NJ";
-    double latitude = 40.906871;
-    double longitude = -74.020924;
+    String locationName = "Great Neck, NY";
+    double latitude = 40.8007;
+    double longitude = -73.7285;
     double elevation = 0;
     GeoLocation geoLocation = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
 
@@ -39,7 +39,6 @@ public class ZmanimController {
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy | h:mm aa");
     SimpleDateFormat onlyDateFormat = new SimpleDateFormat("EEEE, MMMM d");
     SimpleDateFormat strippedDayFormat = new SimpleDateFormat("MMMM d");
-    SimpleDateFormat timeFormatSec = new SimpleDateFormat("h:mm:ss aa");
     SimpleDateFormat timeFormat = new SimpleDateFormat("h:mm aa");
 
     ZmanimHandler zmanimHandler = new ZmanimHandler(geoLocation);
@@ -69,16 +68,11 @@ public class ZmanimController {
         return zmanim(new Date());
     }
 
-    private String timeFormatWithRoundingToMinute(Date date) {
+    private String timeFormatWithRoundingToSecond(Date date) {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.SECOND, 30);
         return timeFormat.format(calendar.getTime());
-    }
-    private String timeFormatWithRoundingToSecond(Date date) {
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(date);
-        return timeFormatSec.format(calendar.getTime());
     }
 
     public ModelAndView zmanim(Date date) {
@@ -117,8 +111,6 @@ public class ZmanimController {
         
         mv.getModel().put("alotHashachar", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
         mv.getModel().put("sunrise", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.NETZ)));
-        mv.getModel().put("szks", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZKS)));
-        mv.getModel().put("szt", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZT)));
         mv.getModel().put("chatzot", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.CHATZOT)));
         mv.getModel().put("minchaGedola", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_GEDOLA)));
         mv.getModel().put("minchaKetana", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_KETANA)));
@@ -339,9 +331,8 @@ mv.getModel().put("shuls", shulNames);
 
         for (Minyan minyan : enabledMinyanim) {
             Date startDate = minyan.getStartDate(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1));
-            //Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
-            //if (startDate != null && startDate.after(terminationDate)) {
-            if (startDate != null) {    
+            Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
+            if (startDate != null && startDate.after(terminationDate)) {
                 String organizationName;
                 Nusach organizationNusach;
                 String organizationId;
