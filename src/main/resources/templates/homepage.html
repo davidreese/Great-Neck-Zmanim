@@ -8,7 +8,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="Zmanim and Minyanim for Teaneck New Jersey">
     <meta name="keywords" content="Jewish,minyanim,zmanim,times,sechedule,teaneck,nj,07666">
-    <link href="/assets/css/bootstrap.min.css" rel="stylesheet" type="text/css" media="all" />
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Zenh87qX5JnK2Jl0vWa8Ck2rdkQ2Bzep5IDxbcnCeuOxjzrPF/et3URy9Bv1WTRi" crossorigin="anonymous">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-OERcA2EqjJCMA+/3y+gxIOqMEjwtxJY7qPCqsdltbNJuaOe923+mo//f6V8Qbsw3" crossorigin="anonymous"></script>
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600,700" rel="stylesheet">
     <link rel="stylesheet" href="/assets/css/animate.css"> <!-- Resource style -->
     <link rel="stylesheet" href="/assets/css/owl.carousel.css">
@@ -73,7 +74,7 @@
                               <tbody>
                                 <tr th:each="minyan: ${allminyanim}">
                                   <td class="align-middle">
-                                    <a role="button" class="btn-action js-scroll-trigger px-2 px-sm-3" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
+                                    <a role="button" class="btn-action js-scroll-trigger px-3 px-sm-3" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
                                   </td>      
                                   <th scope="row" class="align-middle" th:text="${minyan.getType().displayName()}"></th>
                                     <!-- <td th:if="${minyan.getLocationName() != null}" class="middle">
@@ -686,8 +687,6 @@
 
     <!-- Jquery and Js Plugins -->
     <script type="text/javascript" src="/assets/js/jquery-2.1.1.js"></script>
-    <script type="text/javascript" src="/assets/js/popper.min.js"></script>
-    <script type="text/javascript" src="/assets/js/bootstrap.min.js"></script>
     <script type="text/javascript" src="/assets/js/jquery.validate.min.js"></script>
     <script type="text/javascript" src="/assets/js/plugins.js"></script>
     <script type="text/javascript" src="/assets/js/custom.js"></script>
