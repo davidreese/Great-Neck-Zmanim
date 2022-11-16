@@ -35,10 +35,11 @@
                         <p class="col-md-4 h3 mt-3 mobile-hide" th:text="${onlyDate}"></p>
                         <div class="btn-toolbar" role="toolbar" aria-label="Toolbar with button groups">
                           <div class="col-md-4 mt-2 btn-group mobile-hide" style="align-self: center;" role="group">
-                          <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">Today</button>
+                            <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">Today</button>
+                          </div>
                           <div class="col-md-4 mt-2 btn-group mobile-hide" style="align-self: center;" role="group">
-                              <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn"><</button>
-                              <button type="button" th:data-url="@{/zmanim/next(after=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">></button>
+                            <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn"><</button>
+                            <button type="button" th:data-url="@{/zmanim/next(after=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">></button>
                           </div>
                         </div>
                         <div class="col-md-4 mt-2 btn-group desktop-hide" style="height: 50%; align-self: center;" role="group">
