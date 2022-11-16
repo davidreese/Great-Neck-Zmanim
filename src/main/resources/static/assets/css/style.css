@@ -365,7 +365,6 @@ body {
 	-moz-transition: 0.2s;
 	transition: 0.2s;
 }
-
 .btn-action:hover {
 	color: #FFFFFF;
 	box-shadow: 0 5px 25px 0 rgba(0, 0, 100,.2);
