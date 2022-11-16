@@ -188,10 +188,7 @@ for (Minyan minyan : enabledMinyanim) {
     LocalDate ref = LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1);
     Date startDate = minyan.getStartDate(ref);
     Date now = new Date();
-    //Date terminationDate = new Date(now.getTime() - (60000 * 8));
     System.out.println("SD: " + startDate);
-    //System.out.println("TD: " + terminationDate);
-    // if (startDate != null && (startDate.after(terminationDate) || now.getDate() != startDate.getDate())) {  
     if (startDate != null) {      
         String organizationName;
         Nusach organizationNusach;
