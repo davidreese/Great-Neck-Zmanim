@@ -1,10 +1,6 @@
 package com.reesedevelopment.greatneckzmanim.front;
 
-import com.reesedevelopment.greatneckzmanim.admin.structure.location.Location;
-import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.Minyan;
-import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.MinyanTime;
 import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.MinyanType;
-import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organization;
 import com.reesedevelopment.greatneckzmanim.global.Nusach;
 
 //import javax.persistence.Id;
@@ -12,10 +8,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class MinyanEvent {
+public class KolhaMinyanim {
     TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
-
-    private String parentMinyanId;
 
     private MinyanType type;
 
@@ -35,8 +29,7 @@ public class MinyanEvent {
 
     private String notes;
 
-    public MinyanEvent(String parentMinyanId, MinyanType type, String organizationName, Nusach organizationNusach, String organizationId, String locationName, Date startTime, Nusach nusach, String notes) {
-        this.parentMinyanId = parentMinyanId;
+    public KolhaMinyanim(String parentMinyanId, MinyanType type, String organizationName, Nusach organizationNusach, String organizationId, String locationName, Date startTime, Nusach nusach, String notes) {
         this.type = type;
         this.organizationName = organizationName;
         this.organizationNusach = organizationNusach;
@@ -47,8 +40,7 @@ public class MinyanEvent {
         this.notes = notes;
     }
 
-    public MinyanEvent(String parentMinyanId, MinyanType type, String organizationName, Nusach organizationNusach, String organizationId, String locationName, Date startTime, String dynamicTimeString, Nusach nusach, String notes) {
-        this.parentMinyanId = parentMinyanId;
+    public KolhaMinyanim(String parentMinyanId, MinyanType type, String organizationName, Nusach organizationNusach, String organizationId, String locationName, Date startTime, String dynamicTimeString, Nusach nusach, String notes) {
         this.type = type;
         this.organizationName = organizationName;
         this.organizationNusach = organizationNusach;

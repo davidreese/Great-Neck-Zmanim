@@ -6,7 +6,7 @@ if (start == "sh") {
 } else if (start == "mi") {
     updateMinyanType('mincha');
 } else if (start == "ar") {
-    updateMinyanType('arvit');
+    updateMinyanType('maariv');
 } else if (start == "se") {
     updateMinyanType('selichot');
 } else if (start == "mr") {
@@ -186,7 +186,7 @@ function updateTime(name, minyanTime) {
 
 /**
 * Updates minyan type selector
-* @param {string} type Either 'shacharit'/'mincha'/'arvit'/'selichot'/'megilareading'
+* @param {string} type Either 'shacharit'/'mincha'/'maariv'/'selichot'/'megilareading'
 */
 function updateMinyanType(type) {
     updateSelector('type', type);

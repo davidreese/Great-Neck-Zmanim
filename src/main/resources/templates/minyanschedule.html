@@ -45,7 +45,7 @@
                                         <a class="nav-link" id="pills-mincha-tab" data-toggle="pill" href="#pills-mincha" role="tab" aria-controls="pills-mincha" aria-selected="false">Mincha</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
-                                        <a class="nav-link" id="pills-arvit-tab" data-toggle="pill" href="#pills-arvit" role="tab" aria-controls="pills-arvit" aria-selected="false">Arvit</a>
+                                        <a class="nav-link" id="pills-maariv-tab" data-toggle="pill" href="#pills-maariv" role="tab" aria-controls="pills-maariv" aria-selected="false">Maariv</a>
                                     </li>
                                     <li class="nav-item" role="presentation">
                                         <a class="nav-link" id="pills-selichot-tab" data-toggle="pill" href="#pills-selichot" role="tab" aria-controls="pills-selichot" aria-selected="false">Selichot</a>
@@ -240,9 +240,9 @@
                                         </div>
                                     </div>
 
-                                    <div class="tab-pane fade" id="pills-arvit" role="tabpanel" aria-labelledby="pills-arvit-tab">
-                                        <div th:if="${!arvitminyanim.isEmpty()}" class="table-responsive">
-                                            <table class="table">
+                                    <div class="tab-pane fade" id="pills-maariv" role="tabpanel" aria-labelledby="pills-maariv-tab">
+                                        <div th:if="${!maarivminyanim.isEmpty()}" class="table-responsive">
+                                            <table class="table table-striped">
                                                 <thead class="thead-inverse">
                                                 <tr>
                                                     <th class="mini-column">Manage</th>
@@ -264,7 +264,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                <tr th:each="minyan: ${arvitminyanim}" th:with="minyantimes=${arvittimes.get(minyan.getId())}">
+                                                <tr th:each="minyan: ${maarivminyanim}" th:with="minyantimes=${maarivtimes.get(minyan.getId())}">
                                                     <td>
                                                         <div>
                                                             <a role="button" class="btn btn-dark btn-sm" th:href="@{|/admin/minyanim/${minyan.getId()}/view|}">
@@ -324,9 +324,9 @@
                                                 </tbody>
                                             </table>
                                         </div>
-                                        <div th:if="${arvitminyanim.isEmpty()}" class="jumbotron jumbotron-fluid">
+                                        <div th:if="${maarivminyanim.isEmpty()}" class="jumbotron jumbotron-fluid">
                                             <div class="container">
-                                                <h3>You don't have any arvit minyanim saved.</h3>
+                                                <h3>You don't have any maariv minyanim saved.</h3>
                                                 <hr>
                                                 <a th:href="@{|/admin/${organization.id}/minyanim/new?st=ar|}" role="button" class="btn btn-primary">Add a Minyan</a>
                                             </div>
