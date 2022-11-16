@@ -19,261 +19,259 @@
   <body>
     <div class="wrapper">
       <!-- Navbar Section -->
-      
-
-<div class="horizontal-container d-flex" id="wrapper">
+      <div class="horizontal-container d-flex" id="wrapper">
         <th:block th:include="frontnavbar"></th:block>
         <!-- Navbar End -->
         <div class="container-fluid " id="main">
-            <div class="row row-offcanvas row-offcanvas-left vh-100">
-                <!--            <th:block th:include="admin/sidebar"></th:block>-->
-                <!--/col-->
-                <main class="col main pt-5 mt-3 overflow-auto" style="flex-shrink: 3">
-                    <div class="d-flex justify-content-between">
-                        <!--                    <p class="col-md-4 h3 mt-3 mobile-hide" th:text="${'Schedule | ' + onlyDate}"></p>-->
-                        <p class="col-md-4 h4 mt-3 desktop-hide" th:text="${onlyDate}"></p>
-                        <p class="col-md-4 h3 mt-3 mobile-hide" th:text="${onlyDate}"></p>
-                        <div class="col-md-4 btn-toolbar d-flex justify-content-center p-2" role="toolbar" aria-label="Toolbar with button groups">
-                          <div class="btn-group mobile-hide mr-2" style="align-self: center;" role="group">
-                            <!-- REMOVING IF TODAY LOGIC <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">Today</button> -->
-                            <button type="button" th:data-url="@{/zmanim}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">Today</button>
-                          </div>
-                          <div class="btn-group mobile-hide mr-2" style="align-self: center;" role="group">
-                            <!-- REMOVING IF TODAY LOGIC <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn"><</button> -->
-                            <button type="button" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn"><</button>
-                            <button type="button" th:data-url="@{/zmanim/next(after=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">></button>
-                          </div>
-                        </div>
-                        <div class="col-md-4 mt-2 btn-group desktop-hide" style="height: 50%; align-self: center;" role="group">
-                            <button type="button" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn" style="width: 38%;" th:text="${yesterdayStrippedDay}">‹</button>
-                            <!--                        <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">Today</button>-->
-                            <button type="button" th:data-url="@{/zmanim/next(after=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn" style="width: 38%;" th:text="${tommorowStrippedDay}">›</button>
-                        </div>
-                        <p class="col-md-4 h3 mt-3 mobile-hide"  style="text-align: right; font-weight: 430;" th:text="${hebrewDate}"></p>
+          <div class="row row-offcanvas row-offcanvas-left vh-100">
+              <!-- <th:block th:include="admin/sidebar"></th:block> -->
+              <!--/col-->
+              <main class="col main pt-5 mt-3 overflow-auto" style="flex-shrink: 3">
+                <div class="d-flex justify-content-between">
+                  <!-- <p class="col-md-4 h3 mt-3 mobile-hide" th:text="${'Schedule | ' + onlyDate}"></p> -->
+                  <p class="col-md-4 h4 mt-3 desktop-hide" th:text="${onlyDate}"></p>
+                  <p class="col-md-4 h3 mt-3 mobile-hide" th:text="${onlyDate}"></p>
+                  <div class="col-md-4 btn-toolbar d-flex justify-content-center p-2" role="toolbar" aria-label="Toolbar with button groups">
+                    <div class="btn-group mobile-hide mr-2" style="align-self: center;" role="group">
+                    <!-- REMOVING IF TODAY LOGIC <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">Today</button> -->
+                      <button type="button" th:data-url="@{/zmanim}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">Today</button>
+                   </div>
+                    <div class="btn-group mobile-hide mr-2" style="align-self: center;" role="group">
+                    <!-- REMOVING IF TODAY LOGIC <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn"><</button> -->
+                      <button type="button" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn"><</button>
+                      <button type="button" th:data-url="@{/zmanim/next(after=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">></button>
                     </div>
-                    <hr>
-                    <div id="housing-housing">
-                        <div class="mpt0" id="row-housing" style="padding: 1rem;">
-                            <div class="row my-4">
-                                <div class="col-lg-8 col-md-7" id="minyanim-box">
-                                  <div class="card-text">
-                                    <h3>Upcoming Minyanim</h3>
-                                  </div>
-                                    <div class="tab-content" id="pills-tabContent">
-                                        <div class="tab-pane fade active show" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
-                                            <table class="table" th:if="${!allminyanim.isEmpty()}">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">Shul</th>
-                                                    <th scope="col">Type</th>
-                                                    <th scope="col">Time</th>
-                                                    <th scope="col">Room</th>
-                                                    <!--                                        <th scope="col">Nusach</th>-->
-                                                    <!--                                        <th scope="col">Notes</th>-->
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="minyan: ${allminyanim}">
-                                                  <td class="align-middle">
-                                                    <a role="button" class="btn-action js-scroll-trigger px-1 px-sm-3" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
-                                                  </td>      
-                                                  <th scope="row" class="align-middle" th:text="${minyan.getType().displayName()}"></th>
-                                                        <!-- <td th:if="${minyan.getLocationName() != null}" class="middle">
-                                                            <button type="button" class="btn btn-primary btn-sm" th:text="${minyan.getOrganizationName() + '- ' + minyan.getLocationName()}"></button>
-                                                        </td> -->
-                                                        <td class="align-middle" th:text="${minyan.getFormattedStartTime()}"></td>
-                                                        <td class="align-middle" th:text="${minyan.getLocationName()}"></td>
-                                                        <!--                                        <td class="middle" th:text="${minyan.getNusach().displayName()}"></td>-->
-                                                    <!--                                        <td class="middle" th:text="${minyan.getNotes()}"></td>-->
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            <div class="jumbotron" th:if="${allminyanim.isEmpty()}">
-                                                <h4>Sorry, there aren't any upcoming minyanim today.</h4>
-                                            </div>
+                  </div>
+                  <div class="col-md-4 mt-2 btn-group desktop-hide" style="height: 50%; align-self: center;" role="group">
+                    <button type="button" th:data-url="@{/zmanim/last(before=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn" style="width: 38%;" th:text="${yesterdayStrippedDay}">‹</button>
+                    <!--                        <button type="button" th:if="${!isToday}" th:data-url="@{/zmanim}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn">Today</button>-->
+                    <button type="button" th:data-url="@{/zmanim/next(after=${dateString})}" onclick="location.href = this.getAttribute('data-url')" class="btn btn-secondary switcher-btn" style="width: 38%;" th:text="${tommorowStrippedDay}">›</button>
+                  </div>
+                    <p class="col-md-4 h3 mt-3 mobile-hide"  style="text-align: right; font-weight: 430;" th:text="${hebrewDate}"></p>
+                </div>
+                <hr>
+                <div id="housing-housing">
+                  <div class="mpt0" id="row-housing" style="padding: 1rem;">
+                    <div class="row my-4">
+                      <div class="col-lg-8 col-md-7" id="minyanim-box">
+                        <div class="card-text">
+                          <h3>Upcoming Minyanim</h3>
+                        </div>
+                        <div class="tab-content" id="pills-tabContent">
+                          <div class="tab-pane fade active show" id="pills-all" role="tabpanel" aria-labelledby="pills-all-tab">
+                            <table class="table" th:if="${!allminyanim.isEmpty()}">
+                              <thead>
+                               <tr>
+                                <th scope="col">Shul</th>
+                                <th scope="col">Type</th>
+                                <th scope="col">Time</th>
+                                <th scope="col">Room</th>
+                                <!-- <th scope="col">Nusach</th> -->
+                                <!-- <th scope="col">Notes</th> -->
+                              </tr>
+                              </thead>
+                              <tbody>
+                                <tr th:each="minyan: ${allminyanim}">
+                                  <td class="align-middle">
+                                    <a role="button" class="btn-action js-scroll-trigger px-2 px-sm-3" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
+                                  </td>      
+                                  <th scope="row" class="align-middle" th:text="${minyan.getType().displayName()}"></th>
+                                    <!-- <td th:if="${minyan.getLocationName() != null}" class="middle">
+                                      <button type="button" class="btn btn-primary btn-sm" th:text="${minyan.getOrganizationName() + '- ' + minyan.getLocationName()}"></button>
+                                    </td> -->
+                                    <td class="align-middle" th:text="${minyan.getFormattedStartTime()}"></td>
+                                    <td class="align-middle" th:text="${minyan.getLocationName()}"></td>
+                                    <!-- <td class="middle" th:text="${minyan.getNusach().displayName()}"></td> -->
+                                    <!-- <td class="middle" th:text="${minyan.getNotes()}"></td> -->
+                                </tr>
+                              </tbody>
+                            </table>
+                                        <div class="jumbotron" th:if="${allminyanim.isEmpty()}">
+                                            <h4>Sorry, there aren't any upcoming minyanim today.</h4>
                                         </div>
-                                        <!-- <div class="tab-pane fade" id="pills-shacharit" role="tabpanel" aria-labelledby="pills-shacharit-tab">
-                                            <table class="table" th:if="${!shacharitMinyanim.isEmpty()}">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">Time</th>
-                                                    <th scope="col">Minyan</th>
-                                                    <th scope="col">Location</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="minyan: ${shacharitMinyanim}">
-                                                    <td class="middle" th:text="${minyan.getFormattedStartTime()}"></td>
-                                                    <td class="middle">
-                                                        <a role="button" class="btn btn-primary btn-sm" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
-                                                    </td>
-                                                    <td class="middle" th:text="${minyan.getLocationName()}"></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            <div class="jumbotron" th:if="${shacharitMinyanim.isEmpty()}">
-                                                <h4>Sorry, there aren't any shacharit minyanim scheduled.</h4>
-                                            </div>
-                                        </div>
-                                        <div class="tab-pane fade" id="pills-mincha" role="tabpanel" aria-labelledby="pills-mincha-tab">
-                                            <table class="table" th:if="${!minchaMinyanim.isEmpty()}">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">Time</th>
-                                                    <th scope="col">Minyan</th>
-                                                    <th scope="col">Location</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="minyan: ${minchaMinyanim}">
-                                                    <td class="middle" th:text="${minyan.getFormattedStartTime()}"></td>
-                                                    <td class="middle">
-                                                        <a role="button" class="btn btn-primary btn-sm" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
-                                                    </td>
-                                                    <td class="middle" th:text="${minyan.getLocationName()}"></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                            <div class="jumbotron" th:if="${minchaMinyanim.isEmpty()}">
-                                                <h4>Sorry, there aren't any mincha minyanim scheduled.</h4>
-                                            </div>
-                                        </div>
-
-                                        <div class="tab-pane fade" id="pills-maariv" role="tabpanel" aria-labelledby="pills-maariv-tab">
-                                            <table class="table" th:if="${!maarivMinyanim.isEmpty()}">
-                                                <thead>
-                                                <tr>
-                                                    <th scope="col">Time</th>
-                                                    <th scope="col">Minyan</th>
-                                                    <th scope="col">Location</th>
-                                                </tr>
-                                                </thead>
-                                                <tbody>
-                                                <tr th:each="minyan: ${maarivMinyanim}">
-                                                    <td class="middle" th:text="${minyan.getFormattedStartTime()}"></td>
-                                                    <td class="middle">
-                                                        <a role="button" class="btn btn-primary btn-sm" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
-                                                    </td>
-                                                    <td class="middle" th:text="${minyan.getLocationName()}"></td>
-                                                </tr>
-                                                </tbody>
-                                            </table>
-                                                <div class="jumbotron" th:if="${maarivMinyanim.isEmpty()}">
-                                                <h4>Sorry, there aren't any maariv minyanim scheduled.</h4>
-                                            </div>
-                                        </div> -->
                                     </div>
+                                    <!-- <div class="tab-pane fade" id="pills-shacharit" role="tabpanel" aria-labelledby="pills-shacharit-tab">
+                                        <table class="table" th:if="${!shacharitMinyanim.isEmpty()}">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Time</th>
+                                                <th scope="col">Minyan</th>
+                                                <th scope="col">Location</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="minyan: ${shacharitMinyanim}">
+                                                <td class="middle" th:text="${minyan.getFormattedStartTime()}"></td>
+                                                <td class="middle">
+                                                    <a role="button" class="btn btn-primary btn-sm" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
+                                                </td>
+                                                <td class="middle" th:text="${minyan.getLocationName()}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="jumbotron" th:if="${shacharitMinyanim.isEmpty()}">
+                                            <h4>Sorry, there aren't any shacharit minyanim scheduled.</h4>
+                                        </div>
+                                    </div>
+                                    <div class="tab-pane fade" id="pills-mincha" role="tabpanel" aria-labelledby="pills-mincha-tab">
+                                        <table class="table" th:if="${!minchaMinyanim.isEmpty()}">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Time</th>
+                                                <th scope="col">Minyan</th>
+                                                <th scope="col">Location</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="minyan: ${minchaMinyanim}">
+                                                <td class="middle" th:text="${minyan.getFormattedStartTime()}"></td>
+                                                <td class="middle">
+                                                    <a role="button" class="btn btn-primary btn-sm" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
+                                                </td>
+                                                <td class="middle" th:text="${minyan.getLocationName()}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="jumbotron" th:if="${minchaMinyanim.isEmpty()}">
+                                            <h4>Sorry, there aren't any mincha minyanim scheduled.</h4>
+                                        </div>
+                                    </div>
+
+                                    <div class="tab-pane fade" id="pills-maariv" role="tabpanel" aria-labelledby="pills-maariv-tab">
+                                        <table class="table" th:if="${!maarivMinyanim.isEmpty()}">
+                                            <thead>
+                                            <tr>
+                                                <th scope="col">Time</th>
+                                                <th scope="col">Minyan</th>
+                                                <th scope="col">Location</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr th:each="minyan: ${maarivMinyanim}">
+                                                <td class="middle" th:text="${minyan.getFormattedStartTime()}"></td>
+                                                <td class="middle">
+                                                    <a role="button" class="btn btn-primary btn-sm" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
+                                                </td>
+                                                <td class="middle" th:text="${minyan.getLocationName()}"></td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                            <div class="jumbotron" th:if="${maarivMinyanim.isEmpty()}">
+                                            <h4>Sorry, there aren't any maariv minyanim scheduled.</h4>
+                                        </div>
+                                    </div> -->
                                 </div>
-                                <div class="col-lg-4 col-md-5" id="zmanim-box">
-                                  <div class="card-text">
-                                    <h3>Zmanim</h3>
-                                  </div>
-                                  <div class="col">
+                            </div>
+                            <div class="col-lg-4 col-md-5" id="zmanim-box">
+                              <div class="card-text">
+                                <h3>Zmanim</h3>
+                              </div>
+                              <div class="col">
+                                  <div>
+                                    <hr>
                                       <div>
-                                        <hr>
-                                          <div>
-                                              <div class="row m-b-30">
-                                                  <div class="col-12">
-                                                      <div>
-                                                          <b class="time-box" th:text="${alotHashachar}"></b>
-                                                          &nbsp;
-                                                          <span>
-                                                              <span>Alos HaShachar</span>
-                                                          </span>
-                                                      </div>
-                                                          <hr>
-                                                  </div>
-                                                  <div class="col-12">
-                                                      <div>
-                                                          <b class="time-box" th:text="${sunrise}"></b>
-                                                          &nbsp;
-                                                          <span>
-                                                              <span>Netz</span>
-                                                          </span>
-                                                      </div>
-                                                      <hr>
-                                                  </div>
-                                                  <div class="col-12">
-                                                      <div>
-                                                          <b class="time-box" th:text="${szks}"></b>
-                                                          &nbsp;
-                                                          <span>
-                                                              <span>Sof Zman Krias Shema</span>
-                                                          </span>
-                                                      </div>
-                                                      <hr>
-                                                  </div>
-                                                  <div class="col-12">
-                                                      <div>
-                                                          <b class="time-box" th:text="${szt}"></b>
-                                                          &nbsp;
-                                                          <span>
-                                                              <span>Sof Zman Tefilla</span>
-                                                          </span>
-                                                      </div>
-                                                      <hr>
-                                                  </div>
-                                                  <div class="col-12">
-                                                      <div>
-                                                          <b class="time-box" th:text="${chatzot}"></b>
-                                                          &nbsp;
-                                                          <span><span>Chatzos</span></span>
-                                                      </div>
-                                                      <hr>
-                                                  </div>
-                                                  <div class="col-12">
-                                                      <div>
-                                                          <b class="time-box" th:text="${minchaGedola}"></b>
-                                                          &nbsp;
-                                                          <span><span>Mincha Gedola</span></span>
-                                                      </div>
-                                                      <hr>
-                                                  </div>
-                                                  <div class="col-12">
-                                                      <div>
-                                                          <b class="time-box" th:text="${minchaKetana}"></b>
-                                                          &nbsp;
-                                                          <span><span>Mincha Ketana</span></span>
-                                                      </div>
-                                                      <hr>
-                                                  </div>
-                                                  <div class="col-12">
-                                                      <div>
-                                                          <b class="time-box" th:text="${plagHamincha}"></b>
-                                                          &nbsp;
-                                                          <span><span>Plag HaMincha</span></span>
-                                                      </div>
-                                                      <hr>
-                                                  </div>
-                                                  <div class="col-12">
-                                                      <div>
-                                                          <b class="time-box" th:text="${shekiya}"></b>
-                                                          &nbsp;
-                                                          <span><span>Shekiya</span></span>
-                                                      </div>
-                                                      <hr>
+                                          <div class="row m-b-30">
+                                              <div class="col-12">
+                                                  <div>
+                                                      <b class="time-box" th:text="${alotHashachar}"></b>
+                                                      &nbsp;
+                                                      <span>
+                                                          <span>Alos HaShachar</span>
+                                                      </span>
                                                   </div>
                                                       <hr>
-                                                  <div class="col-12">
-                                                      <div>
-                                                          <b class="time-box" th:text="${tzet}"></b>
-                                                              &nbsp;
-                                                              <span><span>Tzes HaKochavim</span></span>
-                                                      </div>
-                                                      <!--                                            <hr></div>-->
-                                                      <!--                                        <div class="col-12"><div><b th:text="${latestShema}"></b>-->
-                                                      <!--                                            &nbsp;-->
-                                                      <!--                                            <span><span>Tzet HaKochavim</span></span>-->
-                                                      <!--                                        </div>-->
+                                              </div>
+                                              <div class="col-12">
+                                                  <div>
+                                                      <b class="time-box" th:text="${sunrise}"></b>
+                                                      &nbsp;
+                                                      <span>
+                                                          <span>Netz</span>
+                                                      </span>
                                                   </div>
+                                                  <hr>
+                                              </div>
+                                              <div class="col-12">
+                                                  <div>
+                                                      <b class="time-box" th:text="${szks}"></b>
+                                                      &nbsp;
+                                                      <span>
+                                                          <span>Sof Zman Krias Shema</span>
+                                                      </span>
+                                                  </div>
+                                                  <hr>
+                                              </div>
+                                              <div class="col-12">
+                                                  <div>
+                                                      <b class="time-box" th:text="${szt}"></b>
+                                                      &nbsp;
+                                                      <span>
+                                                          <span>Sof Zman Tefilla</span>
+                                                      </span>
+                                                  </div>
+                                                  <hr>
+                                              </div>
+                                              <div class="col-12">
+                                                  <div>
+                                                      <b class="time-box" th:text="${chatzot}"></b>
+                                                      &nbsp;
+                                                      <span><span>Chatzos</span></span>
+                                                  </div>
+                                                  <hr>
+                                              </div>
+                                              <div class="col-12">
+                                                  <div>
+                                                      <b class="time-box" th:text="${minchaGedola}"></b>
+                                                      &nbsp;
+                                                      <span><span>Mincha Gedola</span></span>
+                                                  </div>
+                                                  <hr>
+                                              </div>
+                                              <div class="col-12">
+                                                  <div>
+                                                      <b class="time-box" th:text="${minchaKetana}"></b>
+                                                      &nbsp;
+                                                      <span><span>Mincha Ketana</span></span>
+                                                  </div>
+                                                  <hr>
+                                              </div>
+                                              <div class="col-12">
+                                                  <div>
+                                                      <b class="time-box" th:text="${plagHamincha}"></b>
+                                                      &nbsp;
+                                                      <span><span>Plag HaMincha</span></span>
+                                                  </div>
+                                                  <hr>
+                                              </div>
+                                              <div class="col-12">
+                                                  <div>
+                                                      <b class="time-box" th:text="${shekiya}"></b>
+                                                      &nbsp;
+                                                      <span><span>Shekiya</span></span>
+                                                  </div>
+                                                  <hr>
+                                              </div>
+                                                  <hr>
+                                              <div class="col-12">
+                                                  <div>
+                                                      <b class="time-box" th:text="${tzet}"></b>
+                                                          &nbsp;
+                                                          <span><span>Tzes HaKochavim</span></span>
+                                                  </div>
+                                                  <!--                                            <hr></div>-->
+                                                  <!--                                        <div class="col-12"><div><b th:text="${latestShema}"></b>-->
+                                                  <!--                                            &nbsp;-->
+                                                  <!--                                            <span><span>Tzet HaKochavim</span></span>-->
+                                                  <!--                                        </div>-->
                                               </div>
                                           </div>
                                       </div>
                                   </div>
-                              </div> 
-                            </div>
+                              </div>
+                          </div> 
                         </div>
                     </div>
+                </div>
                     <!--/row-->
                 </main>
                 <!--/main col-->
