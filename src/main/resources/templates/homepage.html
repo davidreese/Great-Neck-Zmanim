@@ -16,7 +16,6 @@
     <link rel="stylesheet" href="/assets/css/owl.theme.css">
     <link rel="stylesheet" href="/assets/css/ionicons.min.css"> <!-- Resource style -->
     <link href="/assets/css/style.css" rel="stylesheet" type="text/css" media="all" />
-    <link href="/assets/css/style.scss" rel="stylesheet" type="text/css" media="all" />
   </head>
   <body>
     <div class="wrapper">
@@ -73,7 +72,7 @@
                               <tbody>
                                 <tr th:each="minyan: ${allminyanim}">
                                   <td class="align-middle">
-                                    <a role="button" class="btn-shul js-scroll-trigger px-3 px-sm-3" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
+                                    <a role="button" class="btn-action js-scroll-trigger px-3 px-sm-3" th:href="@{|/orgs/${minyan.getOrganizationId()}|}" th:text="${minyan.getOrganizationName()}"></a>
                                   </td>      
                                   <th scope="row" class="align-middle" th:text="${minyan.getType().displayName()}"></th>
                                     <!-- <td th:if="${minyan.getLocationName() != null}" class="middle">
