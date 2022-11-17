@@ -345,7 +345,7 @@ body {
   height: 38px;
   padding: 0 30px;
   text-align: center;
-  font-size: calc(.75rem + 0.3vw);
+  font-size: calc(.75rem + 0.1vw);
   font-weight: 600;
   line-height: 36px;
   letter-spacing: 2px;
@@ -363,6 +363,20 @@ body {
 	-webkit-transition: 0.2s;
 	-moz-transition: 0.2s;
 	transition: 0.2s;
+}
+.btn-shul:hover {
+	color: #FFFFFF;
+	box-shadow: 0 5px 25px 0 rgba(0, 0, 100,.2);
+	border: 1px solid transparent !important;
+	outline: none !important;
+	text-decoration: none;
+}
+
+.btn-shul:focus, .btn-action:active {
+	background: #275ed8;
+	color: #FFFFFF;
+	border: 1px solid transparent !important;
+	outline: none !important;
 }
 .btn-action {
 	font-family: 'Montserrat';
