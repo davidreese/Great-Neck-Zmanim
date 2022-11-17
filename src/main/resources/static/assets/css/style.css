@@ -371,7 +371,7 @@ body {
   height: 38px;
   padding: 0 30px;
   text-align: center;
-  font-size: rfs(.75rem);
+  @include font-size(.75rem);
   font-weight: 600;
   line-height: 36px;
   letter-spacing: 2px;
