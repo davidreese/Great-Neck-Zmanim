@@ -25,9 +25,9 @@ public class ZmanimHandler {
     public ZmanimHandler() {
         TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
 
-        String locationName = "Great Neck, NY";
-        double latitude = 40.8007;
-        double longitude = -73.7285;
+        String locationName = "Teaneck, NJ";
+        double latitude = 40.906871;
+        double longitude = -74.020924;
         double elevation = 0;
         GeoLocation geoLocation = new GeoLocation(locationName, latitude, longitude, elevation, timeZone);
         this.geoLocation = geoLocation;
