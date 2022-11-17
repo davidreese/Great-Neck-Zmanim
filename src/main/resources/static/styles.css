@@ -35,6 +35,7 @@
 
 .time-shower {
     float: right;
+    color: var(--bs-navbar-color);
 }
 
 .list-group-item.active {
