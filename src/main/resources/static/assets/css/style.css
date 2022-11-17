@@ -339,7 +339,31 @@ body {
 	line-height: 1.6;
 	margin-top: 15px;
 }
-
+.btn-shul {
+	font-family: 'Montserrat';
+	display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  text-align: center;
+  font-size: calc(.75rem + 0.3vw);
+  font-weight: 600;
+  line-height: 36px;
+  letter-spacing: 2px;
+	margin: 0;
+  text-transform: uppercase;
+	text-decoration: none !important;
+  white-space: nowrap;
+  cursor: pointer;
+	background-color: #387ed1;
+	background: #275ed8;
+  color: #FFFFFF;
+  border: 1px solid transparent !important;
+  border-radius: 4px;
+  box-sizing: border-box;
+	-webkit-transition: 0.2s;
+	-moz-transition: 0.2s;
+	transition: 0.2s;
+}
 .btn-action {
 	font-family: 'Montserrat';
 	display: inline-block;
