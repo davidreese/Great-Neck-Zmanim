@@ -365,6 +365,31 @@ body {
 	-moz-transition: 0.2s;
 	transition: 0.2s;
 }
+.btn-shul {
+	font-family: 'Montserrat';
+	display: inline-block;
+  height: 38px;
+  padding: 0 30px;
+  text-align: center;
+  font-size: rfs(.75rem);
+  font-weight: 600;
+  line-height: 36px;
+  letter-spacing: 2px;
+	margin: 0;
+  text-transform: uppercase;
+	text-decoration: none !important;
+  white-space: nowrap;
+  cursor: pointer;
+	background-color: #387ed1;
+	background: #275ed8;
+  color: #FFFFFF;
+  border: 1px solid transparent !important;
+  border-radius: 4px;
+  box-sizing: border-box;
+	-webkit-transition: 0.2s;
+	-moz-transition: 0.2s;
+	transition: 0.2s;
+}
 .btn-action:hover {
 	color: #FFFFFF;
 	box-shadow: 0 5px 25px 0 rgba(0, 0, 100,.2);
