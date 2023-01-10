@@ -41,7 +41,7 @@ public class ZmanimHandler {
         Dictionary<Zman, Date> dictionary = new Hashtable();
 
         ComplexZmanimCalendar complexZmanimCalendar = new ComplexZmanimCalendar(geoLocation);
-        complexZmanimCalendar.getCalendar().set(date.getYear(), date.getMonth().getValue(), date.getDayOfMonth());
+        complexZmanimCalendar.getCalendar().set(date.getYear(), date.getMonth().getValue() - 1, date.getDayOfMonth());
 //        complexZmanimCalendar.getCalendar().
 
         dictionary.put(Zman.ALOT_HASHACHAR, complexZmanimCalendar.getAlosHashachar());
