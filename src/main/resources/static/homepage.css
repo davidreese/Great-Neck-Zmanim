@@ -42,11 +42,18 @@
 }
 
 .switcher-btn:hover {
-    background-color: #80ABC0;
-    border-color: #80ABC0;
+    background-color: #aacad9;
+    border-color: #aacad9;
 }
 
-
+.switcher-btn:active {
+    background-color: #8ab4c2;
+    border-color: #8ab4c2;
+}
+.switcher-btn:focus {
+    background-color: #8ab4c2;
+    border-color: #8ab4c2;
+}
 
 @media screen and (min-width: 601px) {
   #minyanim-box {
