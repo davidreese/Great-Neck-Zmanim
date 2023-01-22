@@ -12,7 +12,9 @@ import com.reesedevelopment.greatneckzmanim.front.MinyanEvent;
 import com.reesedevelopment.greatneckzmanim.front.KolhaMinyanim;
 import com.reesedevelopment.greatneckzmanim.global.Nusach;
 import com.reesedevelopment.greatneckzmanim.global.Zman;
+import net.bytebuddy.asm.Advice.Local;
 import com.reesedevelopment.greatneckzmanim.front.ZmanimHandler;
+import org.codehaus.groovy.runtime.powerassert.SourceText;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,7 +24,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.*;
 
 @Controller
@@ -59,13 +61,17 @@ public class ZmanimController {
         return todaysZmanim();
     }
 
+    private void setTimeZone(TimeZone tz) {
+        // set time format
+        timeFormat.setTimeZone(tz);
+        dateFormat.setTimeZone(tz);
+        onlyDateFormat.setTimeZone(tz);
+        strippedDayFormat.setTimeZone(tz);
+    }
+
     @GetMapping("/zmanim")
     public ModelAndView todaysZmanim() {
-        timeFormat.setTimeZone(timeZone);
-        dateFormat.setTimeZone(timeZone);
-        onlyDateFormat.setTimeZone(timeZone);
-        strippedDayFormat.setTimeZone(timeZone);
-
+        System.out.println("Displaying today's zmanim...");
         return zmanim(new Date());
     }
 
@@ -73,6 +79,7 @@ public class ZmanimController {
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(date);
         calendar.add(Calendar.SECOND, 30);
+        calendar.setTimeZone(timeZone);
         return timeFormat.format(calendar.getTime());
     }
     private String timeFormatWithRoundingToSecond(Date date) {
@@ -85,18 +92,23 @@ public class ZmanimController {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("homepage");
 
+        System.out.println("DEBUG: Adding dates to model");
+
+        // adding dates to model data
+        setTimeZone(timeZone);
 //        String month = calendar.getDisplayName(Calendar.MONTH, Calendar.LONG, java.util.Locale.US);
         mv.getModel().put("date", dateFormat.format(date));
         mv.getModel().put("onlyDate", onlyDateFormat.format(date));
 
         Calendar c = Calendar.getInstance();
 
+        // adds model data for tomorrow's date
         c.setTime(date);
         c.add(Calendar.DATE, 1);
         mv.getModel().put("tommorowOnlyDate", onlyDateFormat.format(c.getTime()));
         mv.getModel().put("tommorowStrippedDay", strippedDayFormat.format(c.getTime()));
 
-
+        // adds model data for yesterday's date
         c.setTime(date);
         c.add(Calendar.DATE, -1);
         mv.getModel().put("yesterdayOnlyDate", onlyDateFormat.format(c.getTime()));
@@ -106,41 +118,53 @@ public class ZmanimController {
         mv.getModel().put("isToday", onlyDateFormat.format(date).equals(onlyDateFormat.format(today)));
 
         mv.getModel().put("dateString", date.toString());
-//        mv.getModel(),put("longdate", )
 
-//        add hebrew date
+//        add today's hebrew date
         mv.getModel().put("hebrewDate", zmanimHandler.getHebrewDate(date));
 
-        timeFormat.setTimeZone(timeZone);
+        System.out.println("DEBUG: Fetching zmanim for model");
 
-        Dictionary zmanim = zmanimHandler.getZmanim(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()));
+        LocalDate localDate = dateToLocalDate(date);
+        System.out.println("Showing zmanim for date: " + localDate.getMonth() + ":" + localDate.getMonthValue() + ":" + localDate.getMonth().getValue() + ":" + localDate.toString());
+
+        Dictionary<Zman, Date> zmanim = zmanimHandler.getZmanim(localDate);
+
+        System.out.println("DEBUG: Putting zmanim in model");
         
-        mv.getModel().put("alotHashachar", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.ALOT_HASHACHAR)));
-        mv.getModel().put("sunrise", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.NETZ)));
-        mv.getModel().put("szks", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZKS)));
-        mv.getModel().put("szt", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SZT)));
-        mv.getModel().put("chatzot", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.CHATZOT)));
-        mv.getModel().put("minchaGedola", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_GEDOLA)));
-        mv.getModel().put("minchaKetana", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.MINCHA_KETANA)));
-        mv.getModel().put("plagHamincha", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.PLAG_HAMINCHA)));
-        mv.getModel().put("shekiya", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.SHEKIYA)));
-        mv.getModel().put("earliestShema", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.EARLIEST_SHEMA)));
-        mv.getModel().put("tzet", timeFormatWithRoundingToSecond((Date) zmanim.get(Zman.TZET)));
+        System.out.println("ALOT HASH: " + zmanim.get(Zman.ALOT_HASHACHAR));
+        mv.getModel().put("alotHashachar", timeFormatWithRoundingToSecond(zmanim.get(Zman.ALOT_HASHACHAR)));
+        mv.getModel().put("sunrise", timeFormatWithRoundingToSecond(zmanim.get(Zman.NETZ)));
+        mv.getModel().put("szks", timeFormatWithRoundingToSecond(zmanim.get(Zman.SZKS)));
+        mv.getModel().put("szt", timeFormatWithRoundingToSecond(zmanim.get(Zman.SZT)));
+        mv.getModel().put("chatzot", timeFormatWithRoundingToSecond(zmanim.get(Zman.CHATZOT)));
+        mv.getModel().put("minchaGedola", timeFormatWithRoundingToSecond(zmanim.get(Zman.MINCHA_GEDOLA)));
+        mv.getModel().put("minchaKetana", timeFormatWithRoundingToSecond(zmanim.get(Zman.MINCHA_KETANA)));
+        mv.getModel().put("plagHamincha", timeFormatWithRoundingToSecond(zmanim.get(Zman.PLAG_HAMINCHA)));
+        mv.getModel().put("shekiya", timeFormatWithRoundingToSecond(zmanim.get(Zman.SHEKIYA)));
+        mv.getModel().put("earliestShema", timeFormatWithRoundingToSecond(zmanim.get(Zman.EARLIEST_SHEMA)));
+        mv.getModel().put("tzet", timeFormatWithRoundingToSecond(zmanim.get(Zman.TZET)));
+
+        System.out.println("DEBUG: Fetching minyanim");
 
 //        get minyanim closest in time to now
 //        todo: only get items with non null time for date
         List<Minyan> enabledMinyanim = minyanDAO.getEnabled();
         List<MinyanEvent> minyanEvents = new ArrayList<>();
 
+        System.out.println("DEBUG: Filtering through minyanim");
+
         for (Minyan minyan : enabledMinyanim) {
-            LocalDate ref = LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1);
+            LocalDate ref = dateToLocalDate(date).plusMonths(1);
             Date startDate = minyan.getStartDate(ref);
             Date now = new Date();
             Date terminationDate = new Date(now.getTime() - (60000 * 8));
             System.out.println("SD: " + startDate);
             System.out.println("TD: " + terminationDate);
             // if (startDate != null && (startDate.after(terminationDate) || now.getDate() != startDate.getDate())) {  
-            if (startDate != null && (startDate.after(terminationDate))) {      
+            // if (startDate != null && (startDate.after(terminationDate))) {      
+            // start date must be valid AND (be after the termination date OR date must not be the same date as today, to disregard the termination time when the user is looking ahead)
+            if (startDate != null && (startDate.after(terminationDate) || !sameDayOfMonth(now, date))) {
+                // show the minyan
                 String organizationName;
                 Nusach organizationNusach;
                 String organizationId;
@@ -258,6 +282,21 @@ mv.getModel().put("shuls", shulNames);
         mv.getModel().put("maarivMinyanim", maarivMinyanim);
 
         return mv;
+    }
+
+    private static LocalDate dateToLocalDate(Date date) {
+        Instant instant = date.toInstant();
+        ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
+        return zonedDateTime.toLocalDate();
+    }
+
+
+    private static boolean sameDayOfMonth(Date date1, Date date2) {
+        Calendar calendar1 = Calendar.getInstance();
+        calendar1.setTime(date1);
+        Calendar calendar2 = Calendar.getInstance();
+        calendar2.setTime(date2);
+        return calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH);
     }
 
     @GetMapping("/zmanim/next")
