@@ -129,8 +129,7 @@ public class ZmanimController {
         Dictionary<Zman, Date> zmanim = zmanimHandler.getZmanim(localDate);
 
         System.out.println("DEBUG: Putting zmanim in model");
-        
-        System.out.println("ALOT HASH: " + zmanim.get(Zman.ALOT_HASHACHAR));
+
         mv.getModel().put("alotHashachar", timeFormatWithRoundingToSecond(zmanim.get(Zman.ALOT_HASHACHAR)));
         mv.getModel().put("sunrise", timeFormatWithRoundingToSecond(zmanim.get(Zman.NETZ)));
         mv.getModel().put("chatzot", timeFormatWithRoundingToSecond(zmanim.get(Zman.CHATZOT)));
@@ -141,11 +140,36 @@ public class ZmanimController {
         mv.getModel().put("earliestShema", timeFormatWithRoundingToSecond(zmanim.get(Zman.EARLIEST_SHEMA)));
         mv.getModel().put("tzet", timeFormatWithRoundingToSecond(zmanim.get(Zman.TZET)));
 
+        List<MinyanEvent> upcomingMinyanim = getMinyanEventsOnDate(localDate.plusMonths(1), true);
+        mv.getModel().put("allminyanim", upcomingMinyanim);
 
-        System.out.println("DEBUG: Fetching minyanim");
+        List<MinyanEvent> shacharitMinyanim = new ArrayList<>();
+        List<MinyanEvent> minchaMinyanim = new ArrayList<>();
+        List<MinyanEvent> arvitMinyanim = new ArrayList<>();
+        for (MinyanEvent me : upcomingMinyanim) {
+            if (me.getType().isShacharit()) {
+                shacharitMinyanim.add(me);
+            } else if (me.getType().isMincha()) {
+                minchaMinyanim.add(me);
+            } else if (me.getType().isArvit()) {
+                arvitMinyanim.add(me);
+            }
+        }
+        mv.getModel().put("shacharitMinyanim", shacharitMinyanim);
+        mv.getModel().put("minchaMinyanim", minchaMinyanim);
+        mv.getModel().put("arvitMinyanim", arvitMinyanim);
 
-//        get minyanim closest in time to now
-//        todo: only get items with non null time for date
+        return mv;
+    }
+
+    /**
+     * Gets an ordered list of minyan events for this date.
+     * @param date on which to find minyan events for.
+     * @param skipMinyanimThatAlreadyPassed if a minyan has already passed and the date is today, don't return those minyan events.
+     * @return all minyan events scheduled to happen on this day.
+     */
+    private List<MinyanEvent> getMinyanEventsOnDate(LocalDate date, boolean skipMinyanimThatAlreadyPassed) {
+        // get minyanim closest in time to the date
         List<Minyan> enabledMinyanim = minyanDAO.getEnabled();
         List<MinyanEvent> minyanEvents = new ArrayList<>();
 
@@ -153,15 +177,18 @@ public class ZmanimController {
 
         for (Minyan minyan : enabledMinyanim) {
 
-            LocalDate ref = dateToLocalDate(date).plusMonths(1);
-            Date startDate = minyan.getStartDate(ref);
+//            LocalDate ref = dateToLocalDate(date).plusMonths(1);
+            Date startDate = minyan.getStartDate(date);
+
             Date now = new Date();
+
             Date terminationDate = new Date(now.getTime() - (60000 * 8));
+
             System.out.println("SD: " + startDate);
             System.out.println("TD: " + terminationDate);
-            
-            // start date must be valid AND (be after the termination date OR date must not be the same date as today, to disregard the termination time when the user is looking ahead)
-            if (startDate != null && (startDate.after(terminationDate) || !sameDayOfMonth(now, date))) {
+
+            // start date must be valid AND (be after the termination date OR date must not be the same date as today, to disregard the termination time when the user is looking ahead, OR must have the option to skip passed minyanim disabled)
+            if (startDate != null && (startDate.after(terminationDate) || !sameDay(date, now) || !skipMinyanimThatAlreadyPassed)) {
                 // show the minyan
                 String organizationName;
                 Nusach organizationNusach;
@@ -196,34 +223,16 @@ public class ZmanimController {
                     minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationNusach, organizationId, locationName, startDate, minyan.getNusach(), minyan.getNotes()));
                 }
             } /*else {
-                if (startDate != null) {
-                    System.out.println("Skipping minyan with start date: " + startDate.toString());
-                } else {
-                    System.out.println("Skipping minyan with null start date.");
-                }
-            }*/
+        if (startDate != null) {
+            System.out.println("Skipping minyan with start date: " + startDate.toString());
+        } else {
+            System.out.println("Skipping minyan with null start date.");
+        }
+    }*/
         }
 
         minyanEvents.sort(Comparator.comparing(MinyanEvent::getStartTime));
-        mv.getModel().put("allminyanim", minyanEvents);
-
-        List<MinyanEvent> shacharitMinyanim = new ArrayList<>();
-        List<MinyanEvent> minchaMinyanim = new ArrayList<>();
-        List<MinyanEvent> arvitMinyanim = new ArrayList<>();
-        for (MinyanEvent me : minyanEvents) {
-            if (me.getType().isShacharit()) {
-                shacharitMinyanim.add(me);
-            } else if (me.getType().isMincha()) {
-                minchaMinyanim.add(me);
-            } else if (me.getType().isArvit()) {
-                arvitMinyanim.add(me);
-            }
-        }
-        mv.getModel().put("shacharitMinyanim", shacharitMinyanim);
-        mv.getModel().put("minchaMinyanim", minchaMinyanim);
-        mv.getModel().put("arvitMinyanim", arvitMinyanim);
-
-        return mv;
+        return minyanEvents;
     }
 
     private static LocalDate dateToLocalDate(Date date) {
@@ -231,7 +240,7 @@ public class ZmanimController {
         ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
         return zonedDateTime.toLocalDate();
     }
-    
+
 
     private static boolean sameDayOfMonth(Date date1, Date date2) {
         Calendar calendar1 = Calendar.getInstance();
@@ -239,6 +248,13 @@ public class ZmanimController {
         Calendar calendar2 = Calendar.getInstance();
         calendar2.setTime(date2);
         return calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH);
+    }
+
+    private static boolean sameDay(LocalDate date1, Date date2) {
+        LocalDate date2LD = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return date1.getDayOfMonth() == date2LD.getDayOfMonth() &&
+                date1.getMonth() == date2LD.getMonth() &&
+                date1.getYear() == date2LD.getYear();
     }
 
     @GetMapping("/zmanim/next")
@@ -320,7 +336,8 @@ public class ZmanimController {
 //        boolean usesNotes;
 
         for (Minyan minyan : enabledMinyanim) {
-            Date startDate = minyan.getStartDate(LocalDate.of(date.getYear() + 1900, date.getMonth(), date.getDate()).plusMonths(1));
+            // TODO: check if this is an accurate line
+            Date startDate = minyan.getStartDate(dateToLocalDate(date));
             Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
             if (startDate != null && startDate.after(terminationDate)) {
                 String organizationName;

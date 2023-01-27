@@ -321,6 +321,11 @@ public class Minyan extends GNZObject implements IDGenerator {
         return getStartDate(LocalDate.now());
     }
 
+    /**
+     * Gets the time that the next instance of this minyan will take place.
+     * @param date
+     * @return the date and time that the next minyan will take place at.
+     */
     public Date getStartDate(LocalDate date) {
 //        need to check if that date is a special day
         MinyanTime mt = getMinyanTime(date);
