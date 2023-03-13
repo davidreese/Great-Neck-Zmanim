@@ -27,10 +27,15 @@
 <!--                </p>-->
                 <button type="submit" class="btn btn-primary">Sign in</button>
                 <div class="login-msg-box" style="padding-top: 7px">
-                    <div class="form-msg-fatal" th:if="${param.error}">
-                        Invalid credentials.
+                    <div class="form-msg-fatal" th:if="${blocked}">
+                        Login attempts have been exhausted. Please try again later.
                     </div>
-                    <div class="form-msg-success" th:if="${param.logout}">
+                    <div th:if="${!blocked}">
+                        <div class="form-msg-fatal" th:if="${error}">
+                            Invalid credentials.
+                        </div>
+                    </div>
+                    <div class="form-msg-success" th:if="${logout}">
                         You have been logged out.
                     </div>
                 </div>
