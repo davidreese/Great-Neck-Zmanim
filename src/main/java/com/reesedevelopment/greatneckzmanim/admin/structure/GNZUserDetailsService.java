@@ -32,7 +32,7 @@ public class GNZUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
         final String ip = getClientIP();
         if (loginAttemptService.isBlocked(ip)) {
-            throw new RuntimeException("blocked");
+            throw new IllegalStateException("The client is blocked.");
         }
 
         GNZUser user = this.gnzUserDAO.findByName(userName);
