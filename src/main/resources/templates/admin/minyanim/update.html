@@ -326,6 +326,7 @@
                                         <div class="form-row" id="yt-box">
                                             <div class="col">
                                                 <select class="custom-select" name="yt-time-type" id="yt-time-type" onchange="update('yt')" required>
+                                                    <option value="default" th:selected="${minyan.getSchedule().getYomTov().isDefault()}">Unchanged</option>
                                                     <option value="nm" th:selected="${minyan.getSchedule().getYomTov().isNone()}">No Minyan</option>
                                                     <option value="fixed" th:selected="${minyan.getSchedule().getYomTov().isFixed()}">Fixed</option>
                                                     <option value="dynamic" th:selected="${minyan.getSchedule().getYomTov().isDynamic()}">Dynamic</option>
@@ -364,6 +365,7 @@
                                         <div class="form-row" id="rc-box">
                                             <div class="col">
                                                 <select class="custom-select" name="rc-time-type" id="rc-time-type" onchange="update('rc')" required>
+                                                    <option value="default" th:selected="${minyan.getSchedule().getRoshChodesh().isDefault()}">Unchanged</option>
                                                     <option value="nm" th:selected="${minyan.getSchedule().getRoshChodesh().isNone()}">No Minyan</option>
                                                     <option value="fixed" th:selected="${minyan.getSchedule().getRoshChodesh().isFixed()}">Fixed</option>
                                                     <option value="dynamic" th:selected="${minyan.getSchedule().getRoshChodesh().isDynamic()}">Dynamic</option>
@@ -401,6 +403,7 @@
                                         <div class="form-row" id="chanuka-box">
                                             <div class="col">
                                                 <select class="custom-select" name="chanuka-time-type" id="chanuka-time-type" onchange="update('chanuka')" required>
+                                                    <option value="default" th:selected="${minyan.getSchedule().getChanuka().isDefault()}">Unchanged</option>
                                                     <option value="nm" th:selected="${minyan.getSchedule().getChanuka().isNone()}">No Minyan</option>
                                                     <option value="fixed" th:selected="${minyan.getSchedule().getChanuka().isFixed()}">Fixed</option>
                                                     <option value="dynamic" th:selected="${minyan.getSchedule().getChanuka().isDynamic()}">Dynamic</option>
@@ -438,6 +441,7 @@
                                         <div class="form-row" id="rcc-box">
                                             <div class="col">
                                                 <select class="custom-select" name="rcc-time-type" id="rcc-time-type" onchange="update('rcc')" required>
+                                                    <option value="default" th:selected="${minyan.getSchedule().getRoshChodeshChanuka().isDefault()}">Unchanged</option>
                                                     <option value="nm" th:selected="${minyan.getSchedule().getRoshChodeshChanuka().isNone()}">No Minyan</option>
                                                     <option value="fixed" th:selected="${minyan.getSchedule().getRoshChodeshChanuka().isFixed()}">Fixed</option>
                                                     <option value="dynamic" th:selected="${minyan.getSchedule().getRoshChodeshChanuka().isDynamic()}">Dynamic</option>
