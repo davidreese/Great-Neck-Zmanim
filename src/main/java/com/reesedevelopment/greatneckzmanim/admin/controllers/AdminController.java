@@ -596,30 +596,7 @@ public class AdminController {
                 System.out.println("Organization does not exist. Failed to delete.");
                 return organizations(null, "Sorry, the organization could not be deleted.");
             }
-        } /*else if (SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName()))) {
-            String username = SecurityContextHolder.getContext().getAuthentication().getName();
-            GNZUser user = this.gnzUserDAO.findByName(username);
-            String associatedOrganizationId = user.getOrganizationId();
-            if (!associatedOrganizationId.equals(id)) {
-                System.out.println("You do not have permission to view this organization.");
-                throw new AccessDeniedException("You do not have permission to view this organization.");
-            } else {
-//                get organization and check if it exists
-                Organization organization = this.organizationDAO.findById(id);
-                if (organization != null) {
-                    if (this.organizationDAO.delete(organization)) {
-                        System.out.println("Organization deleted successfully.");
-                        return organizations("Successfully deleted the organization.", null);
-                    } else {
-                        System.out.println("Organization delete failed.");
-                        return organizations(null, "Sorry, the delete failed.");
-                    }
-                } else {
-                    System.out.println("Organization does not exist. Failed to delete.");
-                    return organizations(null, "Sorry, the organization could not be deleted.");
-                }
-            }
-        }*/ else {
+        } else {
             throw new AccessDeniedException("You do not have permission to delete an organization.");
         }
     }
@@ -715,7 +692,6 @@ public class AdminController {
             System.out.println("Sorry, this email address is not valid.");
             return organization(organizationId, null, null, null,"Sorry, this email address is invalid.");
         }
-
 
 //        check if password is valid
         String passwordRegex = "^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,}$";
