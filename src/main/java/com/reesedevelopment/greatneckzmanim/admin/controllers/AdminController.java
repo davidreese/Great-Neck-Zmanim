@@ -14,7 +14,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -45,19 +44,34 @@ public class AdminController {
     SimpleDateFormat dateFormat = new SimpleDateFormat("MMMM d, yyyy | hh:mm aa");
     TimeZone timeZone = TimeZone.getTimeZone("America/New_York");
 
+    /**
+     * Checks if the authenticated user is an admin (ussualy over one organization) or a super-admin (over the site).
+     * @return the result
+     */
     private boolean isAdmin() {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(ADMIN.getName()));
     }
 
+    /**
+     * Checks if the authenticated user has at least user privleges (ussualy able to manange certain data for one organization).
+     * @return the result
+     */
     private boolean isUser() {
         return SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(Role.USER.getName())) ||
                 SecurityContextHolder.getContext().getAuthentication().getAuthorities().contains(new SimpleGrantedAuthority(ADMIN.getName()));
     }
 
+    /**
+     * Gets the current authenticated user from the database.
+     * @return the user
+     */
     private GNZUser getCurrentUser() {
         return this.gnzUserDAO.findByName(SecurityContextHolder.getContext().getAuthentication().getName());
     }
 
+    /**
+     * Checks if the authenticated user has whole-site privleges.
+     */
     private boolean isSuperAdmin() {
         GNZUser user = getCurrentUser();
         return user.getOrganizationId() == null && user.role().equals(ADMIN);
@@ -80,7 +94,10 @@ public class AdminController {
     }
 
     /**
-     * Verifies that the current user has access to the organization in question and returns it
+     * Gets an organization from the database.
+     * @param orgId the id of the organization to return
+     * @return the organization
+     * @throws AccessDeniedException
      */
     private Organization getOrganization(String orgId) throws AccessDeniedException {
         Organization org = organizationDAO.findById(orgId);
@@ -96,6 +113,12 @@ public class AdminController {
         }
     }
 
+    /**
+     * Gets a location from the database.
+     * @param locId the id of the location to return
+     * @return the location
+     * @throws AccessDeniedException
+     */
     private Location getLocation(String locId) throws AccessDeniedException {
         Location location = locationDAO.findById(locId);
         if (location == null) {
