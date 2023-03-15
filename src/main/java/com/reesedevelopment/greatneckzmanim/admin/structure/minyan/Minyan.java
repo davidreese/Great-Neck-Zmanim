@@ -363,22 +363,35 @@ public class Minyan extends GNZObject implements IDGenerator {
             if (jc.isChanukah()) {
                 return schedule.getRoshChodeshChanuka();
             } else {
-                return schedule.getRoshChodesh();
+                MinyanTime mt = schedule.getRoshChodesh();
+                if (mt.isDefault()) {
+                    return getNormalTime(date);
+                } else {
+                    return mt;
+                }
             }
         } else if (jc.isChanukah()) {
             return schedule.getChanuka();
         } else if (jc.isYomTovAssurBemelacha()) {
             return schedule.getYomTov();
         } else {
-            return switch (date.getDayOfWeek()) {
-                case SUNDAY -> schedule.getSunday();
-                case MONDAY -> schedule.getMonday();
-                case TUESDAY -> schedule.getTuesday();
-                case WEDNESDAY -> schedule.getWednesday();
-                case THURSDAY -> schedule.getThursday();
-                case FRIDAY -> schedule.getFriday();
-                case SATURDAY -> schedule.getShabbat();
-            };
+            return getNormalTime(date);
         }
+    }
+
+    /**
+     * Gets the MinyanTime that would be assigned to this day without taking into account any special days. 
+     * @param date the LocalDate on which to get the MinyanTime
+     */
+    private MinyanTime getNormalTime(LocalDate date) {
+        return switch (date.getDayOfWeek()) {
+            case SUNDAY -> schedule.getSunday();
+            case MONDAY -> schedule.getMonday();
+            case TUESDAY -> schedule.getTuesday();
+            case WEDNESDAY -> schedule.getWednesday();
+            case THURSDAY -> schedule.getThursday();
+            case FRIDAY -> schedule.getFriday();
+            case SATURDAY -> schedule.getShabbat();
+        };
     }
 }

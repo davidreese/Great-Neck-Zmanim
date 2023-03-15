@@ -1,4 +1,5 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure.minyan;
+import com.fasterxml.jackson.databind.ser.std.StdKeySerializers.Default;
 import com.kosherjava.zmanim.util.Time;
 import com.reesedevelopment.greatneckzmanim.global.Zman;
 
@@ -8,20 +9,20 @@ import java.util.Date;
 public class MinyanTime {
     private Time time;
     private TimeRule rule;
+    private boolean isDefault = false;
 
-    public MinyanTime() {
-        return;
-    }
-
-    public MinyanTime(String rawTime) {
+    public MinyanTime(String rawTime) throws IllegalArgumentException {
         if (rawTime == null || rawTime.isEmpty()) {
             return;
         } else if (rawTime.equals("INVALID")) {
             throw new IllegalArgumentException("Invalid time");
+        } else if (rawTime.equals("DEFAULT")) {
+            isDefault = true;
+            return;
         } else if (rawTime.startsWith("T")) {
             String[] parts = rawTime.substring(1).split(":");
             if (parts.length != 4) {
-                throw new IllegalArgumentException("Invalid time");
+                throw new IllegalArgumentException("Invalid time: " + rawTime);
             }
             time = new Time(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]), Integer.parseInt(parts[2]), Integer.parseInt(parts[3]));
         } else if (rawTime.startsWith("R")) {
@@ -32,29 +33,42 @@ public class MinyanTime {
                 rule = new TimeRule(Zman.fromString(parts[0]), Integer.parseInt(parts[1]));
             } else {
                 System.out.println("Invalid time rule: " + rawTime);
-                return;
+                throw new IllegalArgumentException("Invalid time rule: " + rawTime);
             }
         } else if (rawTime.equalsIgnoreCase("NM")) {
             return;
         } else {
-            System.out.println("Invalid time: " + rawTime);
-            return;
+            throw new IllegalArgumentException("Invalid time: " + rawTime);
         }
     }
 
     public MinyanTime(Time time) {
         this.time = time;
         this.rule = null;
+        this.isDefault = false;
     }
 
     public MinyanTime(TimeRule rule) {
         this.rule = rule;
         this.time = null;
+        this.isDefault = false;
+    }
+
+    /**
+     * Creates a MinyanTime that can be marked default or have no scheduled time.
+     * @param isDefault whether or not to set the minyan time to default
+     */
+    public MinyanTime(boolean isDefault) {
+        this.rule = null;
+        this.time = null;
+        this.isDefault = isDefault;
     }
 
 //    computed property
     public TimeType type() {
-        if (time != null) {
+        if (isDefault == true) {
+            return TimeType.DEFAULT;
+        } else if (time != null) {
             return TimeType.FIXED;
         } else if (rule != null) {
             return TimeType.DYNAMIC;
@@ -72,6 +86,10 @@ public class MinyanTime {
         return type() == TimeType.DYNAMIC;
     }
 
+    public boolean isDefault() {
+        return type() == TimeType.DEFAULT;
+    }
+
     public boolean isNone() {
         return type() == TimeType.NONE;
     }
@@ -79,7 +97,8 @@ public class MinyanTime {
     enum TimeType {
         NONE,
         FIXED,
-        DYNAMIC;
+        DYNAMIC,
+        DEFAULT;
 
         public static TimeType fromString(String s) {
             if (s == null) {
@@ -90,6 +109,8 @@ public class MinyanTime {
                     return FIXED;
                 case "dynamic":
                     return DYNAMIC;
+                case "default":
+                    return DEFAULT;
                 case "nm":
                     return NONE;
                 default:
@@ -123,8 +144,10 @@ public class MinyanTime {
                     TimeRule rule = new TimeRule(zman, zmanOffset);
                     return new MinyanTime(rule);
                 }
+            case DEFAULT:
+                return new MinyanTime(true);
             case NONE:
-                return new MinyanTime();
+                return new MinyanTime(false);
             default:
                 return null;
         }
@@ -133,8 +156,11 @@ public class MinyanTime {
     @Override
     public String toString() {
         TimeType t = type();
+
         if (time != null && rule != null) {
             return "INVALID";
+        } else if (t == TimeType.DEFAULT) {
+            return "DEFAULT";
         } else if (t == TimeType.FIXED) {
             return String.format("T%d:%d:%d:%d", time.getHours(), time.getMinutes(), time.getSeconds(), time.getMilliseconds());
         } else if (t == TimeType.DYNAMIC) {
@@ -146,12 +172,18 @@ public class MinyanTime {
         }
     }
 
+    /**
+     * Generates a time string for display on the UI.
+     * @return the display time string
+     */
     public String displayTime() {
         TimeType t = type();
         if (t == TimeType.NONE) {
             return "";
         } else if (time != null && rule != null) {
             return "INVALID";
+        } else if (t == TimeType.DEFAULT) {
+            return null;
         } else if (t == TimeType.FIXED) {
             String timeString = time.toString();
             String[] parts = timeString.split(":");
@@ -245,9 +277,12 @@ public class MinyanTime {
     }
 
     public Time getTime(LocalDate date) {
-        if (type() == TimeType.FIXED) {
+        TimeType timeType = type();
+        if (timeType == TimeType.DEFAULT) {
+            return null;
+        } else if (timeType == TimeType.FIXED) {
             return time;
-        } else if (type() == TimeType.DYNAMIC) {
+        } else if (timeType == TimeType.DYNAMIC) {
             return rule.getTime(date);
         } else {
             return null;
