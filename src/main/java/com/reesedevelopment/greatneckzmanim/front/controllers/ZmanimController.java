@@ -1,7 +1,6 @@
 package com.reesedevelopment.greatneckzmanim.front.controllers;
 
 import com.kosherjava.zmanim.util.GeoLocation;
-import com.kosherjava.zmanim.util.Time;
 import com.reesedevelopment.greatneckzmanim.admin.structure.location.Location;
 import com.reesedevelopment.greatneckzmanim.admin.structure.location.LocationDAO;
 import com.reesedevelopment.greatneckzmanim.admin.structure.minyan.Minyan;
@@ -12,11 +11,8 @@ import com.reesedevelopment.greatneckzmanim.front.MinyanEvent;
 import com.reesedevelopment.greatneckzmanim.global.Nusach;
 import com.reesedevelopment.greatneckzmanim.global.Zman;
 
-import net.bytebuddy.asm.Advice.Local;
-
 import com.reesedevelopment.greatneckzmanim.front.ZmanimHandler;
 
-import org.codehaus.groovy.runtime.powerassert.SourceText;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -230,13 +226,21 @@ public class ZmanimController {
         return minyanEvents;
     }
 
+    /**
+     * Converts a Date object to a LocalDate.
+     * @param date the date to be converted
+     * @return     the LocalDate equivalent
+     */
     private static LocalDate dateToLocalDate(Date date) {
         Instant instant = date.toInstant();
         ZonedDateTime zonedDateTime = instant.atZone(ZoneId.systemDefault());
         return zonedDateTime.toLocalDate();
     }
 
-
+/**
+ * Tests two Date objects to see if they occur on the same date of the month.
+ * @return whether or not the dates are on the same day of the month.
+ */
     private static boolean sameDayOfMonth(Date date1, Date date2) {
         Calendar calendar1 = Calendar.getInstance();
         calendar1.setTime(date1);
@@ -249,7 +253,7 @@ public class ZmanimController {
 
     /**
      * Navigates to the zmanim for the next day after the given one.
-     * @param dateString The standard form of a date that should be incremented and displayed.
+     * @param dateString the standard form of a date that should be incremented and displayed
      * @throws ParseException
      */
     @GetMapping("/zmanim/next")
@@ -262,8 +266,8 @@ public class ZmanimController {
     }
 
     /**
-     * Navigates to the zmanim for the day before the given one.
-     * @param dateString The standard form of a date that should be decremented and displayed.
+     * Navigates to the zmanim for the day before the given one
+     * @param dateString the standard form of a date that should be decremented and displayed
      * @throws ParseException
      */
     @GetMapping("/zmanim/last")
@@ -274,6 +278,12 @@ public class ZmanimController {
         return navigateZmanim(calendar.getTime());
     }
 
+    /**
+     * Navigates to the organizaton page of an organization for the day after the given date.
+     * @param id         the id of the organization whose page should be navigated to
+     * @param dateString the standard form of a date that should be incremented and displayed
+     * @throws ParseException
+     */
     @GetMapping("/orgs/{id}/next")
     public ModelAndView nextOrgAfter(@PathVariable String id, @RequestParam(value = "after", required = true) String dateString) throws ParseException {
         Date date = format.parse(dateString);
@@ -282,6 +292,12 @@ public class ZmanimController {
         return org(id, calendar.getTime());
     }
 
+    /**
+     * Navigates to the organizaton page of an organization for the day before the given date.
+     * @param id         the id of the organization whose page should be navigated to
+     * @param dateString the standard form of a date that should be decremented and displayed
+     * @throws ParseException
+     */
     @GetMapping("/orgs/{id}/last")
     public ModelAndView lastOrgBefore(@PathVariable String id, @RequestParam(value = "before", required = true) String dateString) throws ParseException {
         Date date = format.parse(dateString);
