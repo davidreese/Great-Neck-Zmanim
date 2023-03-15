@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.*;
 import java.util.*;
@@ -116,6 +117,7 @@ public class ZmanimController {
         Date today = new Date();
         mv.getModel().put("isToday", onlyDateFormat.format(date).equals(onlyDateFormat.format(today)));
         // adds today's date as a string to the model
+        // System.out.println(date.toString());
         mv.getModel().put("dateString", date.toString());
 
 //        add today's hebrew date
@@ -140,12 +142,13 @@ public class ZmanimController {
         mv.getModel().put("earliestShema", timeFormatWithRoundingToSecond(zmanim.get(Zman.EARLIEST_SHEMA)));
         mv.getModel().put("tzet", timeFormatWithRoundingToSecond(zmanim.get(Zman.TZET)));
 
-        List<MinyanEvent> upcomingMinyanim = getMinyanEventsOnDate(localDate.plusMonths(1), true);
+        List<MinyanEvent> upcomingMinyanim = getMinyanEventsOnDate(minyanDAO.getEnabled(), localDate, true);
         mv.getModel().put("allminyanim", upcomingMinyanim);
 
         List<MinyanEvent> shacharitMinyanim = new ArrayList<>();
         List<MinyanEvent> minchaMinyanim = new ArrayList<>();
         List<MinyanEvent> arvitMinyanim = new ArrayList<>();
+
         for (MinyanEvent me : upcomingMinyanim) {
             if (me.getType().isShacharit()) {
                 shacharitMinyanim.add(me);
@@ -155,6 +158,7 @@ public class ZmanimController {
                 arvitMinyanim.add(me);
             }
         }
+        
         mv.getModel().put("shacharitMinyanim", shacharitMinyanim);
         mv.getModel().put("minchaMinyanim", minchaMinyanim);
         mv.getModel().put("arvitMinyanim", arvitMinyanim);
@@ -168,16 +172,13 @@ public class ZmanimController {
      * @param skipMinyanimThatAlreadyPassed if a minyan has already passed and the date is today, don't return those minyan events.
      * @return all minyan events scheduled to happen on this day.
      */
-    private List<MinyanEvent> getMinyanEventsOnDate(LocalDate date, boolean skipMinyanimThatAlreadyPassed) {
+    private List<MinyanEvent> getMinyanEventsOnDate(Collection<Minyan> minyanim, LocalDate date, boolean skipMinyanimThatAlreadyPassed) {
         // get minyanim closest in time to the date
-        List<Minyan> enabledMinyanim = minyanDAO.getEnabled();
         List<MinyanEvent> minyanEvents = new ArrayList<>();
 
         System.out.println("DEBUG: Filtering through minyanim");
 
-        for (Minyan minyan : enabledMinyanim) {
-
-//            LocalDate ref = dateToLocalDate(date).plusMonths(1);
+        for (Minyan minyan : minyanim) {
             Date startDate = minyan.getStartDate(date);
 
             Date now = new Date();
@@ -188,7 +189,7 @@ public class ZmanimController {
             System.out.println("TD: " + terminationDate);
 
             // start date must be valid AND (be after the termination date OR date must not be the same date as today, to disregard the termination time when the user is looking ahead, OR must have the option to skip passed minyanim disabled)
-            if (startDate != null && (startDate.after(terminationDate) || !sameDay(date, now) || !skipMinyanimThatAlreadyPassed)) {
+            if (startDate != null && (startDate.after(terminationDate) || !sameDayOfMonth(now, startDate) || !skipMinyanimThatAlreadyPassed)) {
                 // show the minyan
                 String organizationName;
                 Nusach organizationNusach;
@@ -222,13 +223,7 @@ public class ZmanimController {
                 } else {
                     minyanEvents.add(new MinyanEvent(minyan.getId(), minyan.getType(), organizationName, organizationNusach, organizationId, locationName, startDate, minyan.getNusach(), minyan.getNotes()));
                 }
-            } /*else {
-        if (startDate != null) {
-            System.out.println("Skipping minyan with start date: " + startDate.toString());
-        } else {
-            System.out.println("Skipping minyan with null start date.");
         }
-    }*/
         }
 
         minyanEvents.sort(Comparator.comparing(MinyanEvent::getStartTime));
@@ -250,46 +245,60 @@ public class ZmanimController {
         return calendar1.get(Calendar.DAY_OF_MONTH) == calendar2.get(Calendar.DAY_OF_MONTH);
     }
 
-    private static boolean sameDay(LocalDate date1, Date date2) {
-        LocalDate date2LD = date2.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
-        return date1.getDayOfMonth() == date2LD.getDayOfMonth() &&
-                date1.getMonth() == date2LD.getMonth() &&
-                date1.getYear() == date2LD.getYear();
-    }
+    SimpleDateFormat format = new SimpleDateFormat("EEE MMM dd HH:mm:ss zzz yyyy", Locale.ENGLISH);
 
+    /**
+     * Navigates to the zmanim for the next day after the given one.
+     * @param dateString The standard form of a date that should be incremented and displayed.
+     * @throws ParseException
+     */
     @GetMapping("/zmanim/next")
-    public ModelAndView nextZmanimAfter(@RequestParam(value = "after", required = true) String dateString) {
-        Date date = new Date(dateString);
-        return navigateZmanim(new Date(date.getYear(), date.getMonth(), date.getDate() + 1, date.getHours(), date.getMinutes(), date.getSeconds()));
+    public ModelAndView nextZmanimAfter(@RequestParam(value = "after", required = true) String dateString) throws ParseException {
+        // System.out.println("Going to zmanim page for date string: " + dateString);
+        Date date = format.parse(dateString);
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        return navigateZmanim(calendar.getTime());
     }
 
+    /**
+     * Navigates to the zmanim for the day before the given one.
+     * @param dateString The standard form of a date that should be decremented and displayed.
+     * @throws ParseException
+     */
     @GetMapping("/zmanim/last")
-    public ModelAndView lastZmanimBefore(@RequestParam(value = "before", required = true) String dateString) {
-        Date date = new Date(dateString);
-        return navigateZmanim(new Date(date.getYear(), date.getMonth(), date.getDate() - 1, date.getHours(), date.getMinutes(), date.getSeconds()));
+    public ModelAndView lastZmanimBefore(@RequestParam(value = "before", required = true) String dateString) throws ParseException {
+        Date date = format.parse(dateString);
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        return navigateZmanim(calendar.getTime());
     }
 
     @GetMapping("/orgs/{id}/next")
-    public ModelAndView nextOrgAfter(@PathVariable String id, @RequestParam(value = "after", required = true) String dateString) throws Exception {
-        Date date = new Date(dateString);
-        return navigateOrg(id, new Date(date.getYear(), date.getMonth(), date.getDate() + 1, date.getHours(), date.getMinutes(), date.getSeconds()));
+    public ModelAndView nextOrgAfter(@PathVariable String id, @RequestParam(value = "after", required = true) String dateString) throws ParseException {
+        Date date = format.parse(dateString);
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_YEAR, 1);
+        return org(id, calendar.getTime());
     }
 
     @GetMapping("/orgs/{id}/last")
-    public ModelAndView lastOrgBefore(@PathVariable String id, @RequestParam(value = "before", required = true) String dateString) throws Exception {
-        Date date = new Date(dateString);
-        return navigateOrg(id, new Date(date.getYear(), date.getMonth(), date.getDate() - 1, date.getHours(), date.getMinutes(), date.getSeconds()));
+    public ModelAndView lastOrgBefore(@PathVariable String id, @RequestParam(value = "before", required = true) String dateString) throws ParseException {
+        Date date = format.parse(dateString);
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_YEAR, -1);
+        return org(id, calendar.getTime());
     }
 
     public ModelAndView navigateZmanim(Date date) {
         return zmanim(date);
     }
 
-    public ModelAndView navigateOrg(String orgId, Date date) throws Exception {
+    public ModelAndView navigateOrg(String orgId, Date date) {
         return org(orgId, date);
     }
 
-    public ModelAndView org(String orgId, Date date) throws Exception {
+    public ModelAndView org(String orgId, Date date) {
         ModelAndView mv = new ModelAndView();
         mv.setViewName("org");
 
@@ -320,13 +329,10 @@ public class ZmanimController {
 //        add hebrew date
         mv.getModel().put("hebrewDate", zmanimHandler.getHebrewDate(date));
 
-        try {
             Organization org = organizationDAO.findById(orgId);
             mv.addObject("org", org);
-        } catch (Exception e) {
-            e.printStackTrace();
-            throw new Exception("Sorry, there was an error finding the organization.");
-        }
+
+        LocalDate localDate = dateToLocalDate(date);
 
         List<Minyan> enabledMinyanim = minyanDAO.findEnabledMatching(orgId);
         List<MinyanEvent> minyanEvents = new ArrayList<>();
@@ -334,10 +340,9 @@ public class ZmanimController {
 //        boolean nusachChanges;
 //        Nusach lastNusach;
 //        boolean usesNotes;
-
         for (Minyan minyan : enabledMinyanim) {
             // TODO: check if this is an accurate line
-            Date startDate = minyan.getStartDate(dateToLocalDate(date));
+            Date startDate = minyan.getStartDate(localDate);
             Date terminationDate = new Date((new Date()).getTime() - (60000 * 20));
             if (startDate != null && startDate.after(terminationDate)) {
                 String organizationName;
