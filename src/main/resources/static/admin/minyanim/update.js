@@ -30,7 +30,7 @@ function update(name) {
     var fixedBox = document.getElementById(`fixed-time-box-${name}`);
     var dynamicBox = document.getElementById(`dynamic-time-box-${name}`);
 
-    if (mode == "nm") {
+    if (mode == "nm" | mode == "default") {
         newBox.id = `nm-time-box-${name}`;
         newBox.innerHTML = nm;
         if (dynamicBox) {
