@@ -94,6 +94,11 @@ public class MinyanTime {
         return type() == TimeType.NONE;
     }
 
+    public boolean isNoneOrDefault() {
+        TimeType type = type();
+        return type == TimeType.NONE || type == TimeType.DEFAULT;
+    }
+
     enum TimeType {
         NONE,
         FIXED,

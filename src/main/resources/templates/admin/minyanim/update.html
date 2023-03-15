@@ -354,7 +354,7 @@
                                             <div th:if="${minyan.getSchedule().getYomTov().isFixed()}" class="col" id="fixed-time-box-yt">
                                                 <input type="time" class="form-control" name="yt-fixed-time" id="yt-fixed-time" required th:value="${minyan.getSchedule().getYomTov().getFixedTimeShort()}">
                                             </div>
-                                            <div th:if="${minyan.getSchedule().getYomTov().isNone()}" class="col" id="nm-time-box-yt">
+                                            <div th:if="${minyan.getSchedule().getYomTov().isNoneOrDefault()}" class="col" id="nm-time-box-yt">
                                                 <input type="text" class="form-control" name="yt-fixed-time" id="yt-fixed-time" disabled>
                                             </div>
                                         </div>
@@ -393,7 +393,7 @@
                                             <div th:if="${minyan.getSchedule().getRoshChodesh().isFixed()}" class="col" id="fixed-time-box-rc">
                                                 <input type="time" class="form-control" name="rc-fixed-time" id="rc-fixed-time" required th:value="${minyan.getSchedule().getRoshChodesh().getFixedTimeShort()}">
                                             </div>
-                                            <div th:if="${minyan.getSchedule().getRoshChodesh().isNone()}" class="col" id="nm-time-box-rc">
+                                            <div th:if="${minyan.getSchedule().getRoshChodesh().isNoneOrDefault()}" class="col" id="nm-time-box-rc">
                                                 <input type="text" class="form-control" name="rc-fixed-time" id="rc-fixed-time" disabled>
                                             </div>
                                         </div>
@@ -431,7 +431,7 @@
                                             <div th:if="${minyan.getSchedule().getChanuka().isFixed()}" class="col" id="fixed-time-box-chanuka">
                                                 <input type="time" class="form-control" name="chanuka-fixed-time" id="chanuka-fixed-time" required th:value="${minyan.getSchedule().getChanuka().getFixedTimeShort()}">
                                             </div>
-                                            <div th:if="${minyan.getSchedule().getChanuka().isNone()}" class="col" id="nm-time-box-chanuka">
+                                            <div th:if="${minyan.getSchedule().getChanuka().isNoneOrDefault()}" class="col" id="nm-time-box-chanuka">
                                                 <input type="text" class="form-control" name="chanuka-fixed-time" id="chanuka-fixed-time" disabled>
                                             </div>
                                         </div>
@@ -469,7 +469,7 @@
                                             <div th:if="${minyan.getSchedule().getRoshChodeshChanuka().isFixed()}" class="col" id="fixed-time-box-rcc">
                                                 <input type="time" class="form-control" name="rcc-fixed-time" id="rcc-fixed-time" required th:value="${minyan.getSchedule().getRoshChodeshChanuka().getFixedTimeShort()}">
                                             </div>
-                                            <div th:if="${minyan.getSchedule().getRoshChodeshChanuka().isNone()}" class="col" id="nm-time-box-rcc">
+                                            <div th:if="${minyan.getSchedule().getRoshChodeshChanuka().isNoneOrDefault()}" class="col" id="nm-time-box-rcc">
                                                 <input type="text" class="form-control" name="rcc-fixed-time" id="rcc-fixed-time" disabled>
                                             </div>
                                         </div>
