@@ -183,7 +183,7 @@ public class MinyanTime {
         } else if (time != null && rule != null) {
             return "INVALID";
         } else if (t == TimeType.DEFAULT) {
-            return null;
+            return "Unchanged";
         } else if (t == TimeType.FIXED) {
             String timeString = time.toString();
             String[] parts = timeString.split(":");
