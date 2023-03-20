@@ -94,9 +94,10 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         try {
             deleteAccount.executeUpdate();
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        } finally {
+            if (deleteAccount != null) {
+                deleteAccount.close();
+            }
         }
     }
 
