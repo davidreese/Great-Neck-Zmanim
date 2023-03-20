@@ -21,3 +21,5 @@ while (node = treeWalker.nextNode()) {
 }
 
 replaceSaturdayWithShabbat();
+
+replaceSaturdayWithShabbat();
