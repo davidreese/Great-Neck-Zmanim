@@ -103,9 +103,15 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
 
     @Override
     public boolean update(GNZUser objectToUpdate) throws SQLException {
-        String updateString = "UPDATE ACCOUNT SET USERNAME = ?, EMAIL = ?, ENCRYPTED_PASSWORD = ?, ORGANIZATION_ID = ?, ROLE_ID = ? " + "WHERE ID = ?";
 
+        System.out.println("TEST4444");
+        String updateString = "UPDATE ACCOUNT SET USERNAME = ?, EMAIL = ?, ENCRYPTED_PASSWORD = ?, ORGANIZATION_ID = ?, ROLE_ID = ? WHERE ID = ?";
+
+        System.out.println("TEST5554");
         PreparedStatement updateAccount = this.getConnection().prepareStatement(updateString);
+
+        System.out.println("TEST8685");
+        try {
 
         updateAccount.setString(1, objectToUpdate.getUsername());
         updateAccount.setString(2, objectToUpdate.getEmail());
@@ -114,9 +120,13 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         updateAccount.setInt(5, objectToUpdate.getRoleId());
         updateAccount.setString(6, objectToUpdate.getId());
 
-        try {
+        System.out.println("TEST654");
+        
             updateAccount.executeUpdate();
             return true;
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
         } finally {
             if (updateAccount != null) {
                 updateAccount.close();
