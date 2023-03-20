@@ -8,6 +8,8 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -98,9 +100,9 @@ public class LocationDAO extends JdbcDaoSupport implements GNZSaveable<Location>
     }
 
     @Override
-    public boolean delete(Location objectToDelete) {
+    public boolean delete(Location objectToDelete) throws SQLException {
         String sql = String.format("DELETE FROM LOCATION WHERE ID='%s'", objectToDelete.getId());
-
+// TODO: USE PREP STATEMENT
         try {
             this.getConnection().createStatement().execute(sql);
             return true;

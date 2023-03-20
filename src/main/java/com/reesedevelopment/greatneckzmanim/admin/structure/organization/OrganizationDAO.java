@@ -1,5 +1,6 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure.organization;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -89,8 +90,10 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
     }
 
     @Override
-    public boolean delete(Organization objectToDelete) {
+    public boolean delete(Organization objectToDelete) throws SQLException {
         String sql = String.format("DELETE FROM ORGANIZATION WHERE ID='%s'", objectToDelete.getId());
+
+        // TODO: USE PREP STATEMENT
 
         try {
             this.getConnection().createStatement().execute(sql);

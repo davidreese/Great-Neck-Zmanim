@@ -67,34 +67,6 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
             users.add(mapper.mapRow(userMap));
         }
 
-
-
-
-
-//        System.out.println(users);
-        /*
-        try {
-//            Class.forName("org.h2.Driver");
-//            String url = "jdbc:h2:file:./data/demo";
-//            Connection con = DriverManager.getConnection(url);
-            Statement stmt = this.getConnection().createStatement();
-            ResultSet rs = stmt.executeQuery(sql);
-            while (rs.next()) {
-                System.out.println("rs = " + rs.getString("NAME"));
-            }
-            stmt.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        */
-
-
-//        List<Map<String, Object>> users = this.getJdbcTemplate().queryForList(sql, mapper);
-
-//        mapper.mapRow()
-
-//        System.out.println("Users: " + users);
-
         return users;
     }
 
@@ -112,11 +84,15 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
     }
 
     @Override
-    public boolean delete(GNZUser objectToDelete) {
-        String sql = String.format("DELETE FROM ACCOUNT WHERE ID='%s'", objectToDelete.getId());
+    public boolean delete(GNZUser objectToDelete) throws SQLException {
+        String deleteString = "DELETE FROM ACCOUNT " + "WHERE ID = ?";
+
+        PreparedStatement deleteAccount = this.getConnection().prepareStatement(deleteString);
+
+        deleteAccount.setString(1, objectToDelete.getId());
 
         try {
-            this.getConnection().createStatement().executeUpdate(sql);
+            deleteAccount.executeUpdate();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
