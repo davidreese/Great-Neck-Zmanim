@@ -113,7 +113,7 @@ public class LocationDAO extends JdbcDaoSupport implements GNZSaveable<Location>
     }
 
     @Override
-    public boolean update(Location locationToUpdate) {
+    public boolean update(Location locationToUpdate) throws SQLException {
         String sql = String.format("UPDATE LOCATION SET NAME='%s' WHERE ID='%s'", locationToUpdate.getName(), locationToUpdate.getId());
 
         try {

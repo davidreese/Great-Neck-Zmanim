@@ -16,5 +16,5 @@ public interface GNZSaveable<T extends GNZObject> {
 
     boolean delete(T objectToDelete) throws SQLException;
 
-    boolean update(T objectToUpdate);
+    boolean update(T objectToUpdate) throws SQLException;
 }

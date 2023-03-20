@@ -102,38 +102,25 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
     }
 
     @Override
-    public boolean update(GNZUser objectToUpdate) {
+    public boolean update(GNZUser objectToUpdate) throws SQLException {
+        String updateString = "UPDATE ACCOUNT SET USERNAME = ?, EMAIL = ?, ENCRYPTED_PASSWORD = ?, ORGANIZATION_ID = ?, ROLE_ID = ? " + "WHERE ID = ?";
+
+        PreparedStatement updateAccount = this.getConnection().prepareStatement(updateString);
+
+        updateAccount.setString(1, objectToUpdate.getUsername());
+        updateAccount.setString(2, objectToUpdate.getEmail());
+        updateAccount.setString(3, objectToUpdate.getEncryptedPassword());
+        updateAccount.setString(4, objectToUpdate.getOrganizationId());
+        updateAccount.setInt(5, objectToUpdate.getRoleId());
+        updateAccount.setString(6, objectToUpdate.getId());
+
         try {
-            String sql = "UPDATE ACCOUNT SET USERNAME='%s', EMAIL='%s', ENCRYPTED_PASSWORD='%s', ORGANIZATION_ID='%s', ROLE_ID=%d WHERE ID='%s'";
-
-//            String sql = "UPDATE ACCOUNT SET USERNAME=?, EMAIL=?, ORGANIZATION_ID=?, ROLE_ID=? WHERE ID=?;";
-//            getJdbcTemplate().query(sql, new PreparedStatementSetter() {
-//                        public void setValues(PreparedStatement preparedStatement) throws SQLException {
-//                            preparedStatement.setString(0, objectToUpdate.getUsername());
-//                            preparedStatement.setString(1, objectToUpdate.getEmail());
-//                            preparedStatement.setString(2, objectToUpdate.getOrganizationId());
-//                            preparedStatement.setInt(3, objectToUpdate.getRoleId().intValue());
-//                            preparedStatement.setString(4, objectToUpdate.getId());
-//                        }
-//                    }, new GNZUserMapper());
-
-
-            getConnection().createStatement().executeUpdate(String.format(sql, objectToUpdate.getUsername(), objectToUpdate.getEmail(), objectToUpdate.getEncryptedPassword(), objectToUpdate.getOrganizationId(), objectToUpdate.getRoleId(), objectToUpdate.getId()));
-
-//            String sql = "UPDATE ACCOUNT SET USERNAME=?, EMAIL=?, ORGANIZATION_ID=?, ROLE_ID=? WHERE ID=?;";
-//            PreparedStatement stmt = this.getConnection().prepareStatement(sql);
-//            stmt.setString(0, objectToUpdate.getUsername());
-//            stmt.setString(1, objectToUpdate.getEmail());
-//            stmt.setString(2, objectToUpdate.getOrganizationId());
-//            stmt.setInt(3, objectToUpdate.getRoleId().intValue());
-//            stmt.setString(4, objectToUpdate.getId());
-//            stmt.executeUpdate();
-//            getConnection().commit();
-//            System.out.println("Successfully updated GNZUser");
+            updateAccount.executeUpdate();
             return true;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return false;
+        } finally {
+            if (updateAccount != null) {
+                updateAccount.close();
+            }
         }
     }
 }

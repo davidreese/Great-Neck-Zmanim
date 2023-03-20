@@ -115,7 +115,8 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
 
         // TODO: USE PREP STATEMENT
         try {
-            this.getConnection().createStatement().execute(sql);
+            this.getConnection().createStatement()
+            .execute(sql);
             return true;
         } catch (Exception e) {
             e.printStackTrace();
@@ -124,7 +125,7 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
     }
 
     @Override
-    public boolean update(Minyan objectToUpdate) {
+    public boolean update(Minyan objectToUpdate) throws SQLException {
         String sql = String.format("UPDATE MINYAN SET " +
                 "TYPE = '%s', " +
                 "LOCATION_ID = '%s', " +

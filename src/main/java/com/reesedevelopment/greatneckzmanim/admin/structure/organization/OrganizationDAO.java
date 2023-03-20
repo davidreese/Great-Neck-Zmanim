@@ -114,7 +114,7 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
     }
 
     @Override
-    public boolean update(Organization organizationToUpdate) {
+    public boolean update(Organization organizationToUpdate) throws SQLException {
         String sql;
         if (organizationToUpdate.getWebsiteURI() != null) {
             sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI='%s', NUSACH='%s' WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getWebsiteURI(), organizationToUpdate.getNusach().getText(), organizationToUpdate.getId());
