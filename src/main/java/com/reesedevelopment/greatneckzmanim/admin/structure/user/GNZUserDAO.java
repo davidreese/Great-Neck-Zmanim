@@ -133,7 +133,7 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
             return false;
         } finally {
             try {
-                if (updateAccount != null && false) {
+                if (updateAccount != null) {
                     updateAccount.close();
                 }
             } catch (SQLException e) {
