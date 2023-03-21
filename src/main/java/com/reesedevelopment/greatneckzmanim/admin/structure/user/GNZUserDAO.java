@@ -72,16 +72,35 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
 
     @Override
     public boolean save(GNZUser user) {
-        String sql = String.format("INSERT INTO ACCOUNT VALUES ('%s', '%s', '%s', '%s', '%s', '%d')", user.getId(), user.getUsername(), user.getEmail(), user.getEncryptedPassword(), user.getOrganizationId(), user.getRoleId());
-
+        PreparedStatement insertStatement = null;
+        String sql = "INSERT INTO ACCOUNT VALUES (?, ?, ?, ?, ?, ?)";
+    
         try {
-            this.getConnection().createStatement().executeUpdate(sql);
+            insertStatement = this.getConnection().prepareStatement(sql);
+    
+            insertStatement.setString(1, user.getId());
+            insertStatement.setString(2, user.getUsername());
+            insertStatement.setString(3, user.getEmail());
+            insertStatement.setString(4, user.getEncryptedPassword());
+            insertStatement.setString(5, user.getOrganizationId());
+            insertStatement.setInt(6, user.getRoleId().intValue());
+    
+            insertStatement.executeUpdate();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                if (insertStatement != null) {
+                    insertStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
 
     @Override
     public boolean delete(GNZUser objectToDelete) {
