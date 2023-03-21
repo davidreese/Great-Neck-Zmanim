@@ -103,7 +103,7 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
 
             deleteAccount.executeUpdate();
             return true;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         } finally {
@@ -121,19 +121,43 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
     public boolean update(Organization organizationToUpdate) {
         String sql;
         if (organizationToUpdate.getWebsiteURI() != null) {
-            sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI='%s', NUSACH='%s' WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getWebsiteURI(), organizationToUpdate.getNusach().getText(), organizationToUpdate.getId());
+            sql = "UPDATE ORGANIZATION SET NAME = ?, ADDRESS = ?, SITE_URI = ?, NUSACH = ? WHERE ID = ?";
         } else {
-            sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI=NULL, NUSACH='%s' WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getNusach().getText(), organizationToUpdate.getId());
+            sql = "UPDATE ORGANIZATION SET NAME = ?, ADDRESS = ?, SITE_URI = NULL, NUSACH = ? WHERE ID = ?";
         }
-
+    
+        PreparedStatement updateStatement = null;
+    
         try {
-            this.getConnection().createStatement().execute(sql);
+            updateStatement = this.getConnection().prepareStatement(sql);
+    
+            updateStatement.setString(1, organizationToUpdate.getName());
+            updateStatement.setString(2, organizationToUpdate.getAddress());
+            if (organizationToUpdate.getWebsiteURI() != null) {
+                updateStatement.setString(3, organizationToUpdate.getWebsiteURI().toString());
+                updateStatement.setString(4, organizationToUpdate.getNusach().getText());
+                updateStatement.setString(5, organizationToUpdate.getId());
+            } else {
+                updateStatement.setString(3, organizationToUpdate.getNusach().getText());
+                updateStatement.setString(4, organizationToUpdate.getId());
+            }
+    
+            updateStatement.executeUpdate();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                if (updateStatement != null) {
+                    updateStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
 
     public List<GNZUser> getUsersForOrganization(Organization organization) {
         String sql = String.format("SELECT * FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", organization.getId());
