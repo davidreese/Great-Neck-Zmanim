@@ -1,13 +1,11 @@
 package com.reesedevelopment.greatneckzmanim;
 
-//import org.junit.jupiter.api.Test;
-//import org.springframework.boot.test.context.SpringBootTest;
-
-//@SpringBootTest
+// @RunWith(SpringJUnit4ClassRunner.class)
+// @SpringBootTest
 class GreatNeckZmanimApplicationTests {
-
+    // @Autowired
+    // private GNZUserDAO userDAO;
 //    @Test
     void contextLoads() {
     }
-
 }

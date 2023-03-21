@@ -110,7 +110,7 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
     }
 
     @Override
-    public boolean delete(Minyan objectToDelete) throws SQLException {
+    public boolean delete(Minyan objectToDelete) {
         String sql = String.format("DELETE FROM MINYAN WHERE ID = '%s'", objectToDelete.getId());
 
         // TODO: USE PREP STATEMENT
@@ -118,14 +118,14 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
             this.getConnection().createStatement()
             .execute(sql);
             return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
     @Override
-    public boolean update(Minyan objectToUpdate) throws SQLException {
+    public boolean update(Minyan objectToUpdate) {
         String sql = String.format("UPDATE MINYAN SET " +
                 "TYPE = '%s', " +
                 "LOCATION_ID = '%s', " +
@@ -168,7 +168,7 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
         try {
             this.getConnection().createStatement().execute(sql);
             return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }

@@ -84,52 +84,60 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
     }
 
     @Override
-    public boolean delete(GNZUser objectToDelete) throws SQLException {
+    public boolean delete(GNZUser objectToDelete) {
         String deleteString = "DELETE FROM ACCOUNT " + "WHERE ID = ?";
 
-        PreparedStatement deleteAccount = this.getConnection().prepareStatement(deleteString);
-
-        deleteAccount.setString(1, objectToDelete.getId());
+        PreparedStatement deleteAccount = null;
 
         try {
+            deleteAccount = this.getConnection().prepareStatement(deleteString);
+    
+            deleteAccount.setString(1, objectToDelete.getId());
+
             deleteAccount.executeUpdate();
             return true;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return false;
         } finally {
-            if (deleteAccount != null) {
-                deleteAccount.close();
+            try {
+                if (deleteAccount != null) {
+                    deleteAccount.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }
 
     @Override
-    public boolean update(GNZUser objectToUpdate) throws SQLException {
+    public boolean update(GNZUser objectToUpdate) {
+        PreparedStatement updateAccount = null;
 
-        System.out.println("TEST4444");
-        String updateString = "UPDATE ACCOUNT SET USERNAME = ?, EMAIL = ?, ENCRYPTED_PASSWORD = ?, ORGANIZATION_ID = ?, ROLE_ID = ? WHERE ID = ?";
-
-        System.out.println("TEST5554");
-        PreparedStatement updateAccount = this.getConnection().prepareStatement(updateString);
-
-        System.out.println("TEST8685");
         try {
+            String updateString = "UPDATE ACCOUNT SET USERNAME = ?, EMAIL = ?, ENCRYPTED_PASSWORD = ?, ORGANIZATION_ID = ?, ROLE_ID = ? WHERE ID = ?";
+    
+            updateAccount = this.getConnection().prepareStatement(updateString);
 
         updateAccount.setString(1, objectToUpdate.getUsername());
         updateAccount.setString(2, objectToUpdate.getEmail());
         updateAccount.setString(3, objectToUpdate.getEncryptedPassword());
         updateAccount.setString(4, objectToUpdate.getOrganizationId());
-        updateAccount.setInt(5, objectToUpdate.getRoleId());
+        updateAccount.setInt(5, objectToUpdate.getRoleId().intValue());
         updateAccount.setString(6, objectToUpdate.getId());
-
-        System.out.println("TEST654");
         
             updateAccount.executeUpdate();
             return true;
-        } catch (SQLException e) {
+        } catch (Exception e) {
             e.printStackTrace();
             return false;
         } finally {
-            if (updateAccount != null) {
-                updateAccount.close();
+            try {
+                if (updateAccount != null && false) {
+                    updateAccount.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
             }
         }
     }

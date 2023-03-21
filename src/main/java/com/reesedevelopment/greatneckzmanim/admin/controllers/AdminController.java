@@ -778,7 +778,7 @@ public class AdminController {
             @RequestParam(value = "email", required = true) String newEmail,
             @RequestParam(value = "privileges", required = false) int roleId
     ) {
-        System.out.println("IM IN THE FUNCTION");
+        // System.out.println("IM IN THE FUNCTION");
         GNZUser userToUpdate = gnzUserDAO.findById(id);
         GNZUser currentUser = getCurrentUser();
 

@@ -100,26 +100,26 @@ public class LocationDAO extends JdbcDaoSupport implements GNZSaveable<Location>
     }
 
     @Override
-    public boolean delete(Location objectToDelete) throws SQLException {
+    public boolean delete(Location objectToDelete) {
         String sql = String.format("DELETE FROM LOCATION WHERE ID='%s'", objectToDelete.getId());
 // TODO: USE PREP STATEMENT
         try {
             this.getConnection().createStatement().execute(sql);
             return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }
     }
 
     @Override
-    public boolean update(Location locationToUpdate) throws SQLException {
+    public boolean update(Location locationToUpdate) {
         String sql = String.format("UPDATE LOCATION SET NAME='%s' WHERE ID='%s'", locationToUpdate.getName(), locationToUpdate.getId());
 
         try {
             this.getConnection().createStatement().execute(sql);
             return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
         }

@@ -1,5 +1,6 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure.organization;
 
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -90,31 +91,34 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
     }
 
     @Override
-    public boolean delete(Organization objectToDelete) throws SQLException {
-        String sql = String.format("DELETE FROM ORGANIZATION WHERE ID='%s'", objectToDelete.getId());
+    public boolean delete(Organization objectToDelete) {
+        String deleteString = "DELETE FROM ORGANIZATION " + "WHERE ID = ?";
 
-        // TODO: USE PREP STATEMENT
+        PreparedStatement deleteAccount = null;
 
         try {
-            this.getConnection().createStatement().execute(sql);
+            deleteAccount = this.getConnection().prepareStatement(deleteString);
+    
+            deleteAccount.setString(1, objectToDelete.getId());
 
-            String matchingOrgsSQL = String.format("DELETE FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", objectToDelete.getId());
-
-            try {
-                this.getConnection().createStatement().execute(matchingOrgsSQL);
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-                return false;
-            }
-        } catch (Exception e) {
+            deleteAccount.executeUpdate();
+            return true;
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                if (deleteAccount != null) {
+                    deleteAccount.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 
     @Override
-    public boolean update(Organization organizationToUpdate) throws SQLException {
+    public boolean update(Organization organizationToUpdate) {
         String sql;
         if (organizationToUpdate.getWebsiteURI() != null) {
             sql = String.format("UPDATE ORGANIZATION SET NAME='%s', ADDRESS='%s', SITE_URI='%s', NUSACH='%s' WHERE ID='%s'", organizationToUpdate.getName(), organizationToUpdate.getAddress(), organizationToUpdate.getWebsiteURI(), organizationToUpdate.getNusach().getText(), organizationToUpdate.getId());
