@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -40,17 +41,37 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
     @Override
     public GNZUser findById(String id) {
         String sql = GNZUserMapper.BASE_SQL + " WHERE u.ID = ? ";
-
-        Object[] params = new Object[] { id };
+        PreparedStatement preparedStatement = null;
+        ResultSet rs = null;
         GNZUserMapper mapper = new GNZUserMapper();
-
+    
         try {
-            GNZUser userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
-            return userInfo;
-        } catch (EmptyResultDataAccessException e) {
+            preparedStatement = this.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, id);
+            rs = preparedStatement.executeQuery();
+    
+            if (rs.next()) {
+                return mapper.mapRow(rs, rs.getRow());
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
 
     @Override
     public List<GNZUser> getAll() {
