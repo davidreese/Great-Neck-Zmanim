@@ -32,18 +32,42 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
 
     @Override
     public Minyan findById(String id) {
-        String sql = MinyanMapper.BASE_SQL + " WHERE m.ID = ? ";
-
-        Object[] params = new Object[] { id };
+        String sql = MinyanMapper.BASE_SQL + " WHERE m.ID = ?";
+        PreparedStatement preparedStatement = null;
         MinyanMapper mapper = new MinyanMapper();
-
+        ResultSet resultSet = null;
+    
         try {
-            Minyan minyanInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
-            return minyanInfo;
-        } catch (EmptyResultDataAccessException e) {
+            preparedStatement = this.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, id);
+    
+            resultSet = preparedStatement.executeQuery();
+
+            if (resultSet.next()) {
+                return mapper.mapRow(resultSet, resultSet.getRow());
+            } else {
+                return null;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
+        } catch (CannotGetJdbcConnectionException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
 
     @Override
     public List<Minyan> getAll() {
@@ -80,37 +104,52 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
 
     @Override
     public boolean save(Minyan objectToSave) {
-        String sql = String.format("INSERT INTO MINYAN " +
+        String insertString = "INSERT INTO MINYAN " +
                 "(ID, TYPE, LOCATION_ID, ORGANIZATION_ID, ENABLED, START_TIME_1, START_TIME_2, START_TIME_3, START_TIME_4, START_TIME_5, START_TIME_6, START_TIME_7, START_TIME_RC, START_TIME_CH, START_TIME_CHRC, START_TIME_YT, NOTES, NUSACH) " +
-                "VALUES ('%s', '%s', '%s', '%s', %b, '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s', '%s')",
-                objectToSave.getId(),
-                objectToSave.getMinyanTypeString(),
-                objectToSave.getLocationId(),
-                objectToSave.getOrganizationId(),
-                objectToSave.isEnabled(),
-                objectToSave.getStartTime1(),
-                objectToSave.getStartTime2(),
-                objectToSave.getStartTime3(),
-                objectToSave.getStartTime4(),
-                objectToSave.getStartTime5(),
-                objectToSave.getStartTime6(),
-                objectToSave.getStartTime7(),
-                objectToSave.getStartTimeRC(),
-                objectToSave.getStartTimeCH(),
-                objectToSave.getStartTimeCHRC(),
-                objectToSave.getStartTimeYT(),
-                objectToSave.getNotes(),
-                objectToSave.getNusachString()
-        );
-
+                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+        PreparedStatement insertMinyan = null;
+    
         try {
-            this.getConnection().createStatement().execute(sql);
-            return true;
-        } catch (Exception e) {
+            insertMinyan = this.getConnection().prepareStatement(insertString);
+            insertMinyan.setString(1, objectToSave.getId());
+            insertMinyan.setString(2, objectToSave.getMinyanTypeString());
+            insertMinyan.setString(3, objectToSave.getLocationId());
+            insertMinyan.setString(4, objectToSave.getOrganizationId());
+            insertMinyan.setBoolean(5, objectToSave.isEnabled());
+            insertMinyan.setString(6, objectToSave.getStartTime1());
+            insertMinyan.setString(7, objectToSave.getStartTime2());
+            insertMinyan.setString(8, objectToSave.getStartTime3());
+            insertMinyan.setString(9, objectToSave.getStartTime4());
+            insertMinyan.setString(10, objectToSave.getStartTime5());
+            insertMinyan.setString(11, objectToSave.getStartTime6());
+            insertMinyan.setString(12, objectToSave.getStartTime7());
+            insertMinyan.setString(13, objectToSave.getStartTimeRC());
+            insertMinyan.setString(14, objectToSave.getStartTimeCH());
+            insertMinyan.setString(15, objectToSave.getStartTimeCHRC());
+            insertMinyan.setString(16, objectToSave.getStartTimeYT());
+            insertMinyan.setString(17, objectToSave.getNotes());
+            insertMinyan.setString(18, objectToSave.getNusachString());
+    
+            int affectedRows = insertMinyan.executeUpdate();
+            return affectedRows > 0;
+    
+        } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } catch (CannotGetJdbcConnectionException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (insertMinyan != null) {
+                    insertMinyan.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
 
     @Override
     public boolean delete(Minyan objectToDelete) {
