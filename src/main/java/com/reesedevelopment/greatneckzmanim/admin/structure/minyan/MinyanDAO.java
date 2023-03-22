@@ -145,53 +145,69 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
 
     @Override
     public boolean update(Minyan objectToUpdate) {
-        String sql = String.format("UPDATE MINYAN SET " +
-                "TYPE = '%s', " +
-                "LOCATION_ID = '%s', " +
-                "ORGANIZATION_ID = '%s', " +
-                "ENABLED = %b, " +
-                "START_TIME_1 = '%s', " +
-                "START_TIME_2 = '%s', " +
-                "START_TIME_3 = '%s', " +
-                "START_TIME_4 = '%s', " +
-                "START_TIME_5 = '%s', " +
-                "START_TIME_6 = '%s', " +
-                "START_TIME_7 = '%s', " +
-                "START_TIME_RC = '%s', " +
-                "START_TIME_CH = '%s', " +
-                "START_TIME_CHRC = '%s', " +
-                "START_TIME_YT = '%s', " +
-                "NOTES = '%s', " +
-                "NUSACH = '%s' " +
-                "WHERE ID = '%s'",
-                objectToUpdate.getMinyanTypeString(),
-                objectToUpdate.getLocationId(),
-                objectToUpdate.getOrganizationId(),
-                objectToUpdate.isEnabled(),
-                objectToUpdate.getStartTime1(),
-                objectToUpdate.getStartTime2(),
-                objectToUpdate.getStartTime3(),
-                objectToUpdate.getStartTime4(),
-                objectToUpdate.getStartTime5(),
-                objectToUpdate.getStartTime6(),
-                objectToUpdate.getStartTime7(),
-                objectToUpdate.getStartTimeRC(),
-                objectToUpdate.getStartTimeCH(),
-                objectToUpdate.getStartTimeCHRC(),
-                objectToUpdate.getStartTimeYT(),
-                objectToUpdate.getNotes(),
-                objectToUpdate.getNusachString(),
-                objectToUpdate.getId()
-        );
-
+        String updateString = "UPDATE MINYAN SET " +
+                "TYPE = ?, " +
+                "LOCATION_ID = ?, " +
+                "ORGANIZATION_ID = ?, " +
+                "ENABLED = ?, " +
+                "START_TIME_1 = ?, " +
+                "START_TIME_2 = ?, " +
+                "START_TIME_3 = ?, " +
+                "START_TIME_4 = ?, " +
+                "START_TIME_5 = ?, " +
+                "START_TIME_6 = ?, " +
+                "START_TIME_7 = ?, " +
+                "START_TIME_RC = ?, " +
+                "START_TIME_CH = ?, " +
+                "START_TIME_CHRC = ?, " +
+                "START_TIME_YT = ?, " +
+                "NOTES = ?, " +
+                "NUSACH = ? " +
+                "WHERE ID = ?";
+        PreparedStatement updateMinyan = null;
+    
         try {
-            this.getConnection().createStatement().execute(sql);
-            return true;
+            updateMinyan = this.getConnection().prepareStatement(updateString);
+            
+            updateMinyan.setString(1, objectToUpdate.getMinyanTypeString());
+            updateMinyan.setString(2, objectToUpdate.getLocationId());
+            updateMinyan.setString(3, objectToUpdate.getOrganizationId());
+            updateMinyan.setBoolean(4, objectToUpdate.isEnabled());
+            updateMinyan.setString(5, objectToUpdate.getStartTime1());
+            updateMinyan.setString(6, objectToUpdate.getStartTime2());
+            updateMinyan.setString(7, objectToUpdate.getStartTime3());
+            updateMinyan.setString(8, objectToUpdate.getStartTime4());
+            updateMinyan.setString(9, objectToUpdate.getStartTime5());
+            updateMinyan.setString(10, objectToUpdate.getStartTime6());
+            updateMinyan.setString(11, objectToUpdate.getStartTime7());
+            updateMinyan.setString(12, objectToUpdate.getStartTimeRC());
+            updateMinyan.setString(13, objectToUpdate.getStartTimeCH());
+            updateMinyan.setString(14, objectToUpdate.getStartTimeCHRC());
+            updateMinyan.setString(15, objectToUpdate.getStartTimeYT());
+            updateMinyan.setString(16, objectToUpdate.getNotes());
+            updateMinyan.setString(17, objectToUpdate.getNusachString());
+            updateMinyan.setString(18, objectToUpdate.getId());
+    
+            int affectedRows = updateMinyan.executeUpdate();
+            return affectedRows > 0;
+    
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } catch (CannotGetJdbcConnectionException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (updateMinyan != null) {
+                    updateMinyan.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
 
     public List<Minyan> findMatching(String organizationId){
         String sql = MinyanMapper.BASE_SQL + " WHERE m.ORGANIZATION_ID = ? ";
