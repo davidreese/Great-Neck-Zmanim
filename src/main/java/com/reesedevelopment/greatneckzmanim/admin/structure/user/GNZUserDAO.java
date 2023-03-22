@@ -34,8 +34,11 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
             statement.setString(1, username);
     
             resultSet = statement.executeQuery();
-            GNZUser userInfo = mapper.mapRow(resultSet, 0);
-            return userInfo;
+            if (resultSet.next()) {
+                return mapper.mapRow(resultSet, resultSet.getRow());
+            } else {
+                return null;
+            }
         } catch (Exception e) {
             e.printStackTrace();
             return null;

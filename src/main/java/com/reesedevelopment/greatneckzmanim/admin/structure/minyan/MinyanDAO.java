@@ -113,7 +113,6 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
     public boolean delete(Minyan objectToDelete) {
         String sql = String.format("DELETE FROM MINYAN WHERE ID = '%s'", objectToDelete.getId());
 
-        // TODO: USE PREP STATEMENT
         try {
             this.getConnection().createStatement()
             .execute(sql);

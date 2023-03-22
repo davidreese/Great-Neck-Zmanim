@@ -29,17 +29,38 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
 
     public Organization findByName(String name) {
         String sql = OrganizationMapper.BASE_SQL + " WHERE u.NAME = ? ";
-
-        Object[] params = new Object[] { name };
+    
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         OrganizationMapper mapper = new OrganizationMapper();
-
+    
         try {
-            Organization orgInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
-            return orgInfo;
-        } catch (EmptyResultDataAccessException e) {
+            statement = this.getConnection().prepareStatement(sql);
+            statement.setString(1, name);
+    
+            resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                return mapper.mapRow(resultSet, resultSet.getRow());
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
 
     @Override
     public Organization findById(String id) {
@@ -205,19 +226,23 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
     
 
     public List<GNZUser> getUsersForOrganization(Organization organization) {
-        String sql = String.format("SELECT * FROM ACCOUNT WHERE ORGANIZATION_ID='%s'", organization.getId());
+    String sql = "SELECT * FROM ACCOUNT WHERE ORGANIZATION_ID = ?";
+    GNZUserMapper mapper = new GNZUserMapper();
+    List<GNZUser> users = new ArrayList<>();
 
-        GNZUserMapper mapper = new GNZUserMapper();
-
-        List<Map<String, Object>> userMaps = this.getJdbcTemplate().queryForList(sql);
-
-        List<GNZUser> users = new ArrayList<>();
-
-//        iterate through the list and create an GNZUser object for each row
-        for (Map<String, Object> userMap : userMaps) {
-            users.add(mapper.mapRow(userMap));
+    try (PreparedStatement stmt = this.getConnection().prepareStatement(sql)) {
+        stmt.setString(1, organization.getId());
+        ResultSet rs = stmt.executeQuery();
+        
+        while (rs.next()) {
+            GNZUser user = mapper.mapRow(rs, rs.getRow());
+            users.add(user);
         }
-
-        return users;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+
+    return users;
+}
+
 }
