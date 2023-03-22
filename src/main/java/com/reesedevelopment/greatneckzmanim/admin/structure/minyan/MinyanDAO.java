@@ -248,31 +248,80 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
     }
     
 
-    public List<Minyan> findMatching(String organizationId){
-        String sql = MinyanMapper.BASE_SQL + " WHERE m.ORGANIZATION_ID = ? ";
-
-        Object[] params = new Object[] { organizationId };
-        MinyanMapper mapper = new MinyanMapper();
-
+    public List<Minyan> findMatching(String organizationId) {
+        String sql = MinyanMapper.BASE_SQL + " WHERE m.ORGANIZATION_ID = ?";
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Minyan> minyans = new ArrayList<>();
+    
         try {
-            List<Minyan> minyanInfo = this.getJdbcTemplate().query(sql, params, mapper);
-            return minyanInfo;
-        } catch (EmptyResultDataAccessException e) {
+            ps = this.getConnection().prepareStatement(sql);
+            ps.setString(1, organizationId);
+            rs = ps.executeQuery();
+            MinyanMapper mapper = new MinyanMapper();
+    
+            while (rs.next()) {
+                Minyan minyan = mapper.mapRow(rs, rs.getRow());
+                minyans.add(minyan);
+            }
+    
+            return minyans;
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
+        } catch (CannotGetJdbcConnectionException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
-
+    
     public List<Minyan> findEnabledMatching(String organizationId) {
         String sql = MinyanMapper.BASE_SQL + " WHERE m.ORGANIZATION_ID = ? AND m.ENABLED = 1";
 
-        Object[] params = new Object[] { organizationId };
-        MinyanMapper mapper = new MinyanMapper();
-
+        PreparedStatement ps = null;
+        ResultSet rs = null;
+        List<Minyan> minyans = new ArrayList<>();
+    
         try {
-            List<Minyan> minyanInfo = this.getJdbcTemplate().query(sql, params, mapper);
-            return minyanInfo;
-        } catch (EmptyResultDataAccessException e) {
+            ps = this.getConnection().prepareStatement(sql);
+            ps.setString(1, organizationId);
+            rs = ps.executeQuery();
+            MinyanMapper mapper = new MinyanMapper();
+    
+            while (rs.next()) {
+                Minyan minyan = mapper.mapRow(rs, rs.getRow());
+                minyans.add(minyan);
+            }
+    
+            return minyans;
+        } catch (SQLException e) {
+            e.printStackTrace();
             return null;
+        } catch (CannotGetJdbcConnectionException e) {
+            e.printStackTrace();
+            return null;
+        } finally {
+            try {
+                if (rs != null) {
+                    rs.close();
+                }
+                if (ps != null) {
+                    ps.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
 }
