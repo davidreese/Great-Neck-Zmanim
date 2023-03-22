@@ -3,12 +3,10 @@ package com.reesedevelopment.greatneckzmanim.admin.structure.user;
 import com.reesedevelopment.greatneckzmanim.admin.structure.GNZSaveable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
-import org.springframework.jdbc.core.PreparedStatementSetter;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.servlet.http.HttpServletRequest;
 import javax.sql.DataSource;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -26,17 +24,35 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
 
     public GNZUser findByName(String username) {
         String sql = GNZUserMapper.BASE_SQL + " WHERE u.USERNAME = ? ";
-
-        Object[] params = new Object[] { username };
+    
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
         GNZUserMapper mapper = new GNZUserMapper();
-
+    
         try {
-            GNZUser userInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
+            statement = this.getConnection().prepareStatement(sql);
+            statement.setString(1, username);
+    
+            resultSet = statement.executeQuery();
+            GNZUser userInfo = mapper.mapRow(resultSet, 0);
             return userInfo;
-        } catch (EmptyResultDataAccessException e) {
+        } catch (Exception e) {
+            e.printStackTrace();
             return null;
+        } finally {
+            try {
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+                if (statement != null) {
+                    statement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
 
     @Override
     public GNZUser findById(String id) {

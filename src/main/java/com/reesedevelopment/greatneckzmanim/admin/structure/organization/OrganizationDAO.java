@@ -1,6 +1,7 @@
 package com.reesedevelopment.greatneckzmanim.admin.structure.organization;
 
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -42,18 +43,39 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
 
     @Override
     public Organization findById(String id) {
-        String sql = OrganizationMapper.BASE_SQL + " WHERE u.ID = ? ";
-
-        Object[] params = new Object[] { id };
+        String sql = OrganizationMapper.BASE_SQL + " WHERE u.ID = ?";
+        PreparedStatement preparedStatement = null;
+        ResultSet resultSet = null;
         OrganizationMapper mapper = new OrganizationMapper();
-
+    
         try {
-            Organization orgInfo = this.getJdbcTemplate().queryForObject(sql, params, mapper);
-            return orgInfo;
-        } catch (EmptyResultDataAccessException e) {
+            preparedStatement = this.getConnection().prepareStatement(sql);
+            preparedStatement.setString(1, id);
+    
+            resultSet = preparedStatement.executeQuery();
+            if (resultSet.next()) {
+                return mapper.mapRow(resultSet, 1);
+            } else {
+                return null;
+            }
+        } catch (Exception e) {
+            logger.error("Error while finding organization by id: " + id, e);
             return null;
+        } finally {
+            try {
+                if (preparedStatement != null) {
+                    preparedStatement.close();
+                }
+                if (resultSet != null) {
+                    resultSet.close();
+                }
+            } catch (SQLException e) {
+                logger.error("Error while closing prepared statement and result set", e);
+            }
         }
     }
+    
+    
 
     @Override
     public List<Organization> getAll() {
@@ -76,19 +98,42 @@ public class OrganizationDAO extends JdbcDaoSupport implements GNZSaveable<Organ
     public boolean save(Organization organization) {
         String sql;
         if (organization.getWebsiteURI() != null) {
-            sql = String.format("INSERT INTO ORGANIZATION (ID, NAME, ADDRESS, SITE_URI, NUSACH) VALUES ('%s', '%s', '%s', '%s', '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getWebsiteURI(), organization.getNusach().getText());
+            sql = "INSERT INTO ORGANIZATION (ID, NAME, ADDRESS, SITE_URI, NUSACH) VALUES (?, ?, ?, ?, ?)";
         } else {
-            sql = String.format("INSERT INTO ORGANIZATION (ID, NAME, ADDRESS, SITE_URI, NUSACH) VALUES ('%s', '%s', '%s', NULL, '%s')", organization.getId(), organization.getName(), organization.getAddress(), organization.getNusach().getText());
+            sql = "INSERT INTO ORGANIZATION (ID, NAME, ADDRESS, SITE_URI, NUSACH) VALUES (?, ?, ?, NULL, ?)";
         }
-
+    
+        PreparedStatement insertStatement = null;
+    
         try {
-            this.getConnection().createStatement().execute(sql);
+            insertStatement = this.getConnection().prepareStatement(sql);
+    
+            insertStatement.setString(1, organization.getId());
+            insertStatement.setString(2, organization.getName());
+            insertStatement.setString(3, organization.getAddress());
+            if (organization.getWebsiteURI() != null) {
+                insertStatement.setString(4, organization.getWebsiteURI().toString());
+                insertStatement.setString(5, organization.getNusach().getText());
+            } else {
+                insertStatement.setString(4, organization.getNusach().getText());
+            }
+    
+            insertStatement.executeUpdate();
             return true;
         } catch (Exception e) {
             e.printStackTrace();
             return false;
+        } finally {
+            try {
+                if (insertStatement != null) {
+                    insertStatement.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
 
     @Override
     public boolean delete(Organization objectToDelete) {
