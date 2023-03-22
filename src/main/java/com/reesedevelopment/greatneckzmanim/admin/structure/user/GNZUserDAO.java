@@ -3,6 +3,7 @@ package com.reesedevelopment.greatneckzmanim.admin.structure.user;
 import com.reesedevelopment.greatneckzmanim.admin.structure.GNZSaveable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -74,7 +75,10 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
             } else {
                 return null;
             }
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return null;
+        } catch (CannotGetJdbcConnectionException e) {
             e.printStackTrace();
             return null;
         } finally {
@@ -187,7 +191,10 @@ public class GNZUserDAO extends JdbcDaoSupport implements GNZSaveable<GNZUser> {
         
             updateAccount.executeUpdate();
             return true;
-        } catch (Exception e) {
+        } catch (SQLException e) {
+            e.printStackTrace();
+            return false;
+        } catch (CannotGetJdbcConnectionException e) {
             e.printStackTrace();
             return false;
         } finally {
