@@ -149,12 +149,15 @@ public class AdminController {
 
     @GetMapping("/admin/dashboard")
     public ModelAndView dashbaord() {
+        return admin(null, false);
+        /*
         ModelAndView mv = new ModelAndView();
         mv.setViewName("dashboard");
 
         addStandardPageData(mv);
 
         return mv;
+        */
     }
 
     @GetMapping("/admin")
