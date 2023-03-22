@@ -7,11 +7,14 @@ import com.reesedevelopment.greatneckzmanim.admin.structure.organization.Organiz
 import com.reesedevelopment.greatneckzmanim.admin.structure.organization.OrganizationMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.support.JdbcDaoSupport;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 import javax.sql.DataSource;
+
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -111,17 +114,34 @@ public class MinyanDAO extends JdbcDaoSupport implements GNZSaveable<Minyan> {
 
     @Override
     public boolean delete(Minyan objectToDelete) {
-        String sql = String.format("DELETE FROM MINYAN WHERE ID = '%s'", objectToDelete.getId());
-
+        String deleteString = "DELETE FROM MINYAN WHERE ID = ?";
+        PreparedStatement deleteMinyan = null;
+    
         try {
-            this.getConnection().createStatement()
-            .execute(sql);
-            return true;
+            deleteMinyan = this.getConnection().prepareStatement(deleteString);
+            deleteMinyan.setString(1, objectToDelete.getId());
+    
+            int affectedRows = deleteMinyan.executeUpdate();
+            return affectedRows > 0;
+    
         } catch (SQLException e) {
             e.printStackTrace();
             return false;
+        } catch (CannotGetJdbcConnectionException e) {
+            e.printStackTrace();
+            return false;
+        } finally {
+            try {
+                if (deleteMinyan != null) {
+                    deleteMinyan.close();
+                }
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
         }
     }
+    
+    
 
     @Override
     public boolean update(Minyan objectToUpdate) {
