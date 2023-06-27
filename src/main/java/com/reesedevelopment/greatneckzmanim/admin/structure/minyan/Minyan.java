@@ -333,7 +333,7 @@ public class Minyan extends GNZObject implements IDGenerator {
         if (t == null) {
             return null;
         }
-        LocalDate temp = date.minusMonths(1).minusYears(1900);
+        LocalDate temp = date;
         //  return new
         return new Date(temp.getYear(), temp.getMonthValue(), temp.getDayOfMonth(), t.getHours(), t.getMinutes(), t.getSeconds());
     }
